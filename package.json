@@ -18,6 +18,7 @@
     "react-scripts": "^4.0.1"
   },
   "dependencies": {
+    "@happysanta/router": "^0.1.9",
     "@vkontakte/icons": "^1.72.0",
     "@vkontakte/vk-bridge": "^2.3.0",
     "@vkontakte/vk-miniapps-deploy": "0.0.17",
@@ -31,6 +32,7 @@
     "eruda-code": "^2.0.0",
     "eruda-dom": "^2.0.0",
     "prop-types": "^15.7.2",
+    "querystring": "^0.2.0",
     "react": "^16.14.0",
     "react-dom": "^16.14.0"
   },
