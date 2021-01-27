@@ -24,6 +24,8 @@ import {
 	PAGE_MENU,
 } from './router';
 import Start from './panels/Start';
+import Preset from './panels/Preset';
+
 
 const STEPS = {
 	LOADER: 'loader',
@@ -66,7 +68,8 @@ const App = () => {
 			}
 			router.pushPage(PAGE_MENU);
 		} else {
-			router.pushPage(PAGE_START);
+			// router.pushPage(PAGE_START);
+			router.pushPage(PAGE_PRESET);
 		}
 	}, [])
 
@@ -92,6 +95,7 @@ const App = () => {
 					</PanelHeader>
 				</Panel> */}
 				<Start id={PANEL_START}/>
+				<Preset id={PANEL_PRESET}/>
 			</View>
 			<View id={VIEW_MENU} activePanel={location.getViewActivePanel(VIEW_MENU)}>
 				<Panel id={PANEL_MENU}>
