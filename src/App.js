@@ -42,18 +42,7 @@ const App = () => {
 	const [snackbarError, setSnackbarError] = useState(null);
 	const [menuInfo, setMenuInfo] = useState({
 		groupID: null,
-		categories: [
-			{ title: 'Завтрак', isChecked: false },
-			{ title: 'Закуски', isChecked: false },
-			{ title: 'Горячие блюда', isChecked: false },
-			{ title: 'Супы', isChecked: false },
-			{ title: 'Напитки', isChecked: false },
-			{ title: 'Десерты', isChecked: false },
-			{ title: 'Пицца', isChecked: false },
-			{ title: 'Паста', isChecked: false },
-			{ title: 'Бургеры', isChecked: false },
-			{ title: 'Выпечка', isChecked: false },
-		],
+		categories: [],
 		linkVKfood: null,
 	});
 

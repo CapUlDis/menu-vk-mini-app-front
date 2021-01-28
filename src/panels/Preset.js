@@ -33,8 +33,14 @@ const Preset = ({ id, menuInfo, setMenuInfo }) => {
     // }
 
     const handleContinueClick = () => {
-        console.log(menuInfo);
-
+        const cloneMenuInfo = _.cloneDeep(menuInfo);
+        categories.forEach(category => { 
+            if (category.isChecked) {
+                return cloneMenuInfo.categories.push(category.title);
+            }
+            return;
+        });
+        setCategories(cloneMenuInfo);
     }
     
     return (
