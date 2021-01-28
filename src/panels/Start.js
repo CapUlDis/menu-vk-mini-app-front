@@ -1,4 +1,5 @@
 import React from 'react';
+import _ from 'lodash';
 import bridge from "@vkontakte/vk-bridge";
 import { Panel, Placeholder, Title, FixedLayout, Div, Button } from '@vkontakte/vkui';
 import { useRouter } from '@happysanta/router';
@@ -6,12 +7,15 @@ import { PANEL_START, PAGE_PRESET } from '../router';
 import menu from './components/img/menu.svg';
 
 
-const Start = ({ id }) => {
+const Start = ({ id, menuInfo, setMenuInfo }) => {
     const router = useRouter();
 
     const addMenuToCommunity = async () => {
         try {
-            await bridge.send("VKWebAppAddToCommunity");
+            const response = await bridge.send("VKWebAppAddToCommunity");
+            const cloneMenuInfo = _.cloneDeep(menuInfo);
+            cloneMenuInfo.groupID = response.group_id;
+            setMenuInfo(cloneMenuInfo);
             return router.pushPage(PAGE_PRESET);
         } catch(e) {
             console.log(e);

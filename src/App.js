@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import qs from 'querystring';
+import _ from 'lodash';
 import { SplitLayout, SplitCol, Root, View, Panel, PanelHeader, ScreenSpinner } from '@vkontakte/vkui';
 import { PAGE_MAIN, useLocation, useRouter } from '@happysanta/router';
 import '@vkontakte/vkui/dist/vkui.css';
@@ -39,6 +40,23 @@ const App = () => {
 	const [admin, setAdmin] = useState(false);
 	const [step, setStep] = useState(STEPS.LOADER);
 	const [snackbarError, setSnackbarError] = useState(null);
+	const [menuInfo, setMenuInfo] = useState({
+		groupID: null,
+		categories: [
+			{ title: 'Завтрак', isChecked: false },
+			{ title: 'Закуски', isChecked: false },
+			{ title: 'Горячие блюда', isChecked: false },
+			{ title: 'Супы', isChecked: false },
+			{ title: 'Напитки', isChecked: false },
+			{ title: 'Десерты', isChecked: false },
+			{ title: 'Пицца', isChecked: false },
+			{ title: 'Паста', isChecked: false },
+			{ title: 'Бургеры', isChecked: false },
+			{ title: 'Выпечка', isChecked: false },
+		],
+		linkVKfood: null,
+	});
+
 
 	// useEffect(() => {
 	// 	const http = axios.create({
@@ -63,6 +81,9 @@ const App = () => {
 		setStep(STEPS.MAIN);
 
 		if (launchParams.hasOwnProperty('vk_group_id')) {
+			// cloneMenuInfo.groupID = launchParams.vk_group_id;
+			// setMenuInfo(cloneMenuInfo);
+			
 			if (launchParams.vk_viewer_group_role === 'admin') {
 				setAdmin(true);
 			}
@@ -94,8 +115,8 @@ const App = () => {
 						Main
 					</PanelHeader>
 				</Panel> */}
-				<Start id={PANEL_START}/>
-				<Preset id={PANEL_PRESET}/>
+				<Start id={PANEL_START} menuInfo={menuInfo} setMenuInfo={setMenuInfo}/>
+				<Preset id={PANEL_PRESET} menuInfo={menuInfo} setMenuInfo={setMenuInfo}/>
 			</View>
 			<View id={VIEW_MENU} activePanel={location.getViewActivePanel(VIEW_MENU)}>
 				<Panel id={PANEL_MENU}>

@@ -3,7 +3,13 @@ import { Panel, PanelHeader, Title, FixedLayout, Div, Button, Subhead, Group, Ce
 
 import categories from './components/Categories';
 
-const Preset = ({ id }) => {
+const Preset = ({ id, menuInfo, setMenuInfo }) => {
+
+    // const handleCheckCategory = (id, ) => {
+    //     const cloneMenuInfo = _.cloneDeep(menuInfo);
+    //     cloneMenuInfo.categories[id].isChecked
+    // }
+    
     return (
         <Panel id={id}>
             <PanelHeader separator={false} >
@@ -16,10 +22,16 @@ const Preset = ({ id }) => {
             </Div>
             <Group>
                 {categories.map(({ id, title, src }) => 
-                    <Cell selectable before={<Avatar src={src} shadow={false}/>} 
+                    <Cell selectable before={<Avatar src={src} shadow={false} mode='app'/>} 
                         key={id}
                         name='categories'
                         value={title}
+                        checked={menuInfo.categories[id].isChecked}
+                        onChange={e => {
+                            const cloneMenuInfo = _.cloneDeep(menuInfo);
+                            cloneMenuInfo.categories[id].isChecked = e.target.checked;
+                            setMenuInfo(cloneMenuInfo);
+                        }}
                     >
                         {title}
                     </Cell>
