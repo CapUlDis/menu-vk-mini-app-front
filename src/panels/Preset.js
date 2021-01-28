@@ -1,14 +1,41 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Panel, PanelHeader, Title, FixedLayout, Div, Button, Subhead, Group, Cell, Avatar } from '@vkontakte/vkui';
 
-import categories from './components/Categories';
+import breakfast from './components/img/Image.svg';
+import snacks from './components/img/Image-1.svg';
+import hot_meals from './components/img/Image-2.svg';
+import soups from './components/img/Image-3.svg';
+import drinks from './components/img/Image-4.svg';
+import desserts from './components/img/Image-5.svg';
+import pizza from './components/img/Image-6.svg';
+import pasta from './components/img/Image-7.svg';
+import burgers from './components/img/Image-8.svg';
+import bakery from './components/img/Image-9.svg';
 
 const Preset = ({ id, menuInfo, setMenuInfo }) => {
+
+    const [categories, setCategories] = useState([
+        { id: 0, title: 'Завтрак', src: breakfast, isChecked: false },
+        { id: 1, title: 'Закуски', src: snacks, isChecked: false },
+        { id: 2, title: 'Горячие блюда', src: hot_meals, isChecked: false },
+        { id: 3, title: 'Супы', src: soups, isChecked: false },
+        { id: 4, title: 'Напитки', src: drinks, isChecked: false },
+        { id: 5, title: 'Десерты', src: desserts, isChecked: false },
+        { id: 6, title: 'Пицца', src: pizza, isChecked: false },
+        { id: 7, title: 'Паста', src: pasta, isChecked: false },
+        { id: 8, title: 'Бургеры', src: burgers, isChecked: false },
+        { id: 9, title: 'Выпечка', src: bakery, isChecked: false },
+    ]);
 
     // const handleCheckCategory = (id, ) => {
     //     const cloneMenuInfo = _.cloneDeep(menuInfo);
     //     cloneMenuInfo.categories[id].isChecked
     // }
+
+    const handleContinueClick = () => {
+        console.log(menuInfo);
+
+    }
     
     return (
         <Panel id={id}>
@@ -21,16 +48,16 @@ const Preset = ({ id, menuInfo, setMenuInfo }) => {
                 </Subhead>
             </Div>
             <Group>
-                {categories.map(({ id, title, src }) => 
+                {categories.map(({ id, title, src, isChecked }) => 
                     <Cell selectable before={<Avatar src={src} shadow={false} mode='app'/>} 
                         key={id}
                         name='categories'
                         value={title}
-                        checked={menuInfo.categories[id].isChecked}
+                        checked={isChecked}
                         onChange={e => {
-                            const cloneMenuInfo = _.cloneDeep(menuInfo);
-                            cloneMenuInfo.categories[id].isChecked = e.target.checked;
-                            setMenuInfo(cloneMenuInfo);
+                            const cloneCategories = _.cloneDeep(categories);
+                            cloneCategories[id].isChecked = e.target.checked;
+                            setCategories(cloneCategories);
                         }}
                     >
                         {title}
@@ -39,7 +66,7 @@ const Preset = ({ id, menuInfo, setMenuInfo }) => {
             </Group>
             <FixedLayout vertical='bottom'>
                 <Div>
-                    <Button size='l' stretched>
+                    <Button size='l' stretched onClick={handleContinueClick}>
                         Продолжить
                     </Button>
                 </Div>
