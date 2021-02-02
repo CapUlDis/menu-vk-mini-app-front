@@ -100,7 +100,7 @@ const App = () => {
 					</PanelHeader>
 				</Panel> */}
 				<Start id={PANEL_START} setGroup={setGroup}/>
-				<Preset id={PANEL_PRESET} />
+				<Preset id={PANEL_PRESET} group={group}/>
 			</View>
 			<View id={VIEW_MENU} activePanel={location.getViewActivePanel(VIEW_MENU)}>
 				<Panel id={PANEL_MENU}>

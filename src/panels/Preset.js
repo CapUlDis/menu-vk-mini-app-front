@@ -13,7 +13,7 @@ import pasta from './components/img/Image-7.svg';
 import burgers from './components/img/Image-8.svg';
 import bakery from './components/img/Image-9.svg';
 
-const Preset = ({ id, menuInfo, setMenuInfo }) => {
+const Preset = ({ id, group, setGroup }) => {
 
     const [categories, setCategories] = useState([
         { id: 0, title: 'Завтрак', src: breakfast, isChecked: false },
@@ -33,16 +33,18 @@ const Preset = ({ id, menuInfo, setMenuInfo }) => {
     //     cloneMenuInfo.categories[id].isChecked
     // }
 
+    console.log(group);
+
     const handleContinueClick = async () => {
-        const cloneMenuInfo = _.cloneDeep(menuInfo);
-        categories.forEach(category => { 
-            if (category.isChecked) {
-                return cloneMenuInfo.categories.push(category.title);
-            }
-            return;
-        });
-        setMenuInfo(cloneMenuInfo);
-        let response = await API.post('/group', { group: cloneMenuInfo });
+        // const cloneMenuInfo = _.cloneDeep(menuInfo);
+        // categories.forEach(category => { 
+        //     if (category.isChecked) {
+        //         return cloneMenuInfo.categories.push(category.title);
+        //     }
+        //     return;
+        // });
+        // setMenuInfo(cloneMenuInfo);
+        // let response = await API.post('/group', { group: cloneMenuInfo });
     }
     
     return (

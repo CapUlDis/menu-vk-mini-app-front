@@ -9,16 +9,14 @@ import { PANEL_START, PAGE_PRESET } from '../router';
 import menu from './components/img/menu.svg';
 
 
-const Start = ({ id, group, setGroup }) => {
+const Start = ({ id, setGroup }) => {
     const router = useRouter();
 
     const addMenuToCommunity = async () => {
         try {
             const responseVk = await bridge.send("VKWebAppAddToCommunity");
-            setGroup({ groupId: responseVk.group_id });
-            
-            await API.post('/groups', { groupId: responseVk.group_id });
-
+            const response = await API.post('/groups', { groupId: responseVk.group_id });
+            setGroup(response.data.group);
             return router.pushPage(PAGE_PRESET);
         } catch(err) {
             console.log(err);
