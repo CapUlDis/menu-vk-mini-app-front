@@ -40,12 +40,7 @@ const App = () => {
 	const [admin, setAdmin] = useState(false);
 	const [step, setStep] = useState(STEPS.LOADER);
 	const [snackbarError, setSnackbarError] = useState(null);
-	const [menuInfo, setMenuInfo] = useState({
-		groupID: null,
-		categories: [],
-		linkVKfood: null,
-	});
-
+	const [group, setGroup] = useState(false);
 
 	// useEffect(() => {
 	// 	const http = axios.create({
@@ -78,8 +73,8 @@ const App = () => {
 			}
 			router.pushPage(PAGE_MENU);
 		} else {
-			// router.pushPage(PAGE_START);
-			router.pushPage(PAGE_PRESET);
+			router.pushPage(PAGE_START);
+			// router.pushPage(PAGE_PRESET);
 		}
 	}, [])
 
@@ -104,8 +99,8 @@ const App = () => {
 						Main
 					</PanelHeader>
 				</Panel> */}
-				<Start id={PANEL_START} menuInfo={menuInfo} setMenuInfo={setMenuInfo}/>
-				<Preset id={PANEL_PRESET} menuInfo={menuInfo} setMenuInfo={setMenuInfo}/>
+				<Start id={PANEL_START} setGroup={setGroup}/>
+				<Preset id={PANEL_PRESET} />
 			</View>
 			<View id={VIEW_MENU} activePanel={location.getViewActivePanel(VIEW_MENU)}>
 				<Panel id={PANEL_MENU}>

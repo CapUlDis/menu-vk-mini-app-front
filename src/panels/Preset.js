@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Panel, PanelHeader, Title, FixedLayout, Div, Button, Subhead, Group, Cell, Avatar } from '@vkontakte/vkui';
 
+import API from '../utils/API';
 import breakfast from './components/img/Image.svg';
 import snacks from './components/img/Image-1.svg';
 import hot_meals from './components/img/Image-2.svg';
@@ -32,7 +33,7 @@ const Preset = ({ id, menuInfo, setMenuInfo }) => {
     //     cloneMenuInfo.categories[id].isChecked
     // }
 
-    const handleContinueClick = () => {
+    const handleContinueClick = async () => {
         const cloneMenuInfo = _.cloneDeep(menuInfo);
         categories.forEach(category => { 
             if (category.isChecked) {
@@ -40,7 +41,8 @@ const Preset = ({ id, menuInfo, setMenuInfo }) => {
             }
             return;
         });
-        setCategories(cloneMenuInfo);
+        setMenuInfo(cloneMenuInfo);
+        let response = await API.post('/group', { group: cloneMenuInfo });
     }
     
     return (
