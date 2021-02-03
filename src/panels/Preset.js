@@ -36,15 +36,21 @@ const Preset = ({ id, group, setGroup }) => {
     console.log(group);
 
     const handleContinueClick = async () => {
-        // const cloneMenuInfo = _.cloneDeep(menuInfo);
-        // categories.forEach(category => { 
-        //     if (category.isChecked) {
-        //         return cloneMenuInfo.categories.push(category.title);
-        //     }
-        //     return;
-        // });
-        // setMenuInfo(cloneMenuInfo);
-        // let response = await API.post('/group', { group: cloneMenuInfo });
+        const cloneGroup = _.cloneDeep(group);
+        categories.forEach(category => { 
+            if (category.isChecked) {
+                return cloneGroup.categories.push(category.title);
+            }
+            return;
+        });
+
+        try {
+            const response = await API.post('/categories', cloneGroup);
+            console.log(response.data);
+        } catch (err) {
+            console.log(err);
+        }
+        
     }
     
     return (
