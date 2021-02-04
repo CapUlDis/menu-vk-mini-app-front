@@ -26,6 +26,7 @@ import {
 } from './router';
 import Start from './panels/Start';
 import Preset from './panels/Preset';
+import FillMenu from './panels/FillMenu';
 
 
 const STEPS = {
@@ -41,6 +42,7 @@ const App = () => {
 	const [step, setStep] = useState(STEPS.LOADER);
 	const [snackbarError, setSnackbarError] = useState(null);
 	const [group, setGroup] = useState(false);
+	const [desktop, setDesktop] = useState(false);
 
 	// useEffect(() => {
 	// 	const http = axios.create({
@@ -61,7 +63,9 @@ const App = () => {
 
 	useEffect(() => {
 		const launchParams = qs.parse(window.location.search.slice(1));
-		console.log(launchParams);
+
+		if (launchParams.vk_platform === 'desktop_web') setDesktop(true);
+
 		setStep(STEPS.MAIN);
 
 		if (launchParams.hasOwnProperty('vk_group_id')) {
@@ -73,8 +77,9 @@ const App = () => {
 			}
 			router.pushPage(PAGE_MENU);
 		} else {
-			router.pushPage(PAGE_START);
+			// router.pushPage(PAGE_START);
 			// router.pushPage(PAGE_PRESET);
+			router.pushPage(PAGE_FILL_MENU);
 		}
 	}, [])
 
@@ -101,6 +106,7 @@ const App = () => {
 				</Panel> */}
 				<Start id={PANEL_START} setGroup={setGroup}/>
 				<Preset id={PANEL_PRESET} group={group}/>
+				<FillMenu id={PANEL_FILL_MENU} desktop={desktop}/>
 			</View>
 			<View id={VIEW_MENU} activePanel={location.getViewActivePanel(VIEW_MENU)}>
 				<Panel id={PANEL_MENU}>
