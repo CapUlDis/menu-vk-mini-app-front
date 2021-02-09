@@ -77,9 +77,9 @@ const App = () => {
 			}
 			router.pushPage(PAGE_MENU);
 		} else {
-			// router.pushPage(PAGE_START);
+			router.pushPage(PAGE_START);
 			// router.pushPage(PAGE_PRESET);
-			router.pushPage(PAGE_FILL_MENU);
+			// router.pushPage(PAGE_FILL_MENU);
 		}
 	}, [])
 
@@ -105,8 +105,8 @@ const App = () => {
 					</PanelHeader>
 				</Panel> */}
 				<Start id={PANEL_START} setGroup={setGroup}/>
-				<Preset id={PANEL_PRESET} group={group}/>
-				<FillMenu id={PANEL_FILL_MENU} desktop={desktop}/>
+				<Preset id={PANEL_PRESET} group={group} setGroup={setGroup}/>
+				<FillMenu id={PANEL_FILL_MENU} desktop={desktop} group={group} setGroup={setGroup}/>
 			</View>
 			<View id={VIEW_MENU} activePanel={location.getViewActivePanel(VIEW_MENU)}>
 				<Panel id={PANEL_MENU}>

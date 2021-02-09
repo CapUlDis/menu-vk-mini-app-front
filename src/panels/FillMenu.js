@@ -9,7 +9,8 @@ import { Icon24MoreHorizontal } from '@vkontakte/icons';
 import foodVk from './components/img/foodvk.svg';
 
 
-const FillMenu = ({ id, desktop }) => {
+const FillMenu = ({ id, desktop, group, setGroup }) => {
+    console.log(group);
 
     return (
         <Panel id={id}>

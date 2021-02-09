@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { Panel, PanelHeader, Title, FixedLayout, Div, Button, Subhead, Group, Cell, Avatar } from '@vkontakte/vkui';
+import { useRouter } from '@happysanta/router';
 
 import API from '../utils/API';
+import { PAGE_FILL_MENU } from '../router';
 import breakfast from './components/img/Image.svg';
 import snacks from './components/img/Image-1.svg';
 import hot_meals from './components/img/Image-2.svg';
@@ -13,7 +15,9 @@ import pasta from './components/img/Image-7.svg';
 import burgers from './components/img/Image-8.svg';
 import bakery from './components/img/Image-9.svg';
 
+
 const Preset = ({ id, group, setGroup }) => {
+    const router = useRouter();
 
     const [categories, setCategories] = useState([
         { id: 0, title: 'Завтрак', src: breakfast, isChecked: false },
@@ -37,9 +41,16 @@ const Preset = ({ id, group, setGroup }) => {
 
     const handleContinueClick = async () => {
         const cloneGroup = _.cloneDeep(group);
+        cloneGroup.categories = [];
+        let index = 0;
         categories.forEach(category => { 
             if (category.isChecked) {
-                return cloneGroup.categories.push(category.title);
+                cloneGroup.categories.push({ 
+                    title: category.title, 
+                    index: index,
+                    groupId: cloneGroup.groupId
+                });
+                return index++;
             }
             return;
         });
@@ -47,6 +58,9 @@ const Preset = ({ id, group, setGroup }) => {
         try {
             const response = await API.post('/categories', cloneGroup);
             console.log(response.data);
+            cloneGroup.categories = response.data.categories;
+            setGroup(cloneGroup);
+            return router.pushPage(PAGE_FILL_MENU);
         } catch (err) {
             console.log(err);
         }
