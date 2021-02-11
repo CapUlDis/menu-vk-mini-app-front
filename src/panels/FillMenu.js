@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Panel, PanelHeader, PanelHeaderButton, FixedLayout, Div, Group, Header, Link, Cell, CellButton, Avatar, Banner, usePlatform } from '@vkontakte/vkui';
 import { Icon28EditOutline } from '@vkontakte/icons';
 import { Icon24PenOutline } from '@vkontakte/icons';
@@ -10,7 +10,7 @@ import foodVk from './components/img/foodvk.svg';
 
 
 const FillMenu = ({ id, desktop, group, setGroup }) => {
-    console.log(group);
+    
 
     return (
         <Panel id={id}>
@@ -23,52 +23,32 @@ const FillMenu = ({ id, desktop, group, setGroup }) => {
                 before={<img src={foodVk}/>}
                 text='Добавьте ссылку на страницу заведения в Еде ВКонтакте'
             />
-            <Group header={
-                <Header mode="primary" 
-                    indicator="0"
-                    aside={<Link>{desktop ? 'Добавить блюдо' : <Icon20Add/>}</Link>}
-                >
-                    Завтрак
-                </Header>
-            }>
-                <Cell draggable
-                    before={<Avatar mode='app' />} 
-                    indicator={<Icon24MoreHorizontal/>}
-                    description='330 ₽'
-                >
-                    Смузи боул киви-шпинат
-                </Cell>
-                <Cell draggable
-                    before={<Avatar mode='app' />} 
-                    indicator={<Icon24MoreHorizontal/>}
-                    description='330 ₽'
-                >
-                    Смузи боул киви-шпинат
-                </Cell>
-            </Group>
-            <Group header={
-                <Header mode="primary" 
-                    indicator="0"
-                    aside={<Link>{desktop ? 'Добавить блюдо' : <Icon20Add/>}</Link>}
-                >
-                    Завтрак
-                </Header>
-            }>
-                <Cell draggable
-                    before={<Avatar mode='app' />} 
-                    after={<Icon24MoreHorizontal/>}
-                    description='330 ₽'
-                >
-                    Смузи боул киви-шпинат
-                </Cell>
-                <Cell draggable
-                    before={<Avatar mode='app' />} 
-                    indicator={<Icon24MoreHorizontal style={{ marginRight: '5px' }}/>}
-                    description='330 ₽'
-                >
-                    Смузи боул киви-шпинат
-                </Cell>
-            </Group>
+            
+            {group.Categories.map(category => {
+                return (
+                    <Group key={'cat' + category.id} header={
+                        <Header mode="primary" 
+                            indicator={category.Positions ? category.Positions.length : 0}
+                            aside={<Link>{desktop ? 'Добавить блюдо' : <Icon20Add/>}</Link>}
+                        >
+                            {category.title}
+                        </Header>
+                    }>
+                        {category.Positions && category.Positions.map(position => {
+                            return (
+                                <Cell draggable
+                                    key={'pos' + position.id}
+                                    before={<Avatar mode='app' />} 
+                                    indicator={<Icon24MoreHorizontal/>}
+                                    description={position.price}
+                                >
+                                    {position.title}
+                                </Cell>
+                            );
+                        })}
+                    </Group>
+                )
+            })}
             <FixedLayout vertical='bottom'>
                 <Div>
                     {desktop && <CellButton before={<Icon24PenOutline/>}>Изменить категории</CellButton>}

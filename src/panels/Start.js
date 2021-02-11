@@ -15,7 +15,7 @@ const Start = ({ id, setGroup }) => {
     const addMenuToCommunity = async () => {
         try {
             const responseVk = await bridge.send("VKWebAppAddToCommunity");
-            const response = await API.post('/groups', { groupId: responseVk.group_id });
+            const response = await API.post('/groups', { vkGroupId: responseVk.group_id });
             setGroup(response.data.group);
             return router.pushPage(PAGE_PRESET);
         } catch(err) {

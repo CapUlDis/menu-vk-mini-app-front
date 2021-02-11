@@ -41,7 +41,7 @@ const App = () => {
 	const [admin, setAdmin] = useState(false);
 	const [step, setStep] = useState(STEPS.LOADER);
 	const [snackbarError, setSnackbarError] = useState(null);
-	const [group, setGroup] = useState(false);
+	const [group, setGroup] = useState({});
 	const [desktop, setDesktop] = useState(false);
 
 	// useEffect(() => {
@@ -69,8 +69,6 @@ const App = () => {
 		setStep(STEPS.MAIN);
 
 		if (launchParams.hasOwnProperty('vk_group_id')) {
-			// cloneMenuInfo.groupID = launchParams.vk_group_id;
-			// setMenuInfo(cloneMenuInfo);
 			
 			if (launchParams.vk_viewer_group_role === 'admin') {
 				setAdmin(true);
@@ -99,11 +97,6 @@ const App = () => {
 	return (
 		<Root activeView={location.getViewId()}>
 			<View id={VIEW_MAIN} activePanel={location.getViewActivePanel(VIEW_MAIN)}>
-				{/* <Panel id={PANEL_START}>
-					<PanelHeader>
-						Main
-					</PanelHeader>
-				</Panel> */}
 				<Start id={PANEL_START} setGroup={setGroup}/>
 				<Preset id={PANEL_PRESET} group={group} setGroup={setGroup}/>
 				<FillMenu id={PANEL_FILL_MENU} desktop={desktop} group={group} setGroup={setGroup}/>
