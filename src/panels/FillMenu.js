@@ -7,10 +7,12 @@ import { Icon24ViewOutline } from '@vkontakte/icons';
 import { Icon24MoreHorizontal } from '@vkontakte/icons';
 
 import foodVk from './components/img/foodvk.svg';
+import { useRouter } from '@happysanta/router';
+import { MODAL_PAGE_POSITION } from '../router';
 
 
 const FillMenu = ({ id, desktop, group, setGroup }) => {
-    
+    const router = useRouter();
 
     return (
         <Panel id={id}>
@@ -29,7 +31,7 @@ const FillMenu = ({ id, desktop, group, setGroup }) => {
                     <Group key={'cat' + category.id} header={
                         <Header mode="primary" 
                             indicator={category.Positions ? category.Positions.length : 0}
-                            aside={<Link>{desktop ? 'Добавить блюдо' : <Icon20Add/>}</Link>}
+                            aside={<Link onClick={router.pushModal(MODAL_PAGE_POSITION)}>{desktop ? 'Добавить блюдо' : <Icon20Add/>}</Link>}
                         >
                             {category.title}
                         </Header>

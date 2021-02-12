@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import qs from 'querystring';
 import _ from 'lodash';
-import { SplitLayout, SplitCol, Root, View, Panel, PanelHeader, ScreenSpinner } from '@vkontakte/vkui';
+import { SplitLayout, SplitCol, Root, View, Panel, PanelHeader, ScreenSpinner, ModalRoot } from '@vkontakte/vkui';
 import { PAGE_MAIN, useLocation, useRouter } from '@happysanta/router';
 import '@vkontakte/vkui/dist/vkui.css';
 
@@ -14,19 +14,19 @@ import {
 	PANEL_PRESET,
 	PANEL_FILL_MENU,
 	PANEL_EDIT_CATEGORIES,
-	PANEL_ADD_EDIT_POSITION,
 	PANEL_MENU,
 
 	PAGE_START,
 	PAGE_PRESET,
 	PAGE_FILL_MENU,
 	PAGE_EDIT_CATEGORIES,
-	PAGE_ADD_EDIT_POSITION,
 	PAGE_MENU,
+	MODAL_PAGE_POSITION
 } from './router';
 import Start from './panels/Start';
 import Preset from './panels/Preset';
 import FillMenu from './panels/FillMenu';
+import AddEditPosition from './modals/AddEditPosition';
 
 
 const STEPS = {
@@ -96,7 +96,14 @@ const App = () => {
 
 	return (
 		<Root activeView={location.getViewId()}>
-			<View id={VIEW_MAIN} activePanel={location.getViewActivePanel(VIEW_MAIN)}>
+			<View id={VIEW_MAIN} 
+				activePanel={location.getViewActivePanel(VIEW_MAIN)}
+				modal={
+					<ModalRoot activeModal={location.getModalId()} onClose={() => router.popPage()}>
+						<AddEditPosition id={MODAL_PAGE_POSITION}/>
+					</ModalRoot>
+				}
+			>
 				<Start id={PANEL_START} setGroup={setGroup}/>
 				<Preset id={PANEL_PRESET} group={group} setGroup={setGroup}/>
 				<FillMenu id={PANEL_FILL_MENU} desktop={desktop} group={group} setGroup={setGroup}/>

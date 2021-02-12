@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Panel, PanelHeader, Title, FixedLayout, Div, Button, Subhead, Group, Cell, Avatar } from '@vkontakte/vkui';
+import { Panel, PanelHeader, Title, FixedLayout, Div, Button, Separator, Subhead, Group, Cell, Avatar } from '@vkontakte/vkui';
 import { useRouter } from '@happysanta/router';
 
 import API from '../utils/API';
@@ -31,13 +31,6 @@ const Preset = ({ id, group, setGroup }) => {
         { id: 8, title: 'Бургеры', src: burgers, isChecked: false },
         { id: 9, title: 'Выпечка', src: bakery, isChecked: false },
     ]);
-
-    // const handleCheckCategory = (id, ) => {
-    //     const cloneMenuInfo = _.cloneDeep(menuInfo);
-    //     cloneMenuInfo.categories[id].isChecked
-    // }
-
-    console.log(group);
 
     const handleContinueClick = async () => {
         const cloneGroup = _.cloneDeep(group);
@@ -95,6 +88,7 @@ const Preset = ({ id, group, setGroup }) => {
                 )}
             </Group>
             <FixedLayout vertical='bottom'>
+                <Separator wide={true}/>
                 <Div>
                     <Button size='l' stretched onClick={handleContinueClick}>
                         Продолжить
