@@ -114,7 +114,7 @@ const AddEditPosition = ({ id, position, editMode }) => {
         
     }
 
-    const submitHandler = (event) => {
+    const submitHandler = async (event) => {
         event.preventDefault();	
         console.log(categoryId);
         switch (true) {
@@ -143,7 +143,19 @@ const AddEditPosition = ({ id, position, editMode }) => {
         //     image: ${image.src}
         // `);
 
-        
+        const fd = new FormData(document.getElementById('position'));
+        // console.log(fd.get('image'));
+
+        console.log(`
+            title: ${fd.get('title')},
+            description: ${fd.get('description')},
+            value: ${fd.get('value')},
+            unitId: ${fd.get('unitId')},
+            price: ${fd.get('price')},
+            categoryId: ${fd.get('categoryId')},
+            image: ${fd.get('image')}
+        `);
+        const response = await API.post('/positions', fd, { headers: { 'Content-Type': 'multipart/form-data' } });
     }
 
     return (
@@ -159,6 +171,7 @@ const AddEditPosition = ({ id, position, editMode }) => {
                     status={inputStatus.title ? inputStatus.title: 'default'}
                 >
                     <Input name="title"
+                        form="position"
                         type="text"
                         value={title}
                         maxLength="50"
@@ -247,7 +260,7 @@ const AddEditPosition = ({ id, position, editMode }) => {
                         actions={
                             <React.Fragment>
                                 <File mode="secondary" 
-                                    id="file"
+                                    name='image'
                                     accept=".png, .jpg, .jpeg"
                                     onChange={(e) => {
                                         setImage({ plug: <Icon56GalleryOutline/>, src: '' });
