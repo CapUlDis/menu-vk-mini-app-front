@@ -26,19 +26,40 @@ import { PAGE_FILL_MENU } from '../router';
 
 
 const units = [
-    { title: 'грамм', nick: 'г'},
-    { title: 'литр', nick: 'л'},
-    { title: 'миллиграмм', nick: 'мг'},
-    { title: 'миллилитр', nick: 'мл' },
+    { id: 0, title: 'грамм', nick: 'г'},
+    { id: 1, title: 'литр', nick: 'л'},
+    { id: 2, title: 'миллиграмм', nick: 'мг'},
+    { id: 3, title: 'миллилитр', nick: 'мл' },
 ]
 
 const AddEditPosition = ({ id, position, editMode }) => {
     const router = useRouter();
 
+    const group = {
+        id: 1,
+        vkGroupId: 666,
+        Categories: [
+            {
+                id: 1,
+                title: "Суп",
+            },
+            {
+                id: 2,
+                title: "Сок",
+            },
+            {
+                id: 3,
+                title: "Пиво",
+            }
+        ]
+    };
+
     const [title, setTitle] = useState(!editMode ? '' : position.title);
     const [description, setDescription] = useState(!editMode ? '' : position.description);
     const [value, setValue] = useState(!editMode ? '' : position.value);
-    const [unit, setUnit] = useState(!editMode ? '' : position.unit);
+    const [unitId, setUnit] = useState(!editMode ? units[0].id : position.unitId);
+    const [price, setPrice] = useState(!editMode ? '' : position.price);
+    const [categoryId, setCategory] = useState(!editMode ? group.Categories[0].id : position.categoryId);
     const [image, setImage] = useState({ plug: <Icon56GalleryOutline/>, src: '' });
     
     const [inputMes, setInputMes] = useState({});
@@ -93,6 +114,38 @@ const AddEditPosition = ({ id, position, editMode }) => {
         
     }
 
+    const submitHandler = (event) => {
+        event.preventDefault();	
+        console.log(categoryId);
+        switch (true) {
+            case !title.trim():
+                setInputStatus({ title: 'error' });
+                return document.getElementsByClassName('ModalPage__content').scrollTop = 0;
+            case !description.trim():
+                return setInputStatus({ description: 'error' });
+            case !value.trim():
+                return setInputStatus({ value: 'error' });
+            case !price.trim():
+                return setInputStatus({ price: 'error' });
+            case !image.src:
+                setInputMes({ image: 'Загрузите изображение добавляемого блюда.' });
+                setInputStatus({ image: 'error' });
+                return document.getElementsByClassName('ModalPage__content').scrollTop = Infinity;
+        }
+
+        // console.log(`
+        //     title: ${title},
+        //     description: ${description},
+        //     value: ${value},
+        //     unitId: ${unitId},
+        //     price: ${price},
+        //     categoryId: ${categoryId},
+        //     image: ${image.src}
+        // `);
+
+        
+    }
+
     return (
         <ModalPage id={id} 
             settlingHeight={100}
@@ -101,44 +154,80 @@ const AddEditPosition = ({ id, position, editMode }) => {
             <ModalPageHeader left={<PanelHeaderClose onClick={() => router.popPage()}/>}>
                 {!editMode ? 'Добавление' : 'Редактирование'}
             </ModalPageHeader>
-            <FormLayout>
-                <FormItem top="Название">
-                    <Input type="text"
-                        name="title"
+            <FormLayout id='position' onSubmit={e => submitHandler(e)}>
+                <FormItem top="Название"
+                    status={inputStatus.title ? inputStatus.title: 'default'}
+                >
+                    <Input name="title"
+                        type="text"
+                        value={title}
+                        maxLength="50"
                         placeholder="Введите название"
+                        onChange={e => {
+                            setInputStatus({});
+                            setTitle(e.target.value);
+                        }}
                     />
                 </FormItem>
-                <FormItem top="Описание">
-                    <Textarea
-                        name="description"
+                <FormItem top="Описание"
+                    status={inputStatus.description ? inputStatus.description: 'default'}
+                >
+                    <Textarea name="description"
+                        value={description}
+                        maxLength="100"
                         placeholder="Введите описание"
+                        onChange={e => {
+                            setInputStatus({});
+                            setDescription(e.target.value);
+                        }}
                     />
                 </FormItem>
                 <FormLayoutGroup mode="horizontal">
-                    <FormItem top="Размер порции"> 
-                        <Input type="text"
-                            name="value"
+                    <FormItem top="Размер порции"
+                        status={inputStatus.value ? inputStatus.value: 'default'}
+                    > 
+                        <Input name="value"
+                            type="text"
+                            value={value}
                             placeholder="Введите размер"
+                            onChange={e => { 
+                                setInputStatus({});
+                                setValue(e.target.value.replace(/[^\,0-9]/, ''));
+                            }}
                         />
                     </FormItem>
                     <FormItem>
-                        <NativeSelect name="unit">
-                            {units.map((unit, index) => {
-                                return <option key={index} value={unit.nick}>{unit.title}</option>
+                        <NativeSelect name="unitId"
+                            value={unitId}
+                            onChange={e => setUnit(e.currentTarget.value)}
+                        >
+                            {units.map(unit => {
+                                return <option key={unit.id} value={unit.id}>{unit.title}</option>
                             })}
                         </NativeSelect>
                     </FormItem>
                 </FormLayoutGroup>
-                <FormItem top="Цена, ₽">
+                <FormItem top="Цена, ₽"
+                    status={inputStatus.price ? inputStatus.price: 'default'}
+                >
                     <Input type="text"
-                        name="title"
-                        placeholder="Введите название"
+                        name="price"
+                        value={price}
+                        placeholder="Введите цену"
+                        onChange={e => { 
+                            setInputStatus({});
+                            setPrice(e.target.value.replace(/[^\,0-9]/, ''));
+                        }}
+
                     />
                 </FormItem>
                 <FormItem top="Категория">
-                    <NativeSelect>
-                        {units.map((unit, index) => {
-                            return <option key={index} value={unit.nick}>{unit.title}</option>
+                    <NativeSelect name="categoryId"
+                        value={categoryId}
+                        onChange={e => setCategory(e.currentTarget.value)}
+                    >
+                        {group.Categories && group.Categories.map(category => {
+                            return <option key={category.id} value={category.id}>{category.title}</option>
                         })}
                     </NativeSelect>
                 </FormItem>
@@ -174,13 +263,14 @@ const AddEditPosition = ({ id, position, editMode }) => {
                     />
                 </FormItem>
             </FormLayout>
-            {/* <FixedLayout vertical='bottom'>
-                <Separator wide={true}/>
+            <Separator wide={true}/>
                 <Div>
-                    <Button size='l' stretched>
+                    <Button size='l' type='submit' form='position' stretched>
                         Добавить позицию
                     </Button>
                 </Div>
+            {/* <FixedLayout vertical='bottom'>
+                
             </FixedLayout> */}
         </ModalPage>
     );
