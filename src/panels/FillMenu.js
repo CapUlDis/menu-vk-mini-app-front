@@ -11,7 +11,7 @@ import { useRouter } from '@happysanta/router';
 import { MODAL_PAGE_POSITION } from '../router';
 
 
-const FillMenu = ({ id, desktop, group, setGroup }) => {
+const FillMenu = ({ id, desktop, group, setGroup, setPosition }) => {
     const router = useRouter();
 
     return (
@@ -31,7 +31,14 @@ const FillMenu = ({ id, desktop, group, setGroup }) => {
                     <Group key={'cat' + category.id} header={
                         <Header mode="primary" 
                             indicator={category.Positions ? category.Positions.length : 0}
-                            aside={<Link onClick={router.pushModal(MODAL_PAGE_POSITION)}>{desktop ? 'Добавить блюдо' : <Icon20Add/>}</Link>}
+                            aside={
+                                <Link onClick={() => {
+                                    setPosition({ categoryId: category.id });
+                                    return router.pushModal(MODAL_PAGE_POSITION);
+                                }}>
+                                    {desktop ? 'Добавить блюдо' : <Icon20Add/>}
+                                </Link>
+                            }
                         >
                             {category.title}
                         </Header>

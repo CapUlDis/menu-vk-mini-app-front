@@ -43,6 +43,9 @@ const App = () => {
 	const [snackbarError, setSnackbarError] = useState(null);
 	const [group, setGroup] = useState({});
 	const [desktop, setDesktop] = useState(false);
+	
+	const [position, setPosition] = useState({});
+	const [editMode, setEditMode] = useState(false);
 
 	// useEffect(() => {
 	// 	const http = axios.create({
@@ -78,6 +81,7 @@ const App = () => {
 			router.pushPage(PAGE_START);
 			// router.pushPage(PAGE_PRESET);
 			// router.pushPage(PAGE_FILL_MENU);
+			router.pushModal(MODAL_PAGE_POSITION);
 		}
 	}, [])
 
@@ -100,13 +104,26 @@ const App = () => {
 				activePanel={location.getViewActivePanel(VIEW_MAIN)}
 				modal={
 					<ModalRoot activeModal={location.getModalId()} onClose={() => router.popPage()}>
-						<AddEditPosition id={MODAL_PAGE_POSITION}/>
+						<AddEditPosition id={MODAL_PAGE_POSITION} 
+							position={position} 
+							editMode={editMode}
+						/>
 					</ModalRoot>
 				}
 			>
-				<Start id={PANEL_START} setGroup={setGroup}/>
-				<Preset id={PANEL_PRESET} group={group} setGroup={setGroup}/>
-				<FillMenu id={PANEL_FILL_MENU} desktop={desktop} group={group} setGroup={setGroup}/>
+				<Start id={PANEL_START} 
+					setGroup={setGroup}
+				/>
+				<Preset id={PANEL_PRESET} 
+					group={group} 
+					setGroup={setGroup}
+				/>
+				<FillMenu id={PANEL_FILL_MENU} 
+					desktop={desktop} 
+					group={group} 
+					setGroup={setGroup} 
+					setPosition={setPosition}
+				/>
 			</View>
 			<View id={VIEW_MENU} activePanel={location.getViewActivePanel(VIEW_MENU)}>
 				<Panel id={PANEL_MENU}>
