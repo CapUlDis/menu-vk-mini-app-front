@@ -60,36 +60,38 @@ const AddEditPosition = ({ id, position, editMode }) => {
     const [unitId, setUnit] = useState(!editMode ? units[0].id : position.unitId);
     const [price, setPrice] = useState(!editMode ? '' : position.price);
     const [categoryId, setCategory] = useState(!editMode ? group.Categories[0].id : position.categoryId);
-    const [image, setImage] = useState({ plug: <Icon56GalleryOutline/>, src: '' });
+    const [image, setImage] = useState({ plug: <Icon56GalleryOutline/>, src: '' , file: false });
     
     const [inputMes, setInputMes] = useState({});
     const [inputStatus, setInputStatus] = useState({});
 
-    const imageSelectHadler = (event) => {
+    const imageSelectHandle = (event) => {
+        event.nativeEvent.preventDefault();
+
         const resizeFile = (file) => new Promise(resolve => {
             Resizer.imageFileResizer(file, 500, 500, 'JPEG', 100, 0,
                 uri => {
                     resolve(uri);
                 },
-                'base64',
+                'file',
                 500,
                 500
             );
         });
 
         if (!event.target.files[0]) return;
+
+        const file = event.target.files[0];
         
-        if (event.target.files[0].size > 5242880) {
+        if (file.size > 5242880) {
             setInputMes({ image: 'Допустимый размер изображения не больше 5МБ.' });
             setInputStatus({ image: 'error' });
             return document.getElementsByClassName('ModalPage__content').scrollTop = Infinity;
         }
 
         let w, h, ratio;
-        const file = event.target.files[0];
         const img = new Image();
         img.onload = async function() {
-            console.log('tut');
             w = this.naturalWidth;
             h = this.naturalHeight;
             ratio = w/h;
@@ -102,21 +104,22 @@ const AddEditPosition = ({ id, position, editMode }) => {
 
             if (w > 700) {
                 try {
-                    const image = await resizeFile(file);
-                    this.src = image;
+                    let newFile = await resizeFile(file);
+                    return setImage({ src: URL.createObjectURL(newFile), plug: null, file: newFile });
                 } catch(error) {
                     console.log(error);
                 }
             }
-            setImage({ src: this.src, plug: null });
+
+            return setImage({ src: this.src, plug: null, file: false });
         }
-        img.src = URL.createObjectURL(event.target.files[0]);
+        img.src = URL.createObjectURL(file);
         
     }
 
-    const submitHandler = async (event) => {
+    const submitHandle = async (event) => {
         event.preventDefault();	
-        console.log(categoryId);
+        console.log('submit');
         switch (true) {
             case !title.trim():
                 setInputStatus({ title: 'error' });
@@ -133,29 +136,23 @@ const AddEditPosition = ({ id, position, editMode }) => {
                 return document.getElementsByClassName('ModalPage__content').scrollTop = Infinity;
         }
 
+        const formData = new FormData(document.getElementById('position'));
+
+        if (image.file) {
+            formData.set('image', image.file, image.file.name);
+        }
+
         // console.log(`
-        //     title: ${title},
-        //     description: ${description},
-        //     value: ${value},
-        //     unitId: ${unitId},
-        //     price: ${price},
-        //     categoryId: ${categoryId},
-        //     image: ${image.src}
+        //     title: ${fd.get('title')},
+        //     description: ${fd.get('description')},
+        //     value: ${fd.get('value')},
+        //     unitId: ${fd.get('unitId')},
+        //     price: ${fd.get('price')},
+        //     categoryId: ${fd.get('categoryId')},
+        //     image: ${fd.get('image')}
         // `);
-
-        const fd = new FormData(document.getElementById('position'));
-        // console.log(fd.get('image'));
-
-        console.log(`
-            title: ${fd.get('title')},
-            description: ${fd.get('description')},
-            value: ${fd.get('value')},
-            unitId: ${fd.get('unitId')},
-            price: ${fd.get('price')},
-            categoryId: ${fd.get('categoryId')},
-            image: ${fd.get('image')}
-        `);
-        const response = await API.post('/positions', fd, { headers: { 'Content-Type': 'multipart/form-data' } });
+        
+        const response = await API.post('/positions', formData, { headers: { 'Content-Type': 'multipart/form-data' } });
     }
 
     return (
@@ -166,7 +163,7 @@ const AddEditPosition = ({ id, position, editMode }) => {
             <ModalPageHeader left={<PanelHeaderClose onClick={() => router.popPage()}/>}>
                 {!editMode ? 'Добавление' : 'Редактирование'}
             </ModalPageHeader>
-            <FormLayout id='position' onSubmit={e => submitHandler(e)}>
+            <FormLayout id='position' onSubmit={submitHandle}>
                 <FormItem top="Название"
                     status={inputStatus.title ? inputStatus.title: 'default'}
                 >
@@ -262,11 +259,11 @@ const AddEditPosition = ({ id, position, editMode }) => {
                                 <File mode="secondary" 
                                     name='image'
                                     accept=".png, .jpg, .jpeg"
-                                    onChange={(e) => {
-                                        setImage({ plug: <Icon56GalleryOutline/>, src: '' });
+                                    onChange={e => {
+                                        setImage({ plug: <Icon56GalleryOutline/>, src: '', file: false });
                                         setInputStatus({});
                                         setInputMes({});
-                                        imageSelectHadler(e);
+                                        imageSelectHandle(e);
                                     }}
                                 >
                                     Загрузить изображение
