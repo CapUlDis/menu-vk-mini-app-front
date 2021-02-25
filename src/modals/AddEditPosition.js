@@ -133,7 +133,7 @@ const AddEditPosition = ({ id, group, setGroup, position, editMode }) => {
 			if (cloneGroup.Categories[catIndex].Positions === undefined) {
 				cloneGroup.Categories[catIndex].Positions = [response.data.position];
 			} else {
-				cloneGroup.Categories[catIndex].Positions.push(cloneGroup.Categories[catIndex].Positions);
+				cloneGroup.Categories[catIndex].Positions.push(response.data.position);
 			}
 			cloneGroup.Categories[catIndex].posOrder.push(response.data.position.id);
 			setGroup(cloneGroup);
