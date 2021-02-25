@@ -106,6 +106,7 @@ const App = () => {
 					<ModalRoot activeModal={location.getModalId()} onClose={() => router.popPage()}>
 						<AddEditPosition id={MODAL_PAGE_POSITION}
 							group={group}
+							setGroup={setGroup}
 							position={position} 
 							editMode={editMode}
 						/>

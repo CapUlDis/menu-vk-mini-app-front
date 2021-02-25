@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
+import cloneDeep from 'lodash-es/cloneDeep';
 import Resizer from 'react-image-file-resizer';
+// import cloneDeep from 'lodash-es/cloneDeep';
 import { 
     ModalPage,
     ModalPageHeader,
@@ -32,34 +34,15 @@ const units = [
     { id: 3, title: 'миллилитр', nick: 'мл' },
 ]
 
-const AddEditPosition = ({ id, position, editMode }) => {
+const AddEditPosition = ({ id, group, setGroup, position, editMode }) => {
     const router = useRouter();
-
-    const group = {
-        id: 1,
-        vkGroupId: 666,
-        Categories: [
-            {
-                id: 1,
-                title: "Суп",
-            },
-            {
-                id: 2,
-                title: "Сок",
-            },
-            {
-                id: 3,
-                title: "Пиво",
-            }
-        ]
-    };
 
     const [title, setTitle] = useState(!editMode ? '' : position.title);
     const [description, setDescription] = useState(!editMode ? '' : position.description);
     const [value, setValue] = useState(!editMode ? '' : position.value);
     const [unitId, setUnit] = useState(!editMode ? units[0].id : position.unitId);
     const [price, setPrice] = useState(!editMode ? '' : position.price);
-    const [categoryId, setCategory] = useState(!editMode ? group.Categories[0].id : position.categoryId);
+    const [categoryId, setCategory] = useState(position.categoryId);
     const [image, setImage] = useState({ plug: <Icon56GalleryOutline/>, src: '' , file: false });
     
     const [inputMes, setInputMes] = useState({});
@@ -142,17 +125,24 @@ const AddEditPosition = ({ id, position, editMode }) => {
             formData.set('image', image.file, image.file.name);
         }
 
-        // console.log(`
-        //     title: ${fd.get('title')},
-        //     description: ${fd.get('description')},
-        //     value: ${fd.get('value')},
-        //     unitId: ${fd.get('unitId')},
-        //     price: ${fd.get('price')},
-        //     categoryId: ${fd.get('categoryId')},
-        //     image: ${fd.get('image')}
-        // `);
+        try {
+            const response = await API.post('/positions', formData, { headers: { 'Content-Type': 'multipart/form-data' } });
+            console.log(response.data.position);
+            let cloneGroup = cloneDeep(group);
+            const catIndex = cloneGroup.catOrder.indexOf(categoryId);
+            if (cloneGroup.Categories[catIndex].Positions === undefined) {
+                cloneGroup.Categories[catIndex].Positions = [response.data.position];
+            } else {
+                cloneGroup.Categories[catIndex].Positions.push(cloneGroup.Categories[catIndex].Positions);
+            }
+            cloneGroup.Categories[catIndex].posOrder.push(response.data.position.id);
+            setGroup(cloneGroup);
+            return router.popPage();
+        } catch (err) {
+            console.log(err);
+        }
+
         
-        const response = await API.post('/positions', formData, { headers: { 'Content-Type': 'multipart/form-data' } });
     }
 
     return (
@@ -197,12 +187,13 @@ const AddEditPosition = ({ id, position, editMode }) => {
                         status={inputStatus.value ? inputStatus.value: 'default'}
                     > 
                         <Input name="value"
-                            type="text"
+                            type="number"
+                            step='0.5'
                             value={value}
                             placeholder="Введите размер"
                             onChange={e => { 
                                 setInputStatus({});
-                                setValue(e.target.value.replace(/[^\,0-9]/, ''));
+                                setValue(e.target.value);
                             }}
                         />
                     </FormItem>
@@ -220,13 +211,14 @@ const AddEditPosition = ({ id, position, editMode }) => {
                 <FormItem top="Цена, ₽"
                     status={inputStatus.price ? inputStatus.price: 'default'}
                 >
-                    <Input type="text"
+                    <Input type="number"
+                        step="0.5"
                         name="price"
                         value={price}
                         placeholder="Введите цену"
                         onChange={e => { 
                             setInputStatus({});
-                            setPrice(e.target.value.replace(/[^\,0-9]/, ''));
+                            setPrice(e.target.value);
                         }}
 
                     />

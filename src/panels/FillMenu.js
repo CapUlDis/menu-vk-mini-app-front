@@ -47,9 +47,9 @@ const FillMenu = ({ id, desktop, group, setGroup, setPosition }) => {
                             return (
                                 <Cell draggable
                                     key={'pos' + position.id}
-                                    before={<Avatar mode='app' />} 
+                                    before={<Avatar mode='app' src={position.imageUrl}/>} 
                                     indicator={<Icon24MoreHorizontal/>}
-                                    description={position.price}
+                                    description={position.price + ' ₽'}
                                 >
                                     {position.title}
                                 </Cell>
