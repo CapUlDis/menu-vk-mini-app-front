@@ -12,21 +12,21 @@ import App from "./App";
 bridge.send("VKWebAppInit");
 
 ReactDOM.render(
-  <RouterContext.Provider value={router}>
-    <ConfigProvider isWebView={true}>
-      <AdaptivityProvider>
-        <AppRoot>
-          <SplitLayout>
-            <SplitCol>
-              <App />
-            </SplitCol>
-          </SplitLayout>
-        </AppRoot>
-      </AdaptivityProvider>
-    </ConfigProvider>
-  </RouterContext.Provider>, document.getElementById("root")
+	<RouterContext.Provider value={router}>
+		<ConfigProvider isWebView={true}>
+			<AdaptivityProvider>
+				<AppRoot>
+					<SplitLayout>
+						<SplitCol>
+							<App />
+						</SplitCol>
+					</SplitLayout>
+				</AppRoot>
+			</AdaptivityProvider>
+		</ConfigProvider>
+	</RouterContext.Provider>, document.getElementById("root")
 );
 
 if (process.env.NODE_ENV === "development") {
-  import("./eruda").then(({ default: eruda }) => {}); //runtime download
+	import("./eruda").then(({ default: eruda }) => { }); //runtime download
 }

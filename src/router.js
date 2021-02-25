@@ -20,11 +20,11 @@ export const PANEL_MENU = 'panel_menu';
 export const MODAL_PAGE_POSITION = 'modal_page_position';
 
 const routes = {
-    [PAGE_START]: new Page(PANEL_START, VIEW_MAIN),
-    [PAGE_PRESET]: new Page(PANEL_PRESET, VIEW_MAIN),
-    [PAGE_FILL_MENU]: new Page(PANEL_FILL_MENU, VIEW_MAIN),
-    [PAGE_EDIT_CATEGORIES]: new Page(PANEL_EDIT_CATEGORIES, VIEW_MAIN),
-    [PAGE_MENU]: new Page(PANEL_MENU, VIEW_MENU),
+	[PAGE_START]: new Page(PANEL_START, VIEW_MAIN),
+	[PAGE_PRESET]: new Page(PANEL_PRESET, VIEW_MAIN),
+	[PAGE_FILL_MENU]: new Page(PANEL_FILL_MENU, VIEW_MAIN),
+	[PAGE_EDIT_CATEGORIES]: new Page(PANEL_EDIT_CATEGORIES, VIEW_MAIN),
+	[PAGE_MENU]: new Page(PANEL_MENU, VIEW_MENU),
 };
 
 export const router = new Router(routes);
