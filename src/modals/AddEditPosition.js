@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import cloneDeep from 'lodash-es/cloneDeep';
 import Resizer from 'react-image-file-resizer';
-// import cloneDeep from 'lodash-es/cloneDeep';
 import {
 	ModalPage,
 	ModalPageHeader,

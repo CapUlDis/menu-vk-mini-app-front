@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { Panel, PanelHeader, PanelHeaderButton, FixedLayout, Div, Group, Header, Link, Cell, CellButton, Avatar, Banner, usePlatform } from '@vkontakte/vkui';
+import cloneDeep from 'lodash-es/cloneDeep';
+import { Panel, PanelHeader, PanelHeaderButton, FixedLayout, Div, Group, Header, Link, Cell, List, CellButton, Avatar, Banner, usePlatform } from '@vkontakte/vkui';
 import { Icon28EditOutline } from '@vkontakte/icons';
 import { Icon24PenOutline } from '@vkontakte/icons';
 import { Icon20Add } from '@vkontakte/icons';
 import { Icon24ViewOutline } from '@vkontakte/icons';
 import { Icon24MoreHorizontal } from '@vkontakte/icons';
 
+import API from '../utils/API';
 import foodVk from './components/img/foodvk.svg';
+import orderArray from '../utils/orderArray';
 import { useRouter } from '@happysanta/router';
 import { MODAL_PAGE_POSITION } from '../router';
 
@@ -25,8 +28,8 @@ const FillMenu = ({ id, desktop, group, setGroup, setPosition }) => {
         before={<img src={foodVk} />}
         text='Добавьте ссылку на страницу заведения в Еде ВКонтакте'
       />
-
-      {group.Categories.map(category => {
+      <CellButton onClick={() => console.log(group)}>Консоль групп</CellButton>
+      {group.Categories.map((category, catIndex) => {
         return (
           <Group key={'cat' + category.id} header={
             <Header mode="primary"
@@ -43,18 +46,38 @@ const FillMenu = ({ id, desktop, group, setGroup, setPosition }) => {
               {category.title}
             </Header>
           }>
-            {category.Positions && category.Positions.map(position => {
-              return (
-                <Cell draggable
-                  key={'pos' + position.id}
-                  before={<Avatar mode='app' src={position.imageUrl} />}
-                  indicator={<Icon24MoreHorizontal />}
-                  description={position.price + ' ₽'}
-                >
-                  {position.title}
-                </Cell>
-              );
-            })}
+            <List>
+              {category.Positions && category.Positions.map(position => {
+                return (
+                  <Cell draggable
+                    key={'pos' + position.id}
+                    before={<Avatar mode='app' src={position.imageUrl} />}
+                    indicator={<Icon24MoreHorizontal />}
+                    description={position.price + ' ₽'}
+                    onDragFinish={async ({ from, to }) => {
+                      const cloneGroup = cloneDeep(group);
+                      cloneGroup.Categories[catIndex].posOrder.splice(from, 1);
+                      cloneGroup.Categories[catIndex].posOrder.splice(to, 0, group.Categories[catIndex].posOrder[from]);
+                      cloneGroup.Categories[catIndex].Positions = orderArray(cloneGroup.Categories[catIndex].Positions, cloneGroup.Categories[catIndex].posOrder, 'id');
+                      setGroup(cloneGroup);
+                      try {
+                        const cloneGroup = cloneDeep(group);
+                        cloneGroup.Categories[catIndex].posOrder.splice(from, 1);
+                        cloneGroup.Categories[catIndex].posOrder.splice(to, 0, group.Categories[catIndex].posOrder[from]);
+                        cloneGroup.Categories[catIndex].Positions = orderArray(cloneGroup.Categories[catIndex].Positions, cloneGroup.Categories[catIndex].posOrder, 'id');
+
+                        await API.patch(`/categories/${category.id}`, { posOrder: cloneGroup.Categories[catIndex].posOrder });
+                        setGroup(cloneGroup);
+                      } catch (err) {
+                        console.log(err);
+                      }
+                    }}
+                  >
+                    {position.title}
+                  </Cell>
+                );
+              })}
+            </List>
           </Group>
         )
       })}
