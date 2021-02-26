@@ -66,7 +66,7 @@ const FillMenu = ({ id, desktop, group, setGroup, setPosition }) => {
                         cloneGroup.Categories[catIndex].posOrder.splice(to, 0, group.Categories[catIndex].posOrder[from]);
                         cloneGroup.Categories[catIndex].Positions = orderArray(cloneGroup.Categories[catIndex].Positions, cloneGroup.Categories[catIndex].posOrder, 'id');
 
-                        await API.patch(`/categories/${category.id}`, { posOrder: cloneGroup.Categories[catIndex].posOrder });
+                        await API.patch(`/categories/${category.id}`, { posOrder: cloneGroup.Categories[catIndex].posOrder })
                         setGroup(cloneGroup);
                       } catch (err) {
                         console.log(err);

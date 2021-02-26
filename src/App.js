@@ -27,6 +27,7 @@ import Start from './panels/Start';
 import Preset from './panels/Preset';
 import FillMenu from './panels/FillMenu';
 import AddEditPosition from './modals/AddEditPosition';
+import API from './utils/API';
 
 
 const STEPS = {
@@ -64,6 +65,55 @@ const App = () => {
   // 	})();
   // });
 
+  const g = {
+    id: 1,
+    vkGroupId: 666,
+    linkVkFood: null,
+    catOrder: [
+      1,
+      2,
+      3
+    ],
+    createdAt: "2021-02-11T13:05:03.572Z",
+    updatedAt: "2021-02-11T13:05:15.817Z",
+    Categories: [
+      {
+        id: 1,
+        title: "Суп",
+        groupId: 1,
+        posOrder: null,
+        createdAt: "2021-02-11T13:05:15.808Z",
+        updatedAt: "2021-02-11T13:05:15.808Z",
+        Positions: []
+      },
+      {
+        id: 2,
+        title: "Сок",
+        groupId: 1,
+        posOrder: null,
+        createdAt: "2021-02-11T13:05:15.808Z",
+        updatedAt: "2021-02-11T13:05:15.808Z",
+        Positions: []
+      },
+      {
+        id: 3,
+        title: "Пиво",
+        groupId: 1,
+        posOrder: null,
+        createdAt: "2021-02-11T13:05:15.808Z",
+        updatedAt: "2021-02-11T13:05:15.808Z",
+        Positions: []
+      }
+    ]
+  }
+
+  const fetchMenu = async () => {
+    const response = await API.get('/groups/152694612');
+    console.log(response.data.group);
+    setGroup(response.data.group);
+    router.pushPage(PAGE_FILL_MENU);
+  }
+
   useEffect(() => {
     const launchParams = qs.parse(window.location.search.slice(1));
 
@@ -78,7 +128,9 @@ const App = () => {
       }
       router.pushPage(PAGE_MENU);
     } else {
-      router.pushPage(PAGE_START);
+      fetchMenu();
+      // setGroup(g);
+      // router.pushPage(PAGE_START);
       // router.pushPage(PAGE_PRESET);
       // router.pushPage(PAGE_FILL_MENU);
       // router.pushModal(MODAL_PAGE_POSITION);
