@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import cloneDeep from 'lodash-es/cloneDeep';
 import { Panel, PanelHeader, PanelHeaderButton, FixedLayout, Div, Group, Header, Link, Cell, List, CellButton, Avatar, Banner, usePlatform } from '@vkontakte/vkui';
 import { Icon28EditOutline } from '@vkontakte/icons';
@@ -11,7 +11,7 @@ import API from '../utils/API';
 import foodVk from './components/img/foodvk.svg';
 import orderArray from '../utils/orderArray';
 import { useRouter } from '@happysanta/router';
-import { MODAL_PAGE_POSITION } from '../router';
+import { MODAL_PAGE_POSITION, POPOUT_EDIT_DELETE_POSITION } from '../router';
 
 
 const FillMenu = ({ id, desktop, group, setGroup, setPosition }) => {
@@ -52,7 +52,10 @@ const FillMenu = ({ id, desktop, group, setGroup, setPosition }) => {
                   <Cell draggable
                     key={'pos' + position.id}
                     before={<Avatar mode='app' src={position.imageUrl} />}
-                    indicator={<Icon24MoreHorizontal />}
+                    indicator={<Icon24MoreHorizontal onClick={() => {
+                      setPosition(position);
+                      return router.pushPopup(POPOUT_EDIT_DELETE_POSITION);
+                    }}/>}
                     description={position.price + ' ₽'}
                     onDragFinish={async ({ from, to }) => {
                       const cloneGroup = cloneDeep(group);

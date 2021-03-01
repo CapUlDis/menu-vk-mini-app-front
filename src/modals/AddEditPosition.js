@@ -42,7 +42,7 @@ const AddEditPosition = ({ id, group, setGroup, position, editMode }) => {
 	const [unitId, setUnit] = useState(!editMode ? units[0].id : position.unitId);
 	const [price, setPrice] = useState(!editMode ? '' : position.price);
 	const [categoryId, setCategory] = useState(position.categoryId);
-	const [image, setImage] = useState({ plug: <Icon56GalleryOutline />, src: '', file: false });
+	const [image, setImage] = useState({ plug: <Icon56GalleryOutline />, src: !editMode ? '' : position.imageUrl, file: false });
 
 	const [inputMes, setInputMes] = useState({});
 	const [inputStatus, setInputStatus] = useState({});
@@ -258,7 +258,7 @@ const AddEditPosition = ({ id, group, setGroup, position, editMode }) => {
 									}}
 								>
 									Загрузить изображение
-                                </File>
+                </File>
 							</React.Fragment>
 						}
 					/>

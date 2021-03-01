@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import qs from 'querystring';
 import _ from 'lodash';
+import cloneDeep from 'lodash-es/cloneDeep';
 import { SplitLayout, SplitCol, Root, View, Panel, PanelHeader, ScreenSpinner, ModalRoot } from '@vkontakte/vkui';
 import { PAGE_MAIN, useLocation, useRouter } from '@happysanta/router';
 import '@vkontakte/vkui/dist/vkui.css';
@@ -15,18 +16,19 @@ import {
   PANEL_FILL_MENU,
   PANEL_EDIT_CATEGORIES,
   PANEL_MENU,
-
   PAGE_START,
   PAGE_PRESET,
   PAGE_FILL_MENU,
   PAGE_EDIT_CATEGORIES,
   PAGE_MENU,
-  MODAL_PAGE_POSITION
+  MODAL_PAGE_POSITION,
+  POPOUT_EDIT_DELETE_POSITION
 } from './router';
 import Start from './panels/Start';
 import Preset from './panels/Preset';
 import FillMenu from './panels/FillMenu';
 import AddEditPosition from './modals/AddEditPosition';
+import EditDeletePosition from './popouts/EditDeletePosition';
 import API from './utils/API';
 
 
@@ -48,71 +50,35 @@ const App = () => {
   const [position, setPosition] = useState({});
   const [editMode, setEditMode] = useState(false);
 
-  // useEffect(() => {
-  // 	const http = axios.create({
-  // 		headers: {
-  // 		  	// Прикрепляем заголовок, отвечающий за параметры запуска.
-  // 			Authorization: `Bearer ${window.location.search.slice(1)}`,
-  // 		},
-  // 	});
-
-  // 	console.log(window.location.search.slice(1));
-  // 	(async () => {
-  // 		// await fetch('http://localhost:3000/auth', {
-  // 		// 	headers: { Authorization: `Bearer ${window.location.search.slice(1)}` }
-  // 		// });
-  // 		await http.get('http://localhost:3000/');
-  // 	})();
-  // });
-
-  const g = {
-    id: 1,
-    vkGroupId: 666,
-    linkVkFood: null,
-    catOrder: [
-      1,
-      2,
-      3
-    ],
-    createdAt: "2021-02-11T13:05:03.572Z",
-    updatedAt: "2021-02-11T13:05:15.817Z",
-    Categories: [
-      {
-        id: 1,
-        title: "Суп",
-        groupId: 1,
-        posOrder: null,
-        createdAt: "2021-02-11T13:05:15.808Z",
-        updatedAt: "2021-02-11T13:05:15.808Z",
-        Positions: []
-      },
-      {
-        id: 2,
-        title: "Сок",
-        groupId: 1,
-        posOrder: null,
-        createdAt: "2021-02-11T13:05:15.808Z",
-        updatedAt: "2021-02-11T13:05:15.808Z",
-        Positions: []
-      },
-      {
-        id: 3,
-        title: "Пиво",
-        groupId: 1,
-        posOrder: null,
-        createdAt: "2021-02-11T13:05:15.808Z",
-        updatedAt: "2021-02-11T13:05:15.808Z",
-        Positions: []
+  const deletePosition = async () => {
+    try {
+      await API.delete(`/positions/${position.id}`);
+      let cloneGroup = cloneDeep(group);
+      const catIndex = cloneGroup.catOrder.indexOf(position.categoryId);
+      const posIndex = cloneGroup.Categories[catIndex].posOrder.indexOf(position.id);
+      if (catIndex === -1 || posIndex === -1) {
+        throw new Error('Corrupted position and group data. Reload app.');
       }
-    ]
-  }
+      cloneGroup.Categories[catIndex].Positions.splice(posIndex, 1);
+      cloneGroup.Categories[catIndex].posOrder.splice(posIndex, 1);
+      setGroup(cloneGroup);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const popout = (() => {
+    if (location.getPopupId() === POPOUT_EDIT_DELETE_POSITION) {
+      return <EditDeletePosition position={position} setEditMode={setEditMode} deletePosition={deletePosition}/>;
+    }
+  })();
 
   const fetchMenu = async () => {
     const response = await API.get('/groups/152694612');
     console.log(response.data.group);
     setGroup(response.data.group);
     router.pushPage(PAGE_FILL_MENU);
-  }
+  };
 
   useEffect(() => {
     const launchParams = qs.parse(window.location.search.slice(1));
@@ -153,6 +119,7 @@ const App = () => {
   return (
     <Root activeView={location.getViewId()}>
       <View id={VIEW_MAIN}
+        popout={popout}
         activePanel={location.getViewActivePanel(VIEW_MAIN)}
         modal={
           <ModalRoot activeModal={location.getModalId()} onClose={() => router.popPage()}>

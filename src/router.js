@@ -19,6 +19,8 @@ export const PANEL_MENU = 'panel_menu';
 
 export const MODAL_PAGE_POSITION = 'modal_page_position';
 
+export const POPOUT_EDIT_DELETE_POSITION = 'popout_edit_delete_position';
+
 const routes = {
 	[PAGE_START]: new Page(PANEL_START, VIEW_MAIN),
 	[PAGE_PRESET]: new Page(PANEL_PRESET, VIEW_MAIN),
