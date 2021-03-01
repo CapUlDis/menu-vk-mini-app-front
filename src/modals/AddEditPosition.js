@@ -17,10 +17,11 @@ import {
 	Textarea,
 	RichCell,
 	File,
-	Avatar
+	Avatar,
+  CellButton
 } from '@vkontakte/vkui';
 import { useRouter } from '@happysanta/router';
-import { Icon56GalleryOutline } from '@vkontakte/icons';
+import { Icon56GalleryOutline, Icon28DeleteOutline } from '@vkontakte/icons';
 
 import API from '../utils/API';
 import { PAGE_FILL_MENU } from '../router';
@@ -33,7 +34,7 @@ const units = [
 	{ id: 3, title: 'миллилитр', nick: 'мл' },
 ]
 
-const AddEditPosition = ({ id, group, setGroup, position, editMode }) => {
+const AddEditPosition = ({ id, group, setGroup, position, editMode, setEditMode, deletePosition }) => {
 	const router = useRouter();
 
 	const [title, setTitle] = useState(!editMode ? '' : position.title);
@@ -42,7 +43,7 @@ const AddEditPosition = ({ id, group, setGroup, position, editMode }) => {
 	const [unitId, setUnit] = useState(!editMode ? units[0].id : position.unitId);
 	const [price, setPrice] = useState(!editMode ? '' : position.price);
 	const [categoryId, setCategory] = useState(position.categoryId);
-	const [image, setImage] = useState({ plug: <Icon56GalleryOutline />, src: !editMode ? '' : position.imageUrl, file: false });
+	const [image, setImage] = useState({ plug: !editMode ? <Icon56GalleryOutline/> : null, src: !editMode ? '' : position.imageUrl, file: false });
 
 	const [inputMes, setInputMes] = useState({});
 	const [inputStatus, setInputStatus] = useState({});
@@ -147,9 +148,15 @@ const AddEditPosition = ({ id, group, setGroup, position, editMode }) => {
 	return (
 		<ModalPage id={id}
 			settlingHeight={100}
-			onClose={() => router.popPage()}
+			onClose={() => {
+        router.popPage();
+        setEditMode(false);
+      }}
 		>
-			<ModalPageHeader left={<PanelHeaderClose onClick={() => router.popPage()} />}>
+			<ModalPageHeader left={<PanelHeaderClose onClick={() => {
+        router.popPage();
+        setEditMode(false);
+      }} />}>
 				{!editMode ? 'Добавление' : 'Редактирование'}
 			</ModalPageHeader>
 			<FormLayout id='position' onSubmit={submitHandle}>
@@ -264,11 +271,23 @@ const AddEditPosition = ({ id, group, setGroup, position, editMode }) => {
 					/>
 				</FormItem>
 			</FormLayout>
-			<Separator wide={true} />
+      {editMode &&
+        <Div>
+          <Separator wide={true}/>
+          <CellButton before={<Icon28DeleteOutline/>} mode="danger" onClick={() => {
+            deletePosition();
+            router.popPage();
+            setEditMode(false);
+          }}>
+            Удалить позицию
+          </CellButton>
+        </Div>
+      }
+			<Separator wide={true}/>
 			<Div>
 				<Button size='l' type='submit' form='position' stretched>
 					Добавить позицию
-                    </Button>
+        </Button>
 			</Div>
 			{/* <FixedLayout vertical='bottom'>
                 

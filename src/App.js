@@ -128,6 +128,8 @@ const App = () => {
               setGroup={setGroup}
               position={position}
               editMode={editMode}
+              setEditMode={setEditMode}
+              deletePosition={deletePosition}
             />
           </ModalRoot>
         }
