@@ -126,7 +126,7 @@ const AddEditPosition = ({ id, group, setGroup, position, editMode }) => {
 
 		try {
 			const response = await API.post('/positions', formData, { headers: { 'Content-Type': 'multipart/form-data' } });
-			console.log(response.data.position);
+			// console.log(response.data.position);
 			let cloneGroup = cloneDeep(group);
 			const catIndex = cloneGroup.catOrder.indexOf(categoryId);
 			if (cloneGroup.Categories[catIndex].Positions === undefined) {
@@ -225,7 +225,7 @@ const AddEditPosition = ({ id, group, setGroup, position, editMode }) => {
 				<FormItem top="Категория">
 					<NativeSelect name="categoryId"
 						value={categoryId}
-						onChange={e => setCategory(e.currentTarget.value)}
+						onChange={e => setCategory(parseInt(e.currentTarget.value))}
 					>
 						{group.Categories && group.Categories.map(category => {
 							return <option key={category.id} value={category.id}>{category.title}</option>
