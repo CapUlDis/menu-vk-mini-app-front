@@ -94,9 +94,9 @@ const App = () => {
       }
       router.pushPage(PAGE_MENU);
     } else {
-      fetchMenu();
+      // fetchMenu();
       // setGroup(g);
-      // router.pushPage(PAGE_START);
+      router.pushPage(PAGE_START);
       // router.pushPage(PAGE_PRESET);
       // router.pushPage(PAGE_FILL_MENU);
       // router.pushModal(MODAL_PAGE_POSITION);

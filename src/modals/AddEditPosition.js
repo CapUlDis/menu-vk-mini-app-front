@@ -109,9 +109,9 @@ const AddEditPosition = ({ id, group, setGroup, position, editMode, setEditMode,
 				return document.getElementsByClassName('ModalPage__content').scrollTop = 0;
 			case !description.trim():
 				return setInputStatus({ description: 'error' });
-			case !value.trim():
+			case !value:
 				return setInputStatus({ value: 'error' });
-			case !price.trim():
+			case !price:
 				return setInputStatus({ price: 'error' });
 			case !image.src:
 				setInputMes({ image: 'Загрузите изображение добавляемого блюда.' });
@@ -126,10 +126,39 @@ const AddEditPosition = ({ id, group, setGroup, position, editMode, setEditMode,
 		}
 
 		try {
-			const response = await API.post('/positions', formData, { headers: { 'Content-Type': 'multipart/form-data' } });
-			// console.log(response.data.position);
-			let cloneGroup = cloneDeep(group);
+      let cloneGroup = cloneDeep(group);
+
+      if (editMode) {
+        const response = await API.patch(`/positions/${position.id}`, formData, { headers: { 'Content-Type': 'multipart/form-data' }});
+        let cloneGroup = cloneDeep(group);
+        
+        const catIndex = cloneGroup.catOrder.indexOf(parseInt(position.categoryId));
+        const posIndex = cloneGroup.Categories[catIndex].posOrder.indexOf(position.id);
+
+        if (position.categoryId !== categoryId) {
+          const newCatIndex = cloneGroup.catOrder.indexOf(categoryId);
+
+          cloneGroup.Categories[catIndex].posOrder.splice(posIndex, 1);
+          cloneGroup.Categories[catIndex].Positions.splice(posIndex, 1);
+          cloneGroup.Categories[newCatIndex].posOrder.push(position.id);
+
+          if (cloneGroup.Categories[newCatIndex].Positions === undefined) {
+            cloneGroup.Categories[newCatIndex].Positions = [response.data.position];
+          } else {
+            cloneGroup.Categories[newCatIndex].Positions.push(response.data.position);
+          }
+        } else {
+          cloneGroup.Categories[catIndex].Positions[posIndex] = response.data.position;
+        }
+
+        setEditMode(false);
+        setGroup(cloneGroup);
+        return router.popPage();
+      }
+			
+      const response = await API.post('/positions', formData, { headers: { 'Content-Type': 'multipart/form-data' }});
 			const catIndex = cloneGroup.catOrder.indexOf(categoryId);
+      
 			if (cloneGroup.Categories[catIndex].Positions === undefined) {
 				cloneGroup.Categories[catIndex].Positions = [response.data.position];
 			} else {
@@ -138,11 +167,10 @@ const AddEditPosition = ({ id, group, setGroup, position, editMode, setEditMode,
 			cloneGroup.Categories[catIndex].posOrder.push(response.data.position.id);
 			setGroup(cloneGroup);
 			return router.popPage();
+
 		} catch (err) {
 			console.log(err);
 		}
-
-
 	}
 
 	return (
@@ -286,7 +314,7 @@ const AddEditPosition = ({ id, group, setGroup, position, editMode, setEditMode,
 			<Separator wide={true}/>
 			<Div>
 				<Button size='l' type='submit' form='position' stretched>
-					Добавить позицию
+					{!editMode ? 'Добавить позицию' : 'Сохранить'}
         </Button>
 			</Div>
 			{/* <FixedLayout vertical='bottom'>
