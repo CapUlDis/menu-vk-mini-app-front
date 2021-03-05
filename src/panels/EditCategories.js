@@ -32,14 +32,34 @@ const EditCategories = ({
 
   const [deletedCats, setDeletedCats] = useState([]);
 
+  const removeHandle = (category, catIndex) => {
+    if (String(category.id).match('newId') !== null) {
+      //* Только что созданная категория
+      const newIndex = newCats.findIndex(cat => cat.id === category.id);
+      setNewCats([...newCats.slice(0, newIndex), ...newCats.slice(newIndex + 1)]);
+    } else {
+      const changedIndex = changedCats.findIndex(cat => cat.id === category.id);
+      if (changedIndex !== -1) {
+        setChangedCats([...changedCats.slice(0, changedIndex), ...changedCats.slice(changedIndex + 1)]);
+      }
+      setDeletedCats([...deletedCats, catOrder[catIndex]]);
+    }
+    setCategories([...categories.slice(0, catIndex), ...categories.slice(catIndex + 1)]);
+    return setCatOrder([...catOrder.slice(0, catIndex), ...catOrder.slice(catIndex + 1)]);
+  }
+
   return (
     <Panel id={id}>
       <PanelHeader 
         left={
           <PanelHeaderButton onClick={() => {
             setEditMode(false);
-            router.pushPage(PAGE_FILL_MENU);
             setCategories(group.Categories);
+            setCatOrder(group.catOrder);
+            setDeletedCats([]);
+            setNewCats([]);
+            setChangedCats([]);
+            router.pushPage(PAGE_FILL_MENU);
           }}>
             Отменить
           </PanelHeaderButton>
@@ -69,11 +89,7 @@ const EditCategories = ({
                       setEditMode({ catIndex, id: category.id, title: category.title });
                     }}/>
                   }
-                  onRemove={() => {
-                    setDeletedCats([...deletedCats, catOrder[catIndex]]);
-                    setCategories([...categories.slice(0, catIndex), ...categories.slice(catIndex + 1)]);
-                    setCatOrder([...catOrder.slice(0, catIndex), ...catOrder.slice(catIndex + 1)]);
-                  }}
+                  onRemove={() => removeHandle(category, catIndex)}
                   onDragFinish={() => {
 
                   }}
