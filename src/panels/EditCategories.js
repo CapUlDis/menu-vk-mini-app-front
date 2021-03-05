@@ -32,6 +32,19 @@ const EditCategories = ({
 
   const [deletedCats, setDeletedCats] = useState([]);
 
+  const abortHandle = () => {
+    setEditMode(false);
+
+    setCategories(group.Categories);
+    setCatOrder(group.catOrder);
+
+    setDeletedCats([]);
+    setNewCats([]);
+    setChangedCats([]);
+    
+    return router.pushPage(PAGE_FILL_MENU);
+  }
+
   const removeHandle = (category, catIndex) => {
     if (String(category.id).match('newId') !== null) {
       //* Только что созданная категория
@@ -48,19 +61,23 @@ const EditCategories = ({
     return setCatOrder([...catOrder.slice(0, catIndex), ...catOrder.slice(catIndex + 1)]);
   }
 
+  const dragFinishHandle = ({ from, to }) => {
+    const cloneCatOrder = [...catOrder];
+    cloneCatOrder.splice(from, 1);
+    cloneCatOrder.splice(to, 0, catOrder[from]);
+
+    const cloneCategories = [...categories];
+    cloneCategories.splice(from, 1);
+    cloneCategories.splice(to, 0, categories[from]);
+
+    setCatOrder(cloneCatOrder);
+    return setCategories(cloneCategories);
+  }
   return (
     <Panel id={id}>
       <PanelHeader 
         left={
-          <PanelHeaderButton onClick={() => {
-            setEditMode(false);
-            setCategories(group.Categories);
-            setCatOrder(group.catOrder);
-            setDeletedCats([]);
-            setNewCats([]);
-            setChangedCats([]);
-            router.pushPage(PAGE_FILL_MENU);
-          }}>
+          <PanelHeaderButton onClick={abortHandle}>
             Отменить
           </PanelHeaderButton>
         }
@@ -90,9 +107,7 @@ const EditCategories = ({
                     }}/>
                   }
                   onRemove={() => removeHandle(category, catIndex)}
-                  onDragFinish={() => {
-
-                  }}
+                  onDragFinish={dragFinishHandle}
                 > 
                   {category.title}
                 </Cell>
