@@ -22,12 +22,15 @@ import {
   PAGE_EDIT_CATEGORIES,
   PAGE_MENU,
   MODAL_PAGE_POSITION,
+  MODAL_CARD_CATEGORY,
   POPOUT_EDIT_DELETE_POSITION
 } from './router';
 import Start from './panels/Start';
 import Preset from './panels/Preset';
 import FillMenu from './panels/FillMenu';
+import EditCategories from './panels/EditCategories';
 import AddEditPosition from './modals/AddEditPosition';
+import AddEditCategory from './modals/AddEditCategory';
 import EditDeletePosition from './popouts/EditDeletePosition';
 import API from './utils/API';
 
@@ -48,7 +51,13 @@ const App = () => {
   const [desktop, setDesktop] = useState(false);
 
   const [position, setPosition] = useState({});
+  const [category, setCategory] = useState({});
   const [editMode, setEditMode] = useState(false);
+  // EditCategories hooks:
+  const [categories, setCategories] = useState({});
+  const [catOrder, setCatOrder] = useState([]);
+  const [newCats, setNewCats] = useState([]);
+  const [changedCats, setChangedCats] = useState([]);
 
   const deletePosition = async () => {
     try {
@@ -77,6 +86,8 @@ const App = () => {
     const response = await API.get('/groups/152694612');
     console.log(response.data.group);
     setGroup(response.data.group);
+    setCategories(response.data.group.Categories);
+    setCatOrder(response.data.group.catOrder);
     router.pushPage(PAGE_FILL_MENU);
   };
 
@@ -94,9 +105,9 @@ const App = () => {
       }
       router.pushPage(PAGE_MENU);
     } else {
-      // fetchMenu();
+      fetchMenu();
       // setGroup(g);
-      router.pushPage(PAGE_START);
+      // router.pushPage(PAGE_START);
       // router.pushPage(PAGE_PRESET);
       // router.pushPage(PAGE_FILL_MENU);
       // router.pushModal(MODAL_PAGE_POSITION);
@@ -122,7 +133,10 @@ const App = () => {
         popout={popout}
         activePanel={location.getViewActivePanel(VIEW_MAIN)}
         modal={
-          <ModalRoot activeModal={location.getModalId()} onClose={() => router.popPage()}>
+          <ModalRoot activeModal={location.getModalId()} onClose={() => {
+            router.popPage();
+            setEditMode(false);
+          }}>
             <AddEditPosition id={MODAL_PAGE_POSITION}
               group={group}
               setGroup={setGroup}
@@ -130,6 +144,22 @@ const App = () => {
               editMode={editMode}
               setEditMode={setEditMode}
               deletePosition={deletePosition}
+            />
+            <AddEditCategory id={MODAL_CARD_CATEGORY}
+              editMode={editMode}
+              setEditMode={setEditMode}
+
+              categories={categories}
+              setCategories={setCategories}
+              
+              catOrder={catOrder}
+              setCatOrder={setCatOrder}
+
+              newCats={newCats}
+              setNewCats={setNewCats}
+
+              changedCats={changedCats}
+              setChangedCats={setChangedCats}
             />
           </ModalRoot>
         }
@@ -146,6 +176,26 @@ const App = () => {
           group={group}
           setGroup={setGroup}
           setPosition={setPosition}
+        />
+        <EditCategories id={PANEL_EDIT_CATEGORIES} desktop={desktop}
+          categories={categories}
+          setCategories={setCategories}
+
+          catOrder={catOrder}
+          setCatOrder={setCatOrder}
+
+          newCats={newCats}
+          setNewCats={setNewCats}
+
+          changedCats={changedCats}
+          setChangedCats={setChangedCats}
+          
+          group={group}
+          setGroup={setGroup}
+
+          editMode={editMode}
+          setEditMode={setEditMode}
+
         />
       </View>
       <View id={VIEW_MENU} activePanel={location.getViewActivePanel(VIEW_MENU)}>

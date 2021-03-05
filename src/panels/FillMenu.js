@@ -11,7 +11,7 @@ import API from '../utils/API';
 import foodVk from './components/img/foodvk.svg';
 import orderArray from '../utils/orderArray';
 import { useRouter } from '@happysanta/router';
-import { MODAL_PAGE_POSITION, POPOUT_EDIT_DELETE_POSITION } from '../router';
+import { MODAL_PAGE_POSITION, POPOUT_EDIT_DELETE_POSITION, PAGE_EDIT_CATEGORIES } from '../router';
 
 
 const FillMenu = ({ id, desktop, group, setGroup, setPosition }) => {
@@ -20,7 +20,7 @@ const FillMenu = ({ id, desktop, group, setGroup, setPosition }) => {
   return (
     <Panel id={id}>
       <PanelHeader separator={false}
-        left={!desktop && <PanelHeaderButton><Icon28EditOutline /></PanelHeaderButton>}
+        left={!desktop && <PanelHeaderButton onClick={() => router.pushPage(PAGE_EDIT_CATEGORIES)}><Icon28EditOutline /></PanelHeaderButton>}
       >
         Ваше Меню
       </PanelHeader>

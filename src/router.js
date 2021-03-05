@@ -18,6 +18,7 @@ export const PANEL_EDIT_CATEGORIES = 'panel_edit_categories';
 export const PANEL_MENU = 'panel_menu';
 
 export const MODAL_PAGE_POSITION = 'modal_page_position';
+export const MODAL_CARD_CATEGORY = 'modal_card_category';
 
 export const POPOUT_EDIT_DELETE_POSITION = 'popout_edit_delete_position';
 
