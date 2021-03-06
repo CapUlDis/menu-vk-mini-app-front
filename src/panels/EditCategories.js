@@ -73,6 +73,22 @@ const EditCategories = ({
     setCatOrder(cloneCatOrder);
     return setCategories(cloneCategories);
   }
+
+  const submitHandle = async () => {
+    //? Легитимно ли тут так сравнивать массивы
+    if (catOrder !== group.catOrder || changedCats.length !== 0) {
+      console.log('changed');
+      const response = await API.put('/categories', { 
+        catOrder:  catOrder !== group.catOrder ? catOrder : false,
+        newCats, 
+        deletedCats, 
+        changedCats 
+      });
+    }
+
+    return router.pushPage(PAGE_FILL_MENU);
+  }
+
   return (
     <Panel id={id}>
       <PanelHeader 
@@ -118,7 +134,7 @@ const EditCategories = ({
       <FixedLayout vertical='bottom'>
         <Separator wide={true}/>
         <Div>
-          <Button size='l' stretched>
+          <Button size='l' stretched onClick={submitHandle}>
             Готово
           </Button>
         </Div>

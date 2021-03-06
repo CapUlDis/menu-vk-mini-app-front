@@ -146,6 +146,7 @@ const App = () => {
               deletePosition={deletePosition}
             />
             <AddEditCategory id={MODAL_CARD_CATEGORY}
+              group={group}
               editMode={editMode}
               setEditMode={setEditMode}
 

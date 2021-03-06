@@ -10,7 +10,7 @@ import {
 import { PAGE_EDIT_CATEGORIES } from '../router';
 
 const AddEditCategory = ({
-  id, 
+  id, group,
 
   editMode, setEditMode,
 
@@ -38,8 +38,8 @@ const AddEditCategory = ({
       //* Режим добавления новой категори
       const newId = `newId${newCats.length + 1}`
 
-      setNewCats([...newCats, { id: newId, title }]);
-      setCategories([...categories, { id: newId, title }]);
+      setNewCats([...newCats, { id: newId, title, groupId: group.id }]);
+      setCategories([...categories, { id: newId, title, groupId: group.id }]);
       setCatOrder([...catOrder, newId]);
 
     } else {
@@ -47,14 +47,14 @@ const AddEditCategory = ({
       if (editMode.title !== title) {
         //* Вносим изменение только если название поменялось
         const cloneCategories = [...categories];
-        cloneCategories[editMode.catIndex] = { id: editMode.id, title };
+        cloneCategories[editMode.catIndex].title = title;
         setCategories(cloneCategories);
 
         if (String(editMode.id).match('newId') !== null) {
           //* Если меняем название только что созданной категории
           const newIndex = newCats.findIndex(cat => cat.id === editMode.id);
           const cloneNewCats = [...newCats];
-          cloneNewCats[newIndex] = { id: editMode.id, title };
+          cloneNewCats[newIndex].title = title;
           setNewCats(cloneNewCats);
 
         } else {
@@ -62,11 +62,11 @@ const AddEditCategory = ({
           const changedIndex = changedCats.findIndex(cat => cat.id === editMode.id);
           if (changedIndex === -1) {
             //* Меняем первый раз
-            setChangedCats([...changedCats, { id: editMode.id, title }]);
+            setChangedCats([...changedCats, { id: editMode.id, title, groupId: group.id }]);
           } else {
             //* Меняем категорию, которую уже меняли, но ещё не закоммитили изменения в БД
             const cloneChangedCats = [...changedCats];
-            cloneChangedCats[changedIndex] = { id: editMode.id, title };
+            cloneChangedCats[changedIndex].title = title;
             setChangedCats(cloneChangedCats);
           }
           
