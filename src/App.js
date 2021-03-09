@@ -29,6 +29,7 @@ import Start from './panels/Start';
 import Preset from './panels/Preset';
 import FillMenu from './panels/FillMenu';
 import EditCategories from './panels/EditCategories';
+import Menu from './panels/Menu';
 import AddEditPosition from './modals/AddEditPosition';
 import AddEditCategory from './modals/AddEditCategory';
 import EditDeletePosition from './popouts/EditDeletePosition';
@@ -195,11 +196,10 @@ const App = () => {
         />
       </View>
       <View id={VIEW_MENU} activePanel={location.getViewActivePanel(VIEW_MENU)}>
-        <Panel id={PANEL_MENU}>
-          <PanelHeader>
-            Menu
-					</PanelHeader>
-        </Panel>
+        <Menu id={PANEL_MENU}
+          group={group}
+          desktop={desktop}
+        />
       </View>
     </Root>
   );

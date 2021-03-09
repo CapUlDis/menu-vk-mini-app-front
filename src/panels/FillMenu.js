@@ -11,7 +11,7 @@ import API from '../utils/API';
 import foodVk from './components/img/foodvk.svg';
 import orderArray from '../utils/orderArray';
 import { useRouter } from '@happysanta/router';
-import { MODAL_PAGE_POSITION, POPOUT_EDIT_DELETE_POSITION, PAGE_EDIT_CATEGORIES } from '../router';
+import { MODAL_PAGE_POSITION, POPOUT_EDIT_DELETE_POSITION, PAGE_EDIT_CATEGORIES, PAGE_MENU } from '../router';
 
 
 const FillMenu = ({ id, desktop, group, setGroup, setPosition, setCategories, setCatOrder }) => {
@@ -95,7 +95,7 @@ const FillMenu = ({ id, desktop, group, setGroup, setPosition, setCategories, se
       <FixedLayout vertical='bottom'>
         <Div>
           {desktop && <CellButton before={<Icon24PenOutline />}>Изменить категории</CellButton>}
-          <CellButton before={<Icon24ViewOutline />}>Предпросмотр меню</CellButton>
+          <CellButton before={<Icon24ViewOutline/>} onClick={() => router.pushPage(PAGE_MENU)}>Предпросмотр меню</CellButton>
         </Div>
       </FixedLayout>
     </Panel>
