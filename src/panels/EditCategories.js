@@ -95,15 +95,21 @@ const EditCategories = ({
   const submitHandle = async () => {
     if (!arrayEquals(catOrder, group.catOrder) || changedCats.length !== 0) {
       console.log('changed');
-      await API.put('/categories', { 
+      const response = await API.put('/categories', { 
         catOrder:  !arrayEquals(catOrder, group.catOrder) ? catOrder : false,
         newCats, 
         deletedCats, 
         changedCats,
         groupId: group.id,
       });
+      const cloneGroup = cloneDeep(response.data.group);
 
-      
+      setGroup(response.data.group);
+      setCategories(cloneGroup.Categories);
+      setCatOrder(cloneGroup.catOrder);
+      setDeletedCats([]);
+      setChangedCats([]);
+      setNewCats([]);
     }
 
     return router.pushPage(PAGE_FILL_MENU);

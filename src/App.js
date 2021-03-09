@@ -85,12 +85,12 @@ const App = () => {
   const fetchMenu = async () => {
     const response = await API.get('/groups/152694612');
     console.log(response.data.group);
-    setGroup(response.data.group);
-    
     const cloneGroup = cloneDeep(response.data.group);
     
-    setCategories([...cloneGroup.Categories]);
-    setCatOrder([...cloneGroup.catOrder]);
+    setGroup(response.data.group);
+    setCategories(cloneGroup.Categories);
+    setCatOrder(cloneGroup.catOrder);
+
     router.pushPage(PAGE_FILL_MENU);
   };
 
