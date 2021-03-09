@@ -14,13 +14,21 @@ import { useRouter } from '@happysanta/router';
 import { MODAL_PAGE_POSITION, POPOUT_EDIT_DELETE_POSITION, PAGE_EDIT_CATEGORIES } from '../router';
 
 
-const FillMenu = ({ id, desktop, group, setGroup, setPosition }) => {
+const FillMenu = ({ id, desktop, group, setGroup, setPosition, setCategories, setCatOrder }) => {
   const router = useRouter();
 
   return (
     <Panel id={id}>
       <PanelHeader separator={false}
-        left={!desktop && <PanelHeaderButton onClick={() => router.pushPage(PAGE_EDIT_CATEGORIES)}><Icon28EditOutline /></PanelHeaderButton>}
+        left={!desktop && <PanelHeaderButton onClick={() => {
+          const cloneGroup = cloneDeep(group);
+          setCategories(cloneGroup.Categories);
+          setCatOrder(cloneGroup.catOrder);
+          router.pushPage(PAGE_EDIT_CATEGORIES);
+          }}>
+            <Icon28EditOutline />
+          </PanelHeaderButton>
+        }
       >
         Ваше Меню
       </PanelHeader>

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import cloneDeep from 'lodash-es/cloneDeep';
 import { useRouter } from '@happysanta/router';
 import {
 	ModalCard,
@@ -8,6 +9,8 @@ import {
 } from '@vkontakte/vkui';
 
 import { PAGE_EDIT_CATEGORIES } from '../router';
+
+let num = 1;
 
 const AddEditCategory = ({
   id, group,
@@ -26,6 +29,7 @@ const AddEditCategory = ({
 
   const [title, setTitle] = useState(!editMode ? '' : editMode.title);
   const [formStatus, setFormStatus] = useState('default');
+  // const [num, setNum] = useState(1);
 
   const submitHandle = () => {
     console.log('submit');
@@ -34,40 +38,65 @@ const AddEditCategory = ({
       return setFormStatus('error');
     }
 
+    const cloneCategories = cloneDeep(categories);
+
     if (!editMode) {
       //* Режим добавления новой категори
-      const newId = `newId${newCats.length + 1}`
+      const cloneNewCats = cloneDeep(newCats);
+      const newId = `newId${num}`;
+      num += 1;
 
-      setNewCats([...newCats, { id: newId, title, groupId: group.id }]);
-      setCategories([...categories, { id: newId, title, groupId: group.id }]);
+      cloneCategories.push({ id: newId, title });
+      cloneNewCats.push({ id: newId, title, groupId: group.id });
+
+      setNewCats(cloneNewCats);
+      setCategories(cloneCategories);
       setCatOrder([...catOrder, newId]);
 
     } else {
       //* Режим редактирования существующей в массиве categories категории
       if (editMode.title !== title) {
         //* Вносим изменение только если название поменялось
-        const cloneCategories = [...categories];
         cloneCategories[editMode.catIndex].title = title;
+
         setCategories(cloneCategories);
 
         if (String(editMode.id).match('newId') !== null) {
           //* Если меняем название только что созданной категории
           const newIndex = newCats.findIndex(cat => cat.id === editMode.id);
-          const cloneNewCats = [...newCats];
+          const cloneNewCats = cloneDeep(newCats);
+
           cloneNewCats[newIndex].title = title;
+
           setNewCats(cloneNewCats);
 
         } else {
           //* Если меняем название категории, которая есть в БД
           const changedIndex = changedCats.findIndex(cat => cat.id === editMode.id);
+          const cloneChangedCats = cloneDeep(changedCats);
+
           if (changedIndex === -1) {
             //* Меняем первый раз
-            setChangedCats([...changedCats, { id: editMode.id, title, groupId: group.id }]);
+            cloneChangedCats.push({ id: editMode.id, title });
+
+            setChangedCats(cloneChangedCats);
+
           } else {
             //* Меняем категорию, которую уже меняли, но ещё не закоммитили изменения в БД
-            const cloneChangedCats = [...changedCats];
-            cloneChangedCats[changedIndex].title = title;
-            setChangedCats(cloneChangedCats);
+            const originalIndex = group.catOrder.indexOf(editMode.id);
+            
+            if (group.Categories[originalIndex].title === title) {
+              //* Если название вернули на прежнее, то убираем из изменяемых
+              cloneChangedCats.splice(changedIndex, 1);
+
+              setChangedCats(cloneChangedCats);
+
+            } else {
+              cloneChangedCats[changedIndex].title = title;
+
+              setChangedCats(cloneChangedCats);
+
+            }
           }
           
         }

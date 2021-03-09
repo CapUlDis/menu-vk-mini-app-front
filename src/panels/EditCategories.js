@@ -5,7 +5,7 @@ import { Icon28AddCircleFillBlue } from '@vkontakte/icons';
 import { Icon28EditOutline } from '@vkontakte/icons';
 
 import API from '../utils/API';
-import orderArray from '../utils/orderArray';
+import arrayEquals from '../utils/arrayEquals';
 import { useRouter } from '@happysanta/router';
 import { MODAL_CARD_CATEGORY, PAGE_FILL_MENU } from '../router';
 
@@ -33,11 +33,11 @@ const EditCategories = ({
   const [deletedCats, setDeletedCats] = useState([]);
 
   const abortHandle = () => {
+    const cloneGroup = cloneDeep(group);
+
     setEditMode(false);
-
-    setCategories(group.Categories);
-    setCatOrder(group.catOrder);
-
+    setCategories(cloneGroup.Categories);
+    setCatOrder(cloneGroup.catOrder);
     setDeletedCats([]);
     setNewCats([]);
     setChangedCats([]);
@@ -46,18 +46,36 @@ const EditCategories = ({
   }
 
   const removeHandle = (category, catIndex) => {
+    const cloneCategories = cloneDeep(categories);
+
+    cloneCategories.splice(catIndex, 1);
+
+    setCategories(cloneCategories);
+
     if (String(category.id).match('newId') !== null) {
       //* Только что созданная категория
       const newIndex = newCats.findIndex(cat => cat.id === category.id);
-      setNewCats([...newCats.slice(0, newIndex), ...newCats.slice(newIndex + 1)]);
+      const cloneNewCats = cloneDeep(newCats);
+
+      cloneNewCats.splice(newIndex, 1)
+
+      setNewCats(cloneNewCats);
+
     } else {
       const changedIndex = changedCats.findIndex(cat => cat.id === category.id);
+
       if (changedIndex !== -1) {
-        setChangedCats([...changedCats.slice(0, changedIndex), ...changedCats.slice(changedIndex + 1)]);
+        const cloneChangedCats = cloneDeep(changedCats);
+
+        cloneChangedCats.splice(changedIndex, 1);
+
+        setChangedCats(cloneChangedCats);
       }
+
       setDeletedCats([...deletedCats, catOrder[catIndex]]);
+
     }
-    setCategories([...categories.slice(0, catIndex), ...categories.slice(catIndex + 1)]);
+
     return setCatOrder([...catOrder.slice(0, catIndex), ...catOrder.slice(catIndex + 1)]);
   }
 
@@ -66,7 +84,7 @@ const EditCategories = ({
     cloneCatOrder.splice(from, 1);
     cloneCatOrder.splice(to, 0, catOrder[from]);
 
-    const cloneCategories = [...categories];
+    const cloneCategories = cloneDeep(categories);
     cloneCategories.splice(from, 1);
     cloneCategories.splice(to, 0, categories[from]);
 
@@ -75,15 +93,17 @@ const EditCategories = ({
   }
 
   const submitHandle = async () => {
-    //? Легитимно ли тут так сравнивать массивы
-    if (catOrder !== group.catOrder || changedCats.length !== 0) {
+    if (!arrayEquals(catOrder, group.catOrder) || changedCats.length !== 0) {
       console.log('changed');
-      const response = await API.put('/categories', { 
-        catOrder:  catOrder !== group.catOrder ? catOrder : false,
+      await API.put('/categories', { 
+        catOrder:  !arrayEquals(catOrder, group.catOrder) ? catOrder : false,
         newCats, 
         deletedCats, 
-        changedCats 
+        changedCats,
+        groupId: group.id,
       });
+
+      
     }
 
     return router.pushPage(PAGE_FILL_MENU);
@@ -106,6 +126,7 @@ const EditCategories = ({
         </CellButton>
         <CellButton onClick={() =>{
           console.log(categories, catOrder, deletedCats, newCats, changedCats, editMode);
+          // console.log(group.Categories === categories);
         }}>
           Консоль стэйты
         </CellButton>

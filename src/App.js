@@ -86,8 +86,11 @@ const App = () => {
     const response = await API.get('/groups/152694612');
     console.log(response.data.group);
     setGroup(response.data.group);
-    setCategories(response.data.group.Categories);
-    setCatOrder(response.data.group.catOrder);
+    
+    const cloneGroup = cloneDeep(response.data.group);
+    
+    setCategories([...cloneGroup.Categories]);
+    setCatOrder([...cloneGroup.catOrder]);
     router.pushPage(PAGE_FILL_MENU);
   };
 
@@ -177,6 +180,8 @@ const App = () => {
           group={group}
           setGroup={setGroup}
           setPosition={setPosition}
+          setCategories={setCategories}
+          setCatOrder={setCatOrder}
         />
         <EditCategories id={PANEL_EDIT_CATEGORIES} desktop={desktop}
           categories={categories}
