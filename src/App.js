@@ -152,16 +152,12 @@ const App = () => {
               group={group}
               editMode={editMode}
               setEditMode={setEditMode}
-
               categories={categories}
               setCategories={setCategories}
-              
               catOrder={catOrder}
               setCatOrder={setCatOrder}
-
               newCats={newCats}
               setNewCats={setNewCats}
-
               changedCats={changedCats}
               setChangedCats={setChangedCats}
             />
@@ -186,22 +182,16 @@ const App = () => {
         <EditCategories id={PANEL_EDIT_CATEGORIES} desktop={desktop}
           categories={categories}
           setCategories={setCategories}
-
           catOrder={catOrder}
           setCatOrder={setCatOrder}
-
           newCats={newCats}
           setNewCats={setNewCats}
-
           changedCats={changedCats}
           setChangedCats={setChangedCats}
-          
           group={group}
           setGroup={setGroup}
-
           editMode={editMode}
           setEditMode={setEditMode}
-
         />
       </View>
       <View id={VIEW_MENU} activePanel={location.getViewActivePanel(VIEW_MENU)}>

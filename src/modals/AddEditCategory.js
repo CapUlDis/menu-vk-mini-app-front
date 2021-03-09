@@ -29,7 +29,6 @@ const AddEditCategory = ({
 
   const [title, setTitle] = useState(!editMode ? '' : editMode.title);
   const [formStatus, setFormStatus] = useState('default');
-  // const [num, setNum] = useState(1);
 
   const submitHandle = () => {
     console.log('submit');
