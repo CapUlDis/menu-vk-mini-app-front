@@ -1,5 +1,5 @@
-.header__container {
-  height: 210px
+.header__images {
+  height: 212px
 }
 
 .header__cover {
@@ -14,5 +14,34 @@
 
 .header__avatar .Avatar__img {
   border: 2px solid var(--background_content);
-  
+}
+
+.header__text {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.header__title {
+  margin-top: 14px;
+}
+
+.header__open {
+  color: var(--text_secondary);
+  margin-bottom: 14px;
+}
+
+.position__bottom {
+  display: flex;
+  align-items: baseline;
+
+}
+
+.position__value {
+  color: var(--text_secondary);
+}
+
+.position .RichCell__text {
+  color: var(--text_secondary);
 }
