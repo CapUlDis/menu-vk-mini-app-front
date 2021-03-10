@@ -97,6 +97,7 @@ const App = () => {
 
   useEffect(() => {
     const launchParams = qs.parse(window.location.search.slice(1));
+    console.log(launchParams);
 
     if (launchParams.vk_platform === 'desktop_web') setDesktop(true);
 
