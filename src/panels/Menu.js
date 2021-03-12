@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import bridge from "@vkontakte/vk-bridge";
+import { BridgePlus } from "@happysanta/bridge-plus";
 import { Panel, CellButton, FixedLayout, Group, Tabs, HorizontalScroll, TabsItem, Header, List, RichCell, Avatar, Text, Caption, Title, Subhead, Spacing } from '@vkontakte/vkui';
 import { useRouter } from '@happysanta/router';
 
@@ -12,21 +13,57 @@ const Menu = ({ id, group, desktop }) => {
   const router = useRouter();
 
   const [activeTab, setActiveTab] = useState(group.Categories[0].id);
-  const [cover, setCover] = useState('');
-  const [avatar, setAvatar] = useState('');
-  const [name, setName] = useState('');
+  const [groupInfo, setGroupInfo] = useState({ name: '', avatar: '', cover: '', timetable: '', close: true })
 
   const fetchGroupInfo = async () => {
-    // const responseVk = await bridge.send("VKWebAppGetGroupInfo", { group_id: group.vkGroupId });
-    // console.log(responseVk);
+    const response = await BridgePlus.api("groups.getById", { group_id: group.vkGroupId, fields: "addresses,cover,has_photo" })
+      .then(({ response: [groupInfo] }) => { return groupInfo });
+    
+    let cloneGroupInfo = {...groupInfo};
+    console.log(response);
 
-    const res2 = await bridge.send("VKWebAppCallAPIMethod", {"method": "groups.getById", "params": {"group_id": group.vkGroupId, "v": "5.130", "access_token": "504f96ca504f96ca504f96ca6d503a697d5504f504f96ca3049211346c9c52f82d4db83", "fields": "addresses,cover,has_photo"}});
-    // const res2 = await bridge.send("VKWebAppCallAPIMethod", {"method": "groups.getById", "params": {"group_id": group.vkGroupId, "v": "5.130", "access_token": "504f96ca504f96ca504f96ca6d503a697d5504f504f96ca3049211346c9c52f82d4db83", "fields": "addresses,cover,has_photo"}});
+    cloneGroupInfo.name = response.name;
 
-    console.log(res2);
-    setCover(res2.response[0].cover.images[4].url);
-    setAvatar(res2.response[0].photo_200);
-    setName(res2.response[0].name);
+    if (response.has_photo + response.cover.enabled === 2) {
+      cloneGroupInfo.avatar = response.photo_200;
+      cloneGroupInfo.cover = response.cover.images[4].url;
+    }
+
+    if (response.addresses.is_enabled) {
+      const mainAdress = await BridgePlus.api("groups.getAddresses", { group_id: group.vkGroupId, address_ids: response.addresses.main_address_id, fields: "timetable" })
+        .then(({ response }) => { return response.items[0] });
+
+      const daysOfWeek = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+      const today = new Date();
+      const currentMinutes = 60 * today.getHours() + today.getMinutes();
+      const day = daysOfWeek[today.getDay()];
+      
+      if (mainAdress.timetable[day]) {
+        
+        if (currentMinutes < mainAdress.timetable[day].open_time) {
+          const minutes = mainAdress.timetable[day].open_time % 60;
+          const hours = (mainAdress.timetable[day].open_time - minutes) / 60;
+          cloneGroupInfo.timetable = <Subhead weight='regular' className="header__open"><span style={{ color: 'var(--dynamic_red)'}}>Закрыто</span> · откроется в {hours}:{('0' + minutes).slice(-2)}</Subhead>;
+
+        } else if (currentMinutes >= mainAdress.timetable[day].open_time && currentMinutes < mainAdress.timetable[day].close_time) {
+          const minutes = mainAdress.timetable[day].close_time % 60;
+          const hours = (mainAdress.timetable[day].close_time - minutes) / 60;
+          cloneGroupInfo.close = false;
+          cloneGroupInfo.timetable = <Subhead weight='regular' className="header__open">открыто до {hours}:{('0' + minutes).slice(-2)}</Subhead>;
+
+        } else if (currentMinutes >= mainAdress.timetable[day].close_time) {
+          const nextDay = today.getDay() === 6 ? daysOfWeek[0] : daysOfWeek[today.getDay() + 1];
+
+          if (mainAdress.timetable[nextDay]) {
+            const minutes = mainAdress.timetable[nextDay].open_time % 60;
+            const hours = (mainAdress.timetable[nextDay].open_time - minutes) / 60;
+            cloneGroupInfo.timetable = <Subhead weight='regular' className="header__open"><span style={{ color: 'var(--dynamic_red)'}}>Закрыто</span> · откроется в {hours}:{('0' + minutes).slice(-2)}</Subhead>;
+          }
+        }
+      }
+    }
+
+    setGroupInfo(cloneGroupInfo);
   };
 
   useEffect(() => {
@@ -40,15 +77,15 @@ const Menu = ({ id, group, desktop }) => {
   return (
     <Panel id={id}>
       <FixedLayout vertical='top' filled>
-          {avatar &&
+          {groupInfo.avatar &&
             <div className="header__images">
-              <div className="header__cover" style={{ background: `url(${cover}) no-repeat center`, backgroundSize: 'cover' }}/>
-              <Avatar size={80} src={avatar} className="header__avatar"/>
+              <div className="header__cover" style={{ background: `url(${groupInfo.cover}) no-repeat center`, backgroundSize: 'cover' }}/>
+              <Avatar size={80} src={groupInfo.avatar} className="header__avatar"/>
             </div>
           }
           <div className="header__text">
-            <Title level='1' weight='heavy' className="header__title">{name}</Title>
-            <Subhead weight='regular' className="header__open">открыто до 22:00</Subhead>
+            <Title level='1' weight='heavy' className="header__title">{groupInfo.name}</Title>
+            {groupInfo.timetable}
           </div>
           {group.Categories &&
             <Tabs>
@@ -68,7 +105,12 @@ const Menu = ({ id, group, desktop }) => {
           }
           <Spacing separator size={8}/>
       </FixedLayout>
-      <Group className="main" style={{ paddingTop: !avatar ? '50px' : '325px' }}>
+      <Group className="main" style={{ 
+        paddingTop: !groupInfo.avatar ? (!groupInfo.timetable ? '85px' : '120px') : (!groupInfo.timetable ? '295px' : '325px'),
+        paddingBottom: !groupInfo.avatar 
+          ? (document.documentElement.clientHeight - 105 - (!groupInfo.timetable ? 85 : 120)) + 'px'
+          : (document.documentElement.clientHeight - 110 - (!groupInfo.timetable ? 295 : 325)) + 'px'
+      }}>
         {group.Categories &&
           <List>
             {group.Categories.map(category => {
