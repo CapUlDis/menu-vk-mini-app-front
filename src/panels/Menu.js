@@ -2,14 +2,15 @@ import React, { useState, useEffect } from 'react';
 import bridge from "@vkontakte/vk-bridge";
 import { BridgePlus } from "@happysanta/bridge-plus";
 import { Panel, CellButton, FixedLayout, Group, Tabs, HorizontalScroll, TabsItem, Header, List, RichCell, Avatar, Text, Caption, Title, Subhead, Spacing } from '@vkontakte/vkui';
+import { Icon28SettingsOutline } from '@vkontakte/icons';
 import { useRouter } from '@happysanta/router';
 
-import { PANEL_START, PAGE_PRESET } from '../router';
+import { PANEL_START, PAGE_PRESET, PAGE_FILL_MENU } from '../router';
 import units from '../utils/units';
 import './Menu.css';
 
 
-const Menu = ({ id, group, desktop }) => {
+const Menu = ({ id, group, desktop, admin }) => {
   const router = useRouter();
 
   const [activeTab, setActiveTab] = useState(group.Categories[0].id);
@@ -19,19 +20,7 @@ const Menu = ({ id, group, desktop }) => {
     cover: '', 
     timetable: '', 
     close: true,
-    paddingTop: 0,
-    paddingBottom: 0
   });
-
-  const findPos = (obj) => {
-    let curtop = obj.offsetTop;
-    console.log(curtop);
-    // if (obj.offsetParent) {
-    //     do {
-    //         curtop += obj.offsetTop;
-    //     } while (obj === obj.offsetParent);
-    return curtop;
-}
 
   const fetchGroupInfo = async () => {
     const response = await BridgePlus.api("groups.getById", { group_id: group.vkGroupId, fields: "addresses,cover,has_photo" })
@@ -80,8 +69,6 @@ const Menu = ({ id, group, desktop }) => {
         }
       }
     }
-    cloneGroupInfo.paddingTop = document.getElementById('header').offsetHeight;
-    console.log(cloneGroupInfo.paddingTop);
 
     setGroupInfo(cloneGroupInfo);
   };
@@ -97,42 +84,45 @@ const Menu = ({ id, group, desktop }) => {
   return (
     <Panel id={id}>
       <FixedLayout id="header" vertical='top' filled>
-          {groupInfo.avatar &&
-            <div className="header__images">
-              <div className="header__cover" style={{ background: `url(${groupInfo.cover}) no-repeat center`, backgroundSize: 'cover' }}/>
-              <Avatar size={80} src={groupInfo.avatar} className="header__avatar"/>
-            </div>
-          }
-          <div className="header__text">
-            <Title level='1' weight='heavy' className="header__title">{groupInfo.name}</Title>
-            {groupInfo.timetable}
+        {admin && <Icon28SettingsOutline className="header__settings" fill={groupInfo.avatar ? '#FFFFFF' : '#000000'} onClick={() =>{
+          router.pushPage(PAGE_FILL_MENU);
+        }}/>}
+        {groupInfo.avatar &&
+          <div className="header__images">
+            <div className="header__cover" style={{ background: `url(${groupInfo.cover}) no-repeat center`, backgroundSize: 'cover' }}/>
+            <Avatar size={80} src={groupInfo.avatar} className="header__avatar"/>
           </div>
-          {group.Categories &&
-            <Tabs>
-              <HorizontalScroll>
-                {group.Categories.map(category => {
-                  return (
-                    <TabsItem key={category.id}
-                      onClick={() => {
-                        setActiveTab(category.id);
-                        window.scrollTo(0, document.getElementById('group' + category.id).offsetTop - document.getElementById('header').offsetHeight + 16);
-                      }}
-                      selected={activeTab === category.id}
-                    >
-                      {category.title}
-                    </TabsItem>
-                  );
-                })}
-              </HorizontalScroll>
-            </Tabs>
-          }
-          <Spacing separator size={8}/>
+        }
+        <div className="header__text">
+          <Title level='1' weight='heavy' className="header__title">{groupInfo.name}</Title>
+          {groupInfo.timetable}
+        </div>
+        {group.Categories &&
+          <Tabs>
+            <HorizontalScroll>
+              {group.Categories.map(category => {
+                return (
+                  <TabsItem key={category.id}
+                    onClick={() => {
+                      setActiveTab(category.id);
+                      window.scrollTo(0, document.getElementById('group' + category.id).offsetTop - document.getElementById('header').offsetHeight + 16);
+                    }}
+                    selected={activeTab === category.id}
+                  >
+                    {category.title}
+                  </TabsItem>
+                );
+              })}
+            </HorizontalScroll>
+          </Tabs>
+        }
+        <Spacing separator size={8}/>
       </FixedLayout>
       <Group id='main' className="main" style={{ 
         paddingTop: !groupInfo.avatar ? (!groupInfo.timetable ? '97px' : '129px') : (!groupInfo.timetable ? '309px' : '341px'),
         paddingBottom: !groupInfo.avatar 
-          ? (document.documentElement.clientHeight - 92 - (!groupInfo.timetable ? 97 : 129)) + 'px'
-          : (document.documentElement.clientHeight - 92 - (!groupInfo.timetable ? 309 : 341)) + 'px'
+          ? (document.documentElement.clientHeight - 44 - (!groupInfo.timetable ? 97 : 129)) + 'px'
+          : (document.documentElement.clientHeight - 44 - (!groupInfo.timetable ? 309 : 341)) + 'px'
       }}>
         {group.Categories &&
           <List>
@@ -173,9 +163,6 @@ const Menu = ({ id, group, desktop }) => {
             })}
           </List>
         }
-        <CellButton onClick={() => router.popPage()}>
-          Назад
-        </CellButton>
       </Group>
     </Panel>
   );

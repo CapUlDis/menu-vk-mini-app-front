@@ -20,6 +20,12 @@ html {
   border: 2px solid var(--background_content);
 }
 
+.header__settings {
+  position: fixed;
+  left: calc(100% - 44px);
+  top: 14px;
+}
+
 .header__text {
   width: 100%;
   display: flex;

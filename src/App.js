@@ -98,6 +98,7 @@ const App = () => {
   useEffect(() => {
     const launchParams = qs.parse(window.location.search.slice(1));
     console.log(launchParams);
+    setAdmin(true);
 
     if (launchParams.vk_platform === 'desktop_web') setDesktop(true);
 
@@ -200,6 +201,7 @@ const App = () => {
         <Menu id={PANEL_MENU}
           group={group}
           desktop={desktop}
+          admin={admin}
         />
       </View>
     </Root>
