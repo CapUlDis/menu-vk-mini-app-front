@@ -13,7 +13,25 @@ const Menu = ({ id, group, desktop }) => {
   const router = useRouter();
 
   const [activeTab, setActiveTab] = useState(group.Categories[0].id);
-  const [groupInfo, setGroupInfo] = useState({ name: '', avatar: '', cover: '', timetable: '', close: true })
+  const [groupInfo, setGroupInfo] = useState({
+    name: '', 
+    avatar: '', 
+    cover: '', 
+    timetable: '', 
+    close: true,
+    paddingTop: 0,
+    paddingBottom: 0
+  });
+
+  const findPos = (obj) => {
+    let curtop = obj.offsetTop;
+    console.log(curtop);
+    // if (obj.offsetParent) {
+    //     do {
+    //         curtop += obj.offsetTop;
+    //     } while (obj === obj.offsetParent);
+    return curtop;
+}
 
   const fetchGroupInfo = async () => {
     const response = await BridgePlus.api("groups.getById", { group_id: group.vkGroupId, fields: "addresses,cover,has_photo" })
@@ -62,6 +80,8 @@ const Menu = ({ id, group, desktop }) => {
         }
       }
     }
+    cloneGroupInfo.paddingTop = document.getElementById('header').offsetHeight;
+    console.log(cloneGroupInfo.paddingTop);
 
     setGroupInfo(cloneGroupInfo);
   };
@@ -76,7 +96,7 @@ const Menu = ({ id, group, desktop }) => {
 
   return (
     <Panel id={id}>
-      <FixedLayout vertical='top' filled>
+      <FixedLayout id="header" vertical='top' filled>
           {groupInfo.avatar &&
             <div className="header__images">
               <div className="header__cover" style={{ background: `url(${groupInfo.cover}) no-repeat center`, backgroundSize: 'cover' }}/>
@@ -93,7 +113,10 @@ const Menu = ({ id, group, desktop }) => {
                 {group.Categories.map(category => {
                   return (
                     <TabsItem key={category.id}
-                      onClick={() => setActiveTab(category.id)}
+                      onClick={() => {
+                        setActiveTab(category.id);
+                        window.scrollTo(0, document.getElementById('group' + category.id).offsetTop - document.getElementById('header').offsetHeight + 16);
+                      }}
                       selected={activeTab === category.id}
                     >
                       {category.title}
@@ -105,20 +128,22 @@ const Menu = ({ id, group, desktop }) => {
           }
           <Spacing separator size={8}/>
       </FixedLayout>
-      <Group className="main" style={{ 
-        paddingTop: !groupInfo.avatar ? (!groupInfo.timetable ? '85px' : '120px') : (!groupInfo.timetable ? '295px' : '325px'),
+      <Group id='main' className="main" style={{ 
+        paddingTop: !groupInfo.avatar ? (!groupInfo.timetable ? '97px' : '129px') : (!groupInfo.timetable ? '309px' : '341px'),
         paddingBottom: !groupInfo.avatar 
-          ? (document.documentElement.clientHeight - 105 - (!groupInfo.timetable ? 85 : 120)) + 'px'
-          : (document.documentElement.clientHeight - 110 - (!groupInfo.timetable ? 295 : 325)) + 'px'
+          ? (document.documentElement.clientHeight - 92 - (!groupInfo.timetable ? 97 : 129)) + 'px'
+          : (document.documentElement.clientHeight - 92 - (!groupInfo.timetable ? 309 : 341)) + 'px'
       }}>
         {group.Categories &&
           <List>
             {group.Categories.map(category => {
               return (
-                <Group key={'group' + category.id} header={
-                  <Header mode='primary'>
-                    {category.title}
-                  </Header>
+                <Group key={'group' + category.id} 
+                  id={'group' + category.id}
+                  header={
+                    <Header mode='primary'>
+                      {category.title}
+                    </Header>
                 }>
                   {category.Positions &&
                     <List>

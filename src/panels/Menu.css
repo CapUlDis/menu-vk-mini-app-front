@@ -1,3 +1,7 @@
+html {
+  scroll-behavior: smooth;
+}
+
 .header__images {
   height: 212px
 }
@@ -30,6 +34,10 @@
 .header__open {
   color: var(--text_secondary);
   margin-bottom: 14px;
+}
+
+.main .vkuiGroup__inner {
+  padding-top: 0 !important;
 }
 
 .position__bottom {
