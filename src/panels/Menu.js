@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import bridge from "@vkontakte/vk-bridge";
 import { BridgePlus } from "@happysanta/bridge-plus";
-import { Panel, CellButton, FixedLayout, Group, Tabs, HorizontalScroll, TabsItem, Header, List, RichCell, Avatar, Text, Caption, Title, Subhead, Spacing } from '@vkontakte/vkui';
+import { Panel, FixedLayout, Group, Tabs, HorizontalScroll, TabsItem, Header, List, RichCell, Avatar, Text, Caption, Title, Subhead, Spacing } from '@vkontakte/vkui';
 import { Icon28SettingsOutline } from '@vkontakte/icons';
 import { useRouter } from '@happysanta/router';
 
-import { PANEL_START, PAGE_PRESET, PAGE_FILL_MENU } from '../router';
+import { PAGE_FILL_MENU } from '../router';
 import units from '../utils/units';
 import './Menu.css';
 
