@@ -50,9 +50,9 @@ const App = () => {
   const [snackbarError, setSnackbarError] = useState(null);
   const [group, setGroup] = useState({});
   const [desktop, setDesktop] = useState(false);
+  const [watchFlag, setWatchFlag] = useState(0);
 
   const [position, setPosition] = useState({});
-  const [category, setCategory] = useState({});
   const [editMode, setEditMode] = useState(false);
   // EditCategories hooks:
   const [categories, setCategories] = useState({});
@@ -83,50 +83,45 @@ const App = () => {
     }
   })();
 
-  const fetchMenu = async () => {
-    const response = await API.get('/groups/152694612');
-    console.log(response.data.group);
-    const cloneGroup = cloneDeep(response.data.group);
-    
-    setGroup(response.data.group);
-    setCategories(cloneGroup.Categories);
-    setCatOrder(cloneGroup.catOrder);
+  const fetchMenu = async (launchParams) => {
+    try {
+      const response = await API.get(`/groups/${launchParams.vk_group_id}`)
+        .then((response) => {
+          return response.data.group;
+        });
+      console.log(response);
+      setGroup(response);
 
-    router.pushPage(PAGE_FILL_MENU);
+      if (launchParams.vk_viewer_group_role === 'admin') setAdmin(true);
+
+      setStep(STEPS.MAIN);
+      return router.pushPage(PAGE_MENU);
+
+    } catch (err) {
+      console.log(err);
+      return setWatchFlag(watchFlag + 1);
+    }
   };
 
   useEffect(() => {
     const launchParams = qs.parse(window.location.search.slice(1));
     console.log(launchParams);
-    setAdmin(true);
 
     if (launchParams.vk_platform === 'desktop_web') setDesktop(true);
 
-    setStep(STEPS.MAIN);
-
     if (launchParams.hasOwnProperty('vk_group_id')) {
+      fetchMenu(launchParams);
 
-      if (launchParams.vk_viewer_group_role === 'admin') {
-        setAdmin(true);
-      }
-      router.pushPage(PAGE_MENU);
     } else {
-      fetchMenu();
-      // setGroup(g);
-      // router.pushPage(PAGE_START);
-      // router.pushPage(PAGE_PRESET);
-      // router.pushPage(PAGE_FILL_MENU);
-      // router.pushModal(MODAL_PAGE_POSITION);
+      setStep(STEPS.MAIN);
+      router.pushPage(PAGE_START);
     }
-  }, [])
+  }, [watchFlag])
 
   if (step === STEPS.LOADER) {
     return (
       <View activePanel={STEPS.LOADER} popout={<ScreenSpinner size='large' />}>
         <Panel id={STEPS.LOADER}>
-          <PanelHeader>
-            Loader
-					</PanelHeader>
           {snackbarError}
         </Panel>
       </View>
