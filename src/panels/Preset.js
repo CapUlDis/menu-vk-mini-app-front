@@ -35,8 +35,12 @@ const Preset = ({ id, group, setGroup, desktop }) => {
     { id: 9, title: 'Выпечка', src: bakery, isChecked: false },
   ]);
 
+  const hasAtLeastOneChecked = () => {
+
+  }
+
   const handleContinueClick = async () => {
-    const cloneGroup = cloneDeep(group);
+    let cloneGroup = cloneDeep(group);
     cloneGroup.Categories = [];
     categories.forEach(category => {
       if (category.isChecked) {
@@ -77,15 +81,16 @@ const Preset = ({ id, group, setGroup, desktop }) => {
         </Subhead>
       </FixedLayout>
       <Group className="group-categories" style={{ paddingTop: !desktop ? '54px' : '80px'}}>
-        {categories.map(({ id, title, src, isChecked }) =>
+        {categories.map(({ id, title, src, isChecked }) => 
           <Cell selectable before={<Avatar src={src} shadow={false} mode='app' />}
-            className="category-cell"
+            className={desktop ? 'category-cell category-cell_desktop' : 'category-cell' }
             key={id}
             name='categories'
             value={title}
             checked={isChecked}
+            after={desktop && isChecked && <Icon24DoneOutline/>}
             onChange={e => {
-              const cloneCategories = cloneDeep(categories);
+              let cloneCategories = cloneDeep(categories);
               cloneCategories[id].isChecked = e.target.checked;
               setCategories(cloneCategories);
             }}
@@ -97,7 +102,13 @@ const Preset = ({ id, group, setGroup, desktop }) => {
       <FixedLayout vertical='bottom' filled>
         <Separator wide={true}/>
         <Div>
-          <Button className="button-desktop" align={desktop ? "right" : "center"} size={desktop ? 'm' : 'l'} stretched={desktop ? false : true}  onClick={handleContinueClick}>
+          <Button 
+            align={desktop ? "right" : "center"} 
+            size={desktop ? 'm' : 'l'} 
+            stretched={desktop ? false : true}  
+            onClick={handleContinueClick}
+            disabled={!categories.some(cat => cat.isChecked === true)}
+          >
             Продолжить
           </Button>
         </Div>

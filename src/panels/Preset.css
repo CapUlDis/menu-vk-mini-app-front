@@ -13,10 +13,14 @@
   padding-bottom: 11px;
 }
 
-.category-cell .vkuiAvatar__img{
+.category-cell .vkuiAvatar__img {
   background: var(--background_content);
 }
 
 .category-cell .vkuiCell__marker {
   order: 1;
+}
+
+.category-cell_desktop .vkuiCell__checkbox:checked~.vkuiCell__marker, .category-cell_desktop .vkuiCell__marker {
+  display: none;
 }
