@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import qs from 'querystring';
 import _ from 'lodash';
 import cloneDeep from 'lodash-es/cloneDeep';
@@ -114,7 +113,9 @@ const App = () => {
 
     } else {
       setStep(STEPS.MAIN);
-      router.pushPage(PAGE_START);
+      // ! router.pushPage(PAGE_START);
+
+      router.pushPage(PAGE_PRESET);
     }
   }, [watchFlag])
 
@@ -164,6 +165,7 @@ const App = () => {
       >
         <Start id={PANEL_START}
           setGroup={setGroup}
+          desktop={desktop}
         />
         <Preset id={PANEL_PRESET}
           group={group}

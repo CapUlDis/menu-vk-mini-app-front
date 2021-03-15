@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
+import cloneDeep from 'lodash-es/cloneDeep';
 import { Panel, PanelHeader, Title, FixedLayout, Div, Button, Separator, Subhead, Group, Cell, Avatar } from '@vkontakte/vkui';
 import { useRouter } from '@happysanta/router';
 
 import API from '../utils/API';
+import './Preset.css';
 import { PAGE_FILL_MENU } from '../router';
 import breakfast from './components/img/Image.svg';
 import snacks from './components/img/Image-1.svg';
@@ -33,7 +35,7 @@ const Preset = ({ id, group, setGroup }) => {
   ]);
 
   const handleContinueClick = async () => {
-    const cloneGroup = _.cloneDeep(group);
+    const cloneGroup = cloneDeep(group);
     cloneGroup.Categories = [];
     categories.forEach(category => {
       if (category.isChecked) {
@@ -65,12 +67,12 @@ const Preset = ({ id, group, setGroup }) => {
       <PanelHeader separator={false} >
         Выберите категории
       </PanelHeader>
-      <Div>
-        <Subhead weight='regular' align='center'>
-          Выберите категории, которые представлены в вашем заведении. Позже вы сможете их изменить или создать новые.
+      <FixedLayout vertical='top filled'>
+        <Subhead weight='regular' align='center' className="header__subhead">
+          Выберите категории, которые представлены<br/> в вашем заведении. Позже вы сможете их изменить или создать новые.
         </Subhead>
-      </Div>
-      <Group>
+      </FixedLayout>
+      <Group className="group-categories">
         {categories.map(({ id, title, src, isChecked }) =>
           <Cell selectable before={<Avatar src={src} shadow={false} mode='app' />}
             key={id}
@@ -78,7 +80,7 @@ const Preset = ({ id, group, setGroup }) => {
             value={title}
             checked={isChecked}
             onChange={e => {
-              const cloneCategories = _.cloneDeep(categories);
+              const cloneCategories = cloneDeep(categories);
               cloneCategories[id].isChecked = e.target.checked;
               setCategories(cloneCategories);
             }}
@@ -87,7 +89,7 @@ const Preset = ({ id, group, setGroup }) => {
           </Cell>
         )}
       </Group>
-      <FixedLayout vertical='bottom'>
+      <FixedLayout vertical='bottom' filled>
         <Separator wide={true} />
         <Div>
           <Button size='l' stretched onClick={handleContinueClick}>
