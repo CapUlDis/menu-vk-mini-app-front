@@ -7,3 +7,16 @@
   padding-top: 54px;
   padding-bottom: 68px;
 }
+
+.header-desktop {
+  padding-top: 13px;
+  padding-bottom: 11px;
+}
+
+.category-cell .vkuiAvatar__img{
+  background: var(--background_content);
+}
+
+.category-cell .vkuiCell__marker {
+  order: 1;
+}

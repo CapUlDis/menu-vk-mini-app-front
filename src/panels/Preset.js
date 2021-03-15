@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import cloneDeep from 'lodash-es/cloneDeep';
-import { Panel, PanelHeader, Title, FixedLayout, Div, Button, Separator, Subhead, Group, Cell, Avatar } from '@vkontakte/vkui';
+import { Panel, PanelHeader, Text, FixedLayout, Div, Button, Separator, Subhead, Group, Cell, Avatar } from '@vkontakte/vkui';
+import { Icon24DoneOutline } from '@vkontakte/icons';
 import { useRouter } from '@happysanta/router';
 
 import API from '../utils/API';
@@ -18,7 +19,7 @@ import burgers from './components/img/Image-8.svg';
 import bakery from './components/img/Image-9.svg';
 
 
-const Preset = ({ id, group, setGroup }) => {
+const Preset = ({ id, group, setGroup, desktop }) => {
   const router = useRouter();
 
   const [categories, setCategories] = useState([
@@ -64,17 +65,21 @@ const Preset = ({ id, group, setGroup }) => {
 
   return (
     <Panel id={id}>
-      <PanelHeader separator={false} >
-        Выберите категории
-      </PanelHeader>
-      <FixedLayout vertical='top filled'>
+      {!desktop &&
+        <PanelHeader separator={false} >
+          Выберите категории
+        </PanelHeader>
+      }
+      <FixedLayout vertical='top' filled>
+        {desktop && <Text className="header-desktop" weight="medium" align="center">Выберите категории</Text>}
         <Subhead weight='regular' align='center' className="header__subhead">
-          Выберите категории, которые представлены<br/> в вашем заведении. Позже вы сможете их изменить или создать новые.
+          Выберите категории, которые представлены в вашем заведении. Позже вы сможете их изменить или создать новые.
         </Subhead>
       </FixedLayout>
-      <Group className="group-categories">
+      <Group className="group-categories" style={{ paddingTop: !desktop ? '54px' : '80px'}}>
         {categories.map(({ id, title, src, isChecked }) =>
           <Cell selectable before={<Avatar src={src} shadow={false} mode='app' />}
+            className="category-cell"
             key={id}
             name='categories'
             value={title}
@@ -90,9 +95,9 @@ const Preset = ({ id, group, setGroup }) => {
         )}
       </Group>
       <FixedLayout vertical='bottom' filled>
-        <Separator wide={true} />
+        <Separator wide={true}/>
         <Div>
-          <Button size='l' stretched onClick={handleContinueClick}>
+          <Button className="button-desktop" align={desktop ? "right" : "center"} size={desktop ? 'm' : 'l'} stretched={desktop ? false : true}  onClick={handleContinueClick}>
             Продолжить
           </Button>
         </Div>

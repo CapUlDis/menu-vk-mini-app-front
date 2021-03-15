@@ -170,6 +170,7 @@ const App = () => {
         <Preset id={PANEL_PRESET}
           group={group}
           setGroup={setGroup}
+          desktop={desktop}
         />
         <FillMenu id={PANEL_FILL_MENU}
           desktop={desktop}
