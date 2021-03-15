@@ -1,0 +1,9 @@
+.header__subhead {
+  color: var(--text_secondary);
+  padding: 0 30px;
+}
+
+.group-categories {
+  padding-top: 54px;
+  padding-bottom: 68px;
+}
