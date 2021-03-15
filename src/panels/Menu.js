@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BridgePlus } from "@happysanta/bridge-plus";
-import { Panel, FixedLayout, Group, Tabs, HorizontalScroll, TabsItem, Header, List, RichCell, Avatar, Text, Caption, Title, Subhead, Spacing } from '@vkontakte/vkui';
+import { Panel, Placeholder, FixedLayout, Group, Tabs, HorizontalScroll, TabsItem, Header, List, RichCell, Headline, Avatar, Text, Caption, Title, Subhead, Spacing } from '@vkontakte/vkui';
 import { Icon28SettingsOutline } from '@vkontakte/icons';
 import { useRouter } from '@happysanta/router';
 
@@ -99,12 +99,16 @@ const Menu = ({ id, group, desktop, admin }) => {
         {group.Categories &&
           <Tabs>
             <HorizontalScroll>
-              {group.Categories.map(category => {
+              {group.Categories.map((category, index) => {
                 return (
-                  <TabsItem key={category.id}
+                  <TabsItem key={category.id} className={desktop && "header__tab_desktop"}
                     onClick={() => {
                       setActiveTab(category.id);
-                      window.scrollTo(0, document.getElementById('group' + category.id).offsetTop - document.getElementById('header').offsetHeight + 16);
+                      const verPos = document.getElementById('group' + category.id).offsetTop 
+                        - document.getElementById('header').offsetHeight 
+                        + (index !== 0 ? 8 : 0)
+                        - (desktop && 15);
+                      window.scrollTo(0, verPos);
                     }}
                     selected={activeTab === category.id}
                   >
@@ -115,28 +119,46 @@ const Menu = ({ id, group, desktop, admin }) => {
             </HorizontalScroll>
           </Tabs>
         }
-        <Spacing separator size={8}/>
+        <Spacing separator size={desktop ? 1 : 8} className={desktop &&   "separator_desktop"}/>
       </FixedLayout>
-      <Group id='main' className="main" style={{ 
-        paddingTop: !groupInfo.avatar ? (!groupInfo.timetable ? '97px' : '129px') : (!groupInfo.timetable ? '309px' : '341px'),
-        paddingBottom: !groupInfo.avatar 
-          ? (document.documentElement.clientHeight - 44 - (!groupInfo.timetable ? 97 : 129)) + 'px'
-          : (document.documentElement.clientHeight - 44 - (!groupInfo.timetable ? 309 : 341)) + 'px'
-      }}>
-        {group.Categories &&
-          <List>
-            {group.Categories.map(category => {
-              return (
-                <Group key={'group' + category.id} 
-                  id={'group' + category.id}
-                  header={
-                    <Header mode='primary'>
-                      {category.title}
-                    </Header>
-                }>
-                  {category.Positions &&
-                    <List>
-                      {category.Positions.map(position => {
+      {group.Categories && group.Categories.length > 0 
+        ? <Group id='main' className="main" style={{ 
+          paddingTop: !groupInfo.avatar ? (!groupInfo.timetable ? '97px' : '129px') : (!groupInfo.timetable ? '309px' : '341px'),
+          paddingBottom: !groupInfo.avatar 
+            ? (document.documentElement.clientHeight - 52 - (!groupInfo.timetable ? 97 : 129)) + 'px'
+            : (document.documentElement.clientHeight - 52 - (!groupInfo.timetable ? 309 : 341)) + 'px'
+        }}>
+          {group.Categories.map((category, index) => {
+            return (
+              <Group className={desktop && "category_desktop"}
+                key={'group' + category.id} 
+                id={'group' + category.id}
+                header={desktop
+                  ? <Headline className="category__header_desktop"
+                    weight='regular'
+                  >
+                    {category.title}
+                  </Headline>
+                  : <Header mode='primary' style={{ paddingTop: index !== 0 && "8px" }}>
+                    {category.title}
+                  </Header>
+              }>
+                {category.Positions &&
+                  <List className={desktop && 'position-list_desktop'}>
+                    {category.Positions.map(position => {
+                      if (desktop) {
+                        return (
+                          <div className="position-desktop" key={'position-desktop' + position.id}>
+                            <Avatar size={190} mode='image' src={position.imageUrl}/>
+                            <Text className="position-desktop__title">{position.title}</Text>
+                            <Caption className="position-desktop__description" level='1' weight='regular'>{position.description}</Caption>
+                            <div className="position__bottom position__bottom_desktop">
+                              <Text>{position.price + '₽'}</Text>
+                              <Caption className="position__value" level='1' weight='regular'>{'· ' + position.value + units[position.unitId].nick}</Caption>
+                            </div>
+                          </div>
+                        )
+                      } else {
                         return (
                           <RichCell className="position"
                             key={'richCell' + position.id}
@@ -154,15 +176,20 @@ const Menu = ({ id, group, desktop, admin }) => {
                             {position.title}
                           </RichCell>
                         );
-                      })}
-                    </List>
-                  }
-                </Group>
-              );
-            })}
-          </List>
-        }
-      </Group>
+                      }
+                    })}
+                  </List>
+                }
+              </Group>
+            );
+          })}
+        </Group>
+        : <Placeholder style={{
+          paddingTop: !groupInfo.avatar ? (!groupInfo.timetable ? '97px' : '129px') : (!groupInfo.timetable ? '309px' : '341px'),
+        }}>
+          Меню еще не составлено
+        </Placeholder>
+      }
     </Panel>
   );
 }

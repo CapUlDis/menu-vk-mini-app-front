@@ -42,6 +42,10 @@ html {
   margin-bottom: 14px;
 }
 
+.header__tab_desktop.vkuiTabsItem::after {
+  bottom: 0px !important;
+}
+
 .main .vkuiGroup__inner {
   padding-top: 0 !important;
 }
@@ -49,13 +53,49 @@ html {
 .position__bottom {
   display: flex;
   align-items: baseline;
-
 }
 
-.position__value {
+.position__value, .position-desktop__description {
   color: var(--text_secondary);
 }
 
 .position .RichCell__text {
   color: var(--text_secondary);
+}
+
+.category_desktop .vkuiSeparator:not(.vkuiSeparator--wide).vkuiSeparator--android .vkuiSeparator__in {
+  margin-left: 24px;
+  margin-right: 24px;
+}
+
+.category__header_desktop {
+  padding: 14px 0px 14px 24px;
+}
+
+.separator_desktop {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.position-list_desktop {
+  display: flex;
+  padding: 8px 24px;
+}
+
+.position-desktop {
+  display: flex;
+  flex-direction: column;
+  padding-right: 21px;
+}
+
+.position-desktop__description {
+  padding-top: 3px;
+}
+
+.position-desktop__title {
+  padding-top: 13px;
+}
+
+.position__bottom_desktop {
+  padding-top: 6px;
 }
