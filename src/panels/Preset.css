@@ -1,16 +1,13 @@
 .header__subhead {
   color: var(--text_secondary);
+  max-width: 520px;
   padding: 0 30px;
+  margin: auto;
 }
 
 .group-categories {
   padding-top: 54px;
   padding-bottom: 68px;
-}
-
-.header-desktop {
-  padding-top: 13px;
-  padding-bottom: 11px;
 }
 
 .category-cell .vkuiAvatar__img {

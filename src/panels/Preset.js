@@ -69,13 +69,10 @@ const Preset = ({ id, group, setGroup, desktop }) => {
 
   return (
     <Panel id={id}>
-      {!desktop &&
-        <PanelHeader separator={false} >
-          Выберите категории
-        </PanelHeader>
-      }
+      <PanelHeader separator={false} >
+        Выберите категории
+      </PanelHeader>
       <FixedLayout vertical='top' filled>
-        {desktop && <Text className="header-desktop" weight="medium" align="center">Выберите категории</Text>}
         <Subhead weight='regular' align='center' className="header__subhead">
           Выберите категории, которые представлены в вашем заведении. Позже вы сможете их изменить или создать новые.
         </Subhead>
