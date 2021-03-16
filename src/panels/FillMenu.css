@@ -1,0 +1,9 @@
+.footer-desktop {
+  display: flex;
+}
+
+.footer-desktop__cell-button {
+  max-width: 210px;
+  padding: 0px;
+  margin-left: 4px;
+}
