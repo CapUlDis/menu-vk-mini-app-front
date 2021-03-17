@@ -75,6 +75,7 @@ const Menu = ({ id, group, desktop, admin }) => {
   useEffect(() => {
     try {
       fetchGroupInfo();
+      console.log(document.getElementById("main").firstChild.lastChild.firstChild.lastChild.clientHeight);
     } catch (error) {
       console.log(err);
     }
@@ -82,7 +83,7 @@ const Menu = ({ id, group, desktop, admin }) => {
 
   return (
     <Panel id={id}>
-      <FixedLayout id="header" vertical='top' filled>
+      <FixedLayout id="header" vertical='top' >
         {admin && <Icon28SettingsOutline className="header__settings" fill={groupInfo.avatar ? '#FFFFFF' : '#000000'} onClick={() =>{
           router.pushPage(PAGE_FILL_MENU);
         }}/>}
@@ -101,7 +102,7 @@ const Menu = ({ id, group, desktop, admin }) => {
             <HorizontalScroll>
               {group.Categories.map((category, index) => {
                 return (
-                  <TabsItem key={category.id} className={desktop && "header__tab_desktop"}
+                  <TabsItem key={category.id}
                     onClick={() => {
                       setActiveTab(category.id);
                       const verPos = document.getElementById('group' + category.id).offsetTop 
@@ -119,32 +120,29 @@ const Menu = ({ id, group, desktop, admin }) => {
             </HorizontalScroll>
           </Tabs>
         }
-        <Spacing separator size={desktop ? 1 : 8} className={desktop &&   "separator_desktop"}/>
+        <Spacing separator size={8}/>
       </FixedLayout>
       {group.Categories && group.Categories.length > 0 
-        ? <Group id='main' className="main" style={{ 
-          paddingTop: !groupInfo.avatar ? (!groupInfo.timetable ? '97px' : '129px') : (!groupInfo.timetable ? '309px' : '341px'),
+        ? <Group id='main' style={{ 
+          paddingTop: !groupInfo.avatar ? (!groupInfo.timetable ? '87px' : '119px') : (!groupInfo.timetable ? '299px' : '331px'),
           paddingBottom: !groupInfo.avatar 
-            ? (document.documentElement.clientHeight - 52 - (!groupInfo.timetable ? 97 : 129)) + 'px'
-            : (document.documentElement.clientHeight - 52 - (!groupInfo.timetable ? 309 : 341)) + 'px'
+            ? (document.documentElement.clientHeight - 8 - (!groupInfo.timetable ? 87 : 119)) + 'px'
+            : (document.documentElement.clientHeight - 16 - document.getElementById(`group${group.Categories[group.Categories.length - 1].id}__main`).clientHeight - (!groupInfo.timetable ? 299 : 331)) + 'px'
         }}>
           {group.Categories.map((category, index) => {
             return (
-              <Group className={desktop && "category_desktop"}
+              <Group className="category-group"
                 key={'group' + category.id} 
                 id={'group' + category.id}
-                header={desktop
-                  ? <Headline className="category__header_desktop"
-                    weight='regular'
-                  >
-                    {category.title}
-                  </Headline>
-                  : <Header mode='primary' style={{ paddingTop: index !== 0 && "8px" }}>
+                header={
+                  <Header className="category-group__header" mode='primary'>
                     {category.title}
                   </Header>
               }>
                 {category.Positions &&
-                  <List className={desktop && 'position-list_desktop'}>
+                  <List id={'group' + category.id + '__main'}
+                    className={desktop && 'position-list_desktop'}
+                  >
                     {category.Positions.map(position => {
                       if (desktop) {
                         return (
