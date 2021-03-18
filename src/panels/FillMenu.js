@@ -1,5 +1,6 @@
 import React,  { useState }from 'react';
 import cloneDeep from 'lodash-es/cloneDeep';
+// import { BridgePlus } fro  m "@happysanta/bridge-plus";
 import { Panel, PanelHeader, PanelHeaderButton, FixedLayout, Div, Group, Header, Text, Link, Cell, List, CellButton, Avatar, Separator, usePlatform } from '@vkontakte/vkui';
 import { Icon28EditOutline } from '@vkontakte/icons';
 import { Icon24PenOutline } from '@vkontakte/icons';
@@ -17,7 +18,7 @@ import { MODAL_PAGE_POSITION, POPOUT_EDIT_DELETE_POSITION, PAGE_EDIT_CATEGORIES,
 
 const FillMenu = ({ id, desktop, group, setGroup, setPosition, setCategories, setCatOrder }) => {
   const router = useRouter();
-  const platform = usePlatform();
+  // const platform = BridgePlus.getStartParams().getPlatform();
 
   return (
     <Panel id={id}>

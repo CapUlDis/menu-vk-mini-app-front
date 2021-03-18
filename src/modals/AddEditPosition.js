@@ -207,6 +207,7 @@ const AddEditPosition = ({ id, group, setGroup, position, editMode, setEditMode,
 					status={inputStatus.description ? inputStatus.description : 'default'}
 				>
 					<Textarea name="description"
+            style={{ height: '64px' }}
 						value={description}
 						maxLength="100"
 						placeholder="Введите описание"

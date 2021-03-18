@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { BridgePlus } from "@happysanta/bridge-plus";
 import { Panel, Placeholder, FixedLayout, Group, Tabs, HorizontalScroll, TabsItem, Header, List, RichCell, Headline, Avatar, Text, Caption, Title, Subhead, Spacing } from '@vkontakte/vkui';
 import { Icon28SettingsOutline } from '@vkontakte/icons';
 import { useRouter } from '@happysanta/router';
