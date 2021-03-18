@@ -35,10 +35,6 @@ const Preset = ({ id, group, setGroup, desktop }) => {
     { id: 9, title: 'Выпечка', src: bakery, isChecked: false },
   ]);
 
-  const hasAtLeastOneChecked = () => {
-
-  }
-
   const handleContinueClick = async () => {
     let cloneGroup = cloneDeep(group);
     cloneGroup.Categories = [];

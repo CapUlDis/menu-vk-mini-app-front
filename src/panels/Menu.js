@@ -9,81 +9,24 @@ import units from '../utils/units';
 import './Menu.css';
 
 
-const Menu = ({ id, group, desktop, admin }) => {
+const Menu = ({ id, group, desktop, admin, groupInfo }) => {
   const router = useRouter();
 
   const [activeTab, setActiveTab] = useState(group.Categories[0].id);
-  const [groupInfo, setGroupInfo] = useState({
-    name: '', 
-    avatar: '', 
-    cover: '', 
-    timetable: '', 
-    close: true,
-  });
-
-  const fetchGroupInfo = async () => {
-    const response = await BridgePlus.api("groups.getById", { group_id: group.vkGroupId, fields: "addresses,cover,has_photo" })
-      .then(({ response: [groupInfo] }) => { return groupInfo });
-    
-    let cloneGroupInfo = {...groupInfo};
-    console.log(response);
-
-    cloneGroupInfo.name = response.name;
-
-    if (response.has_photo + response.cover.enabled === 2) {
-      cloneGroupInfo.avatar = response.photo_200;
-      cloneGroupInfo.cover = response.cover.images[4].url;
-    }
-
-    if (response.addresses.is_enabled) {
-      const mainAdress = await BridgePlus.api("groups.getAddresses", { group_id: group.vkGroupId, address_ids: response.addresses.main_address_id, fields: "timetable" })
-        .then(({ response }) => { return response.items[0] });
-
-      const daysOfWeek = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
-      const today = new Date();
-      const currentMinutes = 60 * today.getHours() + today.getMinutes();
-      const day = daysOfWeek[today.getDay()];
-      
-      if (mainAdress.timetable[day]) {
-        
-        if (currentMinutes < mainAdress.timetable[day].open_time) {
-          const minutes = mainAdress.timetable[day].open_time % 60;
-          const hours = (mainAdress.timetable[day].open_time - minutes) / 60;
-          cloneGroupInfo.timetable = <Subhead weight='regular' className="header__open"><span style={{ color: 'var(--dynamic_red)'}}>Закрыто</span> · откроется в {hours}:{('0' + minutes).slice(-2)}</Subhead>;
-
-        } else if (currentMinutes >= mainAdress.timetable[day].open_time && currentMinutes < mainAdress.timetable[day].close_time) {
-          const minutes = mainAdress.timetable[day].close_time % 60;
-          const hours = (mainAdress.timetable[day].close_time - minutes) / 60;
-          cloneGroupInfo.close = false;
-          cloneGroupInfo.timetable = <Subhead weight='regular' className="header__open">открыто до {hours}:{('0' + minutes).slice(-2)}</Subhead>;
-
-        } else if (currentMinutes >= mainAdress.timetable[day].close_time) {
-          const nextDay = today.getDay() === 6 ? daysOfWeek[0] : daysOfWeek[today.getDay() + 1];
-
-          if (mainAdress.timetable[nextDay]) {
-            const minutes = mainAdress.timetable[nextDay].open_time % 60;
-            const hours = (mainAdress.timetable[nextDay].open_time - minutes) / 60;
-            cloneGroupInfo.timetable = <Subhead weight='regular' className="header__open"><span style={{ color: 'var(--dynamic_red)'}}>Закрыто</span> · откроется в {hours}:{('0' + minutes).slice(-2)}</Subhead>;
-          }
-        }
-      }
-    }
-
-    setGroupInfo(cloneGroupInfo);
-  };
+  const [contentPaddingBottom, setContentPaddingBottom] = useState('0px')
 
   useEffect(() => {
-    try {
-      fetchGroupInfo();
-      console.log(document.getElementById("main").firstChild.lastChild.firstChild.lastChild.clientHeight);
-    } catch (error) {
-      console.log(err);
-    }
-  }, []);
+    let paddingBottom = document.documentElement.clientHeight 
+          - document.getElementById(`group${group.Categories[group.Categories.length - 1].id}__main`).clientHeight
+          - (!groupInfo.avatar ? (!groupInfo.timetable ? 87 : 119) : (!groupInfo.timetable ? 299 : 331))
+          - 16;
+    
+    setContentPaddingBottom(paddingBottom + 'px');
+  }, [])
 
   return (
     <Panel id={id}>
-      <FixedLayout id="header" vertical='top' >
+      <FixedLayout id="header" vertical='top' filled>
         {admin && <Icon28SettingsOutline className="header__settings" fill={groupInfo.avatar ? '#FFFFFF' : '#000000'} onClick={() =>{
           router.pushPage(PAGE_FILL_MENU);
         }}/>}
@@ -105,10 +48,8 @@ const Menu = ({ id, group, desktop, admin }) => {
                   <TabsItem key={category.id}
                     onClick={() => {
                       setActiveTab(category.id);
-                      const verPos = document.getElementById('group' + category.id).offsetTop 
-                        - document.getElementById('header').offsetHeight 
-                        + (index !== 0 ? 8 : 0)
-                        - (desktop && 15);
+                      const verPos = document.getElementById('group' + category.id + '__main').offsetTop 
+                        - document.getElementById('header').offsetHeight;
                       window.scrollTo(0, verPos);
                     }}
                     selected={activeTab === category.id}
@@ -125,11 +66,9 @@ const Menu = ({ id, group, desktop, admin }) => {
       {group.Categories && group.Categories.length > 0 
         ? <Group id='main' style={{ 
           paddingTop: !groupInfo.avatar ? (!groupInfo.timetable ? '87px' : '119px') : (!groupInfo.timetable ? '299px' : '331px'),
-          paddingBottom: !groupInfo.avatar 
-            ? (document.documentElement.clientHeight - 8 - (!groupInfo.timetable ? 87 : 119)) + 'px'
-            : (document.documentElement.clientHeight - 16 - document.getElementById(`group${group.Categories[group.Categories.length - 1].id}__main`).clientHeight - (!groupInfo.timetable ? 299 : 331)) + 'px'
+          paddingBottom: contentPaddingBottom 
         }}>
-          {group.Categories.map((category, index) => {
+          {group.Categories.map(category => {
             return (
               <Group className="category-group"
                 key={'group' + category.id} 

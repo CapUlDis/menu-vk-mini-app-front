@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
+import { BridgePlus } from "@happysanta/bridge-plus";
 import qs from 'querystring';
 import _ from 'lodash';
 import cloneDeep from 'lodash-es/cloneDeep';
-import { SplitLayout, SplitCol, Root, View, Panel, PanelHeader, ScreenSpinner, ModalRoot } from '@vkontakte/vkui';
+import { SplitLayout, SplitCol, Root, View, Panel, Subhead, ScreenSpinner, ModalRoot } from '@vkontakte/vkui';
 import { PAGE_MAIN, useLocation, useRouter } from '@happysanta/router';
 import '@vkontakte/vkui/dist/vkui.css';
 
@@ -59,6 +60,14 @@ const App = () => {
   const [newCats, setNewCats] = useState([]);
   const [changedCats, setChangedCats] = useState([]);
 
+  const [groupInfo, setGroupInfo] = useState({
+    name: '', 
+    avatar: '', 
+    cover: '', 
+    timetable: '', 
+    close: true,
+  });
+
   const deletePosition = async () => {
     try {
       await API.delete(`/positions/${position.id}`);
@@ -82,6 +91,65 @@ const App = () => {
     }
   })();
 
+  const fetchGroupInfo = async (group) => {
+    const response = await BridgePlus.api("groups.getById", { group_id: group.vkGroupId, fields: "addresses,cover,has_photo" })
+      .then(({ response: [groupInfo] }) => { return groupInfo });
+    
+    let cloneGroupInfo = {...groupInfo};
+    console.log(response);
+
+    cloneGroupInfo.name = response.name;
+
+    if (response.has_photo + response.cover.enabled === 2) {
+      cloneGroupInfo.avatar = response.photo_200;
+      cloneGroupInfo.cover = response.cover.images[4].url;
+    }
+
+    if (response.addresses.is_enabled) {
+      const mainAdress = await BridgePlus.api("groups.getAddresses", { group_id: group.vkGroupId, address_ids: response.addresses.main_address_id, fields: "timetable" })
+        .then(({ response }) => { return response.items[0] });
+
+      const daysOfWeek = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+      const today = new Date();
+      const currentMinutes = 60 * today.getHours() + today.getMinutes();
+      const day = daysOfWeek[today.getDay()];
+      
+      if (mainAdress.timetable[day]) {
+        
+        if (currentMinutes < mainAdress.timetable[day].open_time) {
+          const minutes = mainAdress.timetable[day].open_time % 60;
+          const hours = (mainAdress.timetable[day].open_time - minutes) / 60;
+          cloneGroupInfo.timetable = <Subhead weight='regular' className="header__open"><span style={{ color: 'var(--dynamic_red)'}}>Закрыто</span> · откроется в {hours}:{('0' + minutes).slice(-2)}</Subhead>;
+
+        } else if (currentMinutes >= mainAdress.timetable[day].open_time && currentMinutes < mainAdress.timetable[day].close_time) {
+          const minutes = mainAdress.timetable[day].close_time % 60;
+          const hours = (mainAdress.timetable[day].close_time - minutes) / 60;
+          cloneGroupInfo.close = false;
+          cloneGroupInfo.timetable = <Subhead weight='regular' className="header__open">открыто до {hours}:{('0' + minutes).slice(-2)}</Subhead>;
+
+        } else if (currentMinutes >= mainAdress.timetable[day].close_time) {
+          const nextDay = today.getDay() === 6 ? daysOfWeek[0] : daysOfWeek[today.getDay() + 1];
+
+          if (mainAdress.timetable[nextDay]) {
+            const minutes = mainAdress.timetable[nextDay].open_time % 60;
+            const hours = (mainAdress.timetable[nextDay].open_time - minutes) / 60;
+            cloneGroupInfo.timetable = <Subhead weight='regular' className="header__open"><span style={{ color: 'var(--dynamic_red)'}}>Закрыто</span> · откроется в {hours}:{('0' + minutes).slice(-2)}</Subhead>;
+          }
+        }
+      } else {
+        const nextDay = today.getDay() === 6 ? daysOfWeek[0] : daysOfWeek[today.getDay() + 1];
+
+        if (mainAdress.timetable[nextDay]) {
+          const minutes = mainAdress.timetable[nextDay].open_time % 60;
+          const hours = (mainAdress.timetable[nextDay].open_time - minutes) / 60;
+          cloneGroupInfo.timetable = <Subhead weight='regular' className="header__open"><span style={{ color: 'var(--dynamic_red)'}}>Закрыто</span> · откроется завтра в {hours}:{('0' + minutes).slice(-2)}</Subhead>;
+        }
+      }
+    }
+
+    setGroupInfo(cloneGroupInfo);
+  };
+
   const fetchMenu = async (launchParams) => {
     try {
       const response = await API.get(`/groups/${launchParams.vk_group_id}`)
@@ -91,7 +159,11 @@ const App = () => {
       console.log(response);
       setGroup(response);
 
-      if (launchParams.vk_viewer_group_role === 'admin') setAdmin(true);
+      if (launchParams.vk_viewer_group_role === 'admin') {
+        setAdmin(true);
+      }
+
+      await fetchGroupInfo(response);
 
       setStep(STEPS.MAIN);
       return router.pushPage(PAGE_MENU);
@@ -200,6 +272,7 @@ const App = () => {
           group={group}
           desktop={desktop}
           admin={admin}
+          groupInfo={groupInfo}
         />
       </View>
     </Root>
