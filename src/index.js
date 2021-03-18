@@ -1,7 +1,7 @@
 import "core-js/features/map";
 import "core-js/features/set";
 import React from "react";
-import { BridgePlus, isDesktopPlatform } from "@happysanta/bridge-plus";
+import { BridgePlus } from "@happysanta/bridge-plus";
 import ReactDOM from "react-dom";
 import bridge from "@vkontakte/vk-bridge";
 import { ConfigProvider, AdaptivityProvider, AppRoot, SplitLayout, SplitCol, WebviewType } from '@vkontakte/vkui';
@@ -26,7 +26,6 @@ const mapPlatform = (platform) => {
 };
 
 const platform = BridgePlus.getStartParams().getPlatform();
-const isDesktop = isDesktopPlatform();
 const uiPlatform = mapPlatform(platform);
 
 ReactDOM.render(
@@ -34,7 +33,6 @@ ReactDOM.render(
 		<ConfigProvider isWebView={true}
       platform={uiPlatform}
       webviewType={WebviewType.INTERNAL}
-      transitionMotionEnabled={!isDesktop}
     >
 			<AdaptivityProvider >
 				<AppRoot>

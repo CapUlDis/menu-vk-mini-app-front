@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Panel, Placeholder, FixedLayout, Group, Tabs, HorizontalScroll, TabsItem, Header, List, RichCell, Headline, Avatar, Text, Caption, Title, Subhead, Spacing } from '@vkontakte/vkui';
+import { Panel, Placeholder, FixedLayout, Group, Tabs, HorizontalScroll, TabsItem, Header, List, RichCell, PanelHeader, Avatar, Text, Caption, Title, Subhead, Spacing } from '@vkontakte/vkui';
 import { Icon28SettingsOutline } from '@vkontakte/icons';
 import { useRouter } from '@happysanta/router';
 
@@ -40,27 +40,28 @@ const Menu = ({ id, group, desktop, admin, groupInfo }) => {
           {groupInfo.timetable}
         </div>
         {group.Categories &&
-          <Tabs>
-            <HorizontalScroll>
-              {group.Categories.map((category, index) => {
-                return (
-                  <TabsItem key={category.id}
-                    onClick={() => {
-                      setActiveTab(category.id);
-                      const verPos = document.getElementById('group' + category.id + '__main').offsetTop 
-                        - document.getElementById('header').offsetHeight;
-                      window.scrollTo(0, verPos);
-                    }}
-                    selected={activeTab === category.id}
-                  >
-                    {category.title}
-                  </TabsItem>
-                );
-              })}
+          <Tabs className={desktop && 'header__tabs_desktop'}>
+            <HorizontalScroll showArrows={desktop ? true : false}
+              getScrollToRight={i => i + 120}
+              getScrollToLeft={i => i - 120}
+            >
+              {group.Categories.map(category => 
+                <TabsItem key={category.id}
+                  onClick={() => {
+                    setActiveTab(category.id);
+                    const verPos = document.getElementById('group' + category.id + '__main').offsetTop
+                      - document.getElementById('header').offsetHeight;
+                    window.scrollTo(0, verPos);
+                  }}
+                  selected={activeTab === category.id}
+                >
+                  {category.title}
+                </TabsItem>
+              )}
             </HorizontalScroll>
           </Tabs>
         }
-        <Spacing separator size={8}/>
+        <Spacing separator size={desktop? 1 : 8} className={desktop && 'header__separator_desktop'}/>
       </FixedLayout>
       {group.Categories && group.Categories.length > 0 
         ? <Group id='main' style={{ 
@@ -73,7 +74,7 @@ const Menu = ({ id, group, desktop, admin, groupInfo }) => {
                 key={'group' + category.id} 
                 id={'group' + category.id}
                 header={
-                  <Header className="category-group__header" mode='primary'>
+                  <Header className={desktop ? "category-group__header category-group__header_desktop" : "category-group__header"} mode='primary'>
                     {category.title}
                   </Header>
               }>

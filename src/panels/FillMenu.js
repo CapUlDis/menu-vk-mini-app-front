@@ -20,17 +20,20 @@ const FillMenu = ({ id, desktop, group, setGroup, setPosition, setCategories, se
   const router = useRouter();
   // const platform = BridgePlus.getStartParams().getPlatform();
 
+  const editCategoriesHadle = () => {
+    const cloneGroup = cloneDeep(group);
+    setCategories(cloneGroup.Categories);
+    setCatOrder(cloneGroup.catOrder);
+    
+    return router.pushPage(PAGE_EDIT_CATEGORIES);
+  }
+
   return (
     <Panel id={id}>
       <PanelHeader 
         left={desktop
           ? undefined
-          : <PanelHeaderButton onClick={() => {
-            const cloneGroup = cloneDeep(group);
-            setCategories(cloneGroup.Categories);
-            setCatOrder(cloneGroup.catOrder);
-            router.pushPage(PAGE_EDIT_CATEGORIES);
-          }}>
+          : <PanelHeaderButton onClick={editCategoriesHadle}>
             <Icon28EditOutline />
           </PanelHeaderButton>
         }
@@ -41,6 +44,7 @@ const FillMenu = ({ id, desktop, group, setGroup, setPosition, setCategories, se
       <Group style={{ paddingBottom: '72px' }}>
         {group.Categories.map((category, catIndex) =>
             <Group key={'cat' + category.id}
+              className="category-group"
               header={
               <Header mode="primary"
                 indicator={category.Positions ? category.Positions.length : 0}
@@ -89,7 +93,7 @@ const FillMenu = ({ id, desktop, group, setGroup, setPosition, setCategories, se
       <FixedLayout vertical='bottom' filled>
         <Separator wide />
         <Div className={desktop ? 'footer-desktop' : undefined}>
-          {desktop && <CellButton className="footer-desktop__cell-button" before={<Icon24PenOutline />}>Изменить категории</CellButton>}
+          {desktop && <CellButton className="footer-desktop__cell-button" before={<Icon24PenOutline />} onClick={editCategoriesHadle}>Изменить категории</CellButton>}
           <CellButton className="footer-desktop__cell-button" before={<Icon24ViewOutline/>} onClick={() => router.pushPage(PAGE_MENU)}>Предпросмотр меню</CellButton>
         </Div>
       </FixedLayout>

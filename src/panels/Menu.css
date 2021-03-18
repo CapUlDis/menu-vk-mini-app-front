@@ -77,3 +77,20 @@ html {
 .position__bottom_desktop {
   padding-top: 6px;
 }
+
+.header__tabs_desktop {
+  margin-left: 20px;
+}
+
+.header__separator_desktop {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.category-group__header_desktop {
+  padding-left: 8px;
+}
+
+.category-group {
+  padding: 0 4px;
+}
