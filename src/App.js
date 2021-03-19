@@ -209,9 +209,10 @@ const App = () => {
         modal={
           <ModalRoot activeModal={location.getModalId()} onClose={() => {
             router.popPage();
-            setEditMode(false);
+            setTimeout(() => setEditMode(false), 100);
           }}>
             <AddEditPosition id={MODAL_PAGE_POSITION}
+              desktop={desktop}
               group={group}
               setGroup={setGroup}
               position={position}

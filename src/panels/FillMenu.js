@@ -30,7 +30,7 @@ const FillMenu = ({ id, desktop, group, setGroup, setPosition, setCategories, se
 
   return (
     <Panel id={id}>
-      <PanelHeader 
+      <PanelHeader fixed={true}
         left={desktop
           ? undefined
           : <PanelHeaderButton onClick={editCategoriesHadle}>
@@ -92,7 +92,7 @@ const FillMenu = ({ id, desktop, group, setGroup, setPosition, setCategories, se
       </Group>
       <FixedLayout vertical='bottom' filled>
         <Separator wide />
-        <Div className={desktop ? 'footer-desktop' : undefined}>
+        <Div className={desktop && 'footer-desktop'}>
           {desktop && <CellButton className="footer-desktop__cell-button" before={<Icon24PenOutline />} onClick={editCategoriesHadle}>Изменить категории</CellButton>}
           <CellButton className="footer-desktop__cell-button" before={<Icon24ViewOutline/>} onClick={() => router.pushPage(PAGE_MENU)}>Предпросмотр меню</CellButton>
         </Div>

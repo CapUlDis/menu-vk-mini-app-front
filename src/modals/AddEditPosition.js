@@ -18,23 +18,18 @@ import {
 	RichCell,
 	File,
 	Avatar,
-  CellButton
+  CellButton,
+  SizeType
 } from '@vkontakte/vkui';
 import { useRouter } from '@happysanta/router';
-import { Icon56GalleryOutline, Icon28DeleteOutline } from '@vkontakte/icons';
+import { Icon56GalleryOutline, Icon28DeleteOutline, Icon24DeleteOutline, Icon24DismissOverlay } from '@vkontakte/icons';
 
 import API from '../utils/API';
-import { PAGE_FILL_MENU } from '../router';
+import units from '../utils/units';
+import './AddEditPosition.css';
 
 
-const units = [
-	{ id: 0, title: 'грамм', nick: 'г' },
-	{ id: 1, title: 'литр', nick: 'л' },
-	{ id: 2, title: 'миллиграмм', nick: 'мг' },
-	{ id: 3, title: 'миллилитр', nick: 'мл' },
-];
-
-const AddEditPosition = ({ id, group, setGroup, position, editMode, setEditMode, deletePosition }) => {
+const AddEditPosition = ({ id, desktop, group, setGroup, position, editMode, setEditMode, deletePosition }) => {
 	const router = useRouter();
 
 	const [title, setTitle] = useState(!editMode ? '' : position.title);
@@ -178,12 +173,12 @@ const AddEditPosition = ({ id, group, setGroup, position, editMode, setEditMode,
 			settlingHeight={100}
 			onClose={() => {
         router.popPage();
-        setEditMode(false);
+        setTimeout(() => setEditMode(false), 100);
       }}
 		>
-			<ModalPageHeader left={<PanelHeaderClose onClick={() => {
+			<ModalPageHeader left={!desktop && <PanelHeaderClose onClick={() => {
         router.popPage();
-        setEditMode(false);
+        setTimeout(() => setEditMode(false), 100);
       }} />}>
 				{!editMode ? 'Добавление' : 'Редактирование'}
 			</ModalPageHeader>
@@ -232,7 +227,9 @@ const AddEditPosition = ({ id, group, setGroup, position, editMode, setEditMode,
 							}}
 						/>
 					</FormItem>
-					<FormItem>
+					<FormItem className="select-units"
+            style={{ maxWidth: desktop ? '104px' : '120px' }}
+          >
 						<NativeSelect name="unitId"
 							value={unitId}
 							onChange={e => setUnit(e.currentTarget.value)}
@@ -276,8 +273,11 @@ const AddEditPosition = ({ id, group, setGroup, position, editMode, setEditMode,
 						disabled
 						multiline
 						before={
-							<Avatar size={100} mode='app' id='preview' src={image.src}>
+							<Avatar size={100} mode='image' shadow={false} id='preview' src={image.src}>
 								{image.plug}
+                {image.src && <Icon24DismissOverlay className="image-input__close" onClick={() => {
+                  setImage({ plug: !editMode ? <Icon56GalleryOutline/> : null, src: !editMode ? '' : position.imageUrl, file: false });
+                }} />}
 							</Avatar>
 						}
 						caption="Загрузите изображение блюда. Рекомендуемый размер 500×500px"
@@ -300,7 +300,7 @@ const AddEditPosition = ({ id, group, setGroup, position, editMode, setEditMode,
 					/>
 				</FormItem>
 			</FormLayout>
-      {editMode &&
+      {editMode && !desktop &&
         <Div>
           <Separator wide={true}/>
           <CellButton before={<Icon28DeleteOutline/>} mode="danger" onClick={() => {
@@ -313,8 +313,24 @@ const AddEditPosition = ({ id, group, setGroup, position, editMode, setEditMode,
         </Div>
       }
 			<Separator wide={true}/>
-			<Div>
-				<Button size='l' type='submit' form='position' stretched>
+			<Div className={desktop && "footer-desktop"}>
+        {editMode && desktop &&
+          <Button size="s" mode="tertiary"
+            className="footer-desktop__delete"
+            before={<Icon24DeleteOutline/>} onClick={() => {
+            // deletePosition();
+            // router.popPage();
+            // setEditMode(false);
+          }}>
+            Удалить позицию
+          </Button>
+        }
+        {desktop &&
+          <Button className="footer-desktop__button footer-desktop__button_right" size="s" mode="secondary">Отмена</Button>
+        }
+				<Button size={desktop ? 's' : 'l'} type='submit' form='position'
+          stretched={desktop ? false : true}
+        >
 					{!editMode ? 'Добавить позицию' : 'Сохранить'}
         </Button>
 			</Div>

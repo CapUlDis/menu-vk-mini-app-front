@@ -1,5 +1,6 @@
 .footer-desktop {
   display: flex;
+  height: 56px;
 }
 
 .footer-desktop__cell-button {
