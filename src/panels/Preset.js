@@ -65,7 +65,7 @@ const Preset = ({ id, group, setGroup, desktop }) => {
 
   return (
     <Panel id={id}>
-      <PanelHeader separator={false} >
+      <PanelHeader className={desktop && "panel-header_desktop"} separator={false}>
         Выберите категории
       </PanelHeader>
       <FixedLayout vertical='top' filled>
@@ -73,7 +73,10 @@ const Preset = ({ id, group, setGroup, desktop }) => {
           Выберите категории, которые представлены в вашем заведении. Позже вы сможете их изменить или создать новые.
         </Subhead>
       </FixedLayout>
-      <Group className="group-categories" style={{ paddingTop: !desktop ? '54px' : '80px'}}>
+      <Group className="group-categories" style={{ 
+        paddingTop: !desktop ? '54px' : '36px',
+        paddingBottom: !desktop ? '68px' : '61px'
+      }}>
         {categories.map(({ id, title, src, isChecked }) => 
           <Cell selectable before={<Avatar src={src} shadow={false} mode='app' />}
             className={desktop ? 'category-cell category-cell_desktop' : 'category-cell' }
@@ -96,7 +99,8 @@ const Preset = ({ id, group, setGroup, desktop }) => {
         <Separator wide={true}/>
         <Div>
           <Button 
-            align={desktop ? "right" : "center"} 
+            className="button-desktop"
+            // align={desktop ? "right" : "center"} 
             size={desktop ? 'm' : 'l'} 
             stretched={desktop ? false : true}  
             onClick={handleContinueClick}

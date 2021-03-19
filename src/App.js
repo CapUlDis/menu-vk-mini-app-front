@@ -185,9 +185,9 @@ const App = () => {
 
     } else {
       setStep(STEPS.MAIN);
-      router.pushPage(PAGE_START);
+      // router.pushPage(PAGE_START);
 
-      // router.pushPage(PAGE_PRESET);
+      router.pushPage(PAGE_PRESET);
     }
   }, [watchFlag])
 

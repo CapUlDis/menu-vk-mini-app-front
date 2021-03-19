@@ -5,11 +5,6 @@
   margin: auto;
 }
 
-.group-categories {
-  padding-top: 54px;
-  padding-bottom: 68px;
-}
-
 .category-cell .vkuiAvatar__img {
   background: var(--background_content);
 }
@@ -20,4 +15,13 @@
 
 .category-cell_desktop .vkuiCell__checkbox:checked~.vkuiCell__marker, .category-cell_desktop .vkuiCell__marker {
   display: none;
+}
+
+.button-desktop {
+  display: block;
+  margin-left: auto;
+}
+
+.panel-header_desktop.vkuiPanelHeader--vkcom .vkuiPanelHeader__in {
+  box-shadow: none; 
 }
