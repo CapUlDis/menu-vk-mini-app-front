@@ -224,6 +224,7 @@ const App = () => {
               abortHandle={abortHandle}
             />
             <AddEditCategory id={MODAL_CARD_CATEGORY}
+              desktop={desktop}
               group={group}
               editMode={editMode}
               setEditMode={setEditMode}

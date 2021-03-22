@@ -2,18 +2,23 @@ import React, { useState } from 'react';
 import cloneDeep from 'lodash-es/cloneDeep';
 import { useRouter } from '@happysanta/router';
 import {
+  ModalPage,
+  ModalPageHeader,
 	ModalCard,
+  Group,
+  Div,
   FormItem,
 	Input,
   Button,
 } from '@vkontakte/vkui';
 
 import { PAGE_EDIT_CATEGORIES } from '../router';
+import './AddEditCategory.css';
 
 let num = 1;
 
 const AddEditCategory = ({
-  id, group,
+  id, group, desktop,
 
   editMode, setEditMode,
 
@@ -106,33 +111,68 @@ const AddEditCategory = ({
     return setTimeout(() => setEditMode(false), 100);
   }
 
-  return (
-    <ModalCard id={id}
-      header={!editMode ? 'Новая категория' : 'Изменить категорию' }
-      onClose={() => {
-        router.popPage();
-        setTimeout(() => setEditMode(false), 100);
-      }}
-      actions={
-        <Button size="l" mode="primary" onClick={submitHandle}>
-          {!editMode ? 'Добавить' : 'Сохранить'}
-        </Button>
-      }
-    >
-      <FormItem status={formStatus}>
-        <Input name="title"
-          form="position"
-          type="text"
-          value={title}
-          maxLength="30"
-          placeholder="Введите название категории"
-          onChange={e => {
-            setTitle(e.target.value);
-          }}
-        />
-      </FormItem>
-    </ModalCard>
-  );
+  if (desktop) {
+    return (
+      <ModalPage id={id}
+        header={
+          <ModalPageHeader>
+            {!editMode ? 'Новая категория' : 'Изменить категорию' }
+          </ModalPageHeader>
+        }
+      >
+        <div class="modal-page__group">
+          <FormItem status={formStatus}
+            top="Название"
+          >
+            <Input name="title"
+                form="position"
+                type="text"
+                value={title}
+                maxLength="30"
+                placeholder="Введите название категории"
+                onChange={e => {
+                  setTitle(e.target.value);
+                }}
+              />
+          </FormItem>
+          <Div className="footer-desktop">
+            <Button className="modal-page__button" size="s" mode="primary" onClick={submitHandle}>
+              {!editMode ? 'Добавить категорию' : 'Сохранить категорию'}
+            </Button>
+          </Div>
+        </div>
+      </ModalPage>
+    );
+
+  } else {
+    return (
+      <ModalCard id={id}
+        header={!editMode ? 'Новая категория' : 'Изменить категорию' }
+        onClose={() => {
+          router.popPage();
+          setTimeout(() => setEditMode(false), 100);
+        }}
+        actions={
+          <Button size="l" mode="primary" onClick={submitHandle}>
+            {!editMode ? 'Добавить' : 'Сохранить'}
+          </Button>
+        }
+      >
+        <FormItem status={formStatus}>
+          <Input name="title"
+            form="position"
+            type="text"
+            value={title}
+            maxLength="30"
+            placeholder="Введите название категории"
+            onChange={e => {
+              setTitle(e.target.value);
+            }}
+          />
+        </FormItem>
+      </ModalCard>
+    );
+  }
 };
 
 export default AddEditCategory;
