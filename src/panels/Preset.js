@@ -97,11 +97,10 @@ const Preset = ({ id, group, setGroup, desktop }) => {
       </Group>
       <FixedLayout vertical='bottom' filled>
         <Separator wide={true}/>
-        <Div>
-          <Button 
-            className="button-desktop"
-            // align={desktop ? "right" : "center"} 
-            size={desktop ? 'm' : 'l'} 
+        <Div className={desktop && "footer-desktop"}>
+          <Button className={desktop && "footer-desktop__button"}
+            align={desktop ? "right" : "center"} 
+            size={desktop ? 's' : 'l'} 
             stretched={desktop ? false : true}  
             onClick={handleContinueClick}
             disabled={!categories.some(cat => cat.isChecked === true)}

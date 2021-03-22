@@ -29,7 +29,7 @@ import units from '../utils/units';
 import './AddEditPosition.css';
 
 
-const AddEditPosition = ({ id, desktop, group, setGroup, position, editMode, setEditMode, deletePosition }) => {
+const AddEditPosition = ({ id, desktop, group, setGroup, position, editMode, setEditMode, deletePosition, abortHandle }) => {
 	const router = useRouter();
 
 	const [title, setTitle] = useState(!editMode ? '' : position.title);
@@ -94,6 +94,12 @@ const AddEditPosition = ({ id, desktop, group, setGroup, position, editMode, set
 		img.src = URL.createObjectURL(file);
 
 	}
+
+  const deleteClickHandle = () => {
+    deletePosition();
+    router.popPage();
+    return setTimeout(() => setEditMode(false), 100);
+  }
 
 	const submitHandle = async (event) => {
 		event.preventDefault();
@@ -171,15 +177,9 @@ const AddEditPosition = ({ id, desktop, group, setGroup, position, editMode, set
 	return (
 		<ModalPage id={id}
 			settlingHeight={100}
-			onClose={() => {
-        router.popPage();
-        setTimeout(() => setEditMode(false), 100);
-      }}
+			onClose={abortHandle}
 		>
-			<ModalPageHeader left={!desktop && <PanelHeaderClose onClick={() => {
-        router.popPage();
-        setTimeout(() => setEditMode(false), 100);
-      }} />}>
+			<ModalPageHeader left={!desktop && <PanelHeaderClose onClick={abortHandle} />}>
 				{!editMode ? 'Добавление' : 'Редактирование'}
 			</ModalPageHeader>
 			<FormLayout id='position' onSubmit={submitHandle}>
@@ -303,40 +303,49 @@ const AddEditPosition = ({ id, desktop, group, setGroup, position, editMode, set
       {editMode && !desktop &&
         <Div>
           <Separator wide={true}/>
-          <CellButton before={<Icon28DeleteOutline/>} mode="danger" onClick={() => {
-            deletePosition();
-            router.popPage();
-            setEditMode(false);
-          }}>
+          <CellButton before={<Icon28DeleteOutline/>} mode="danger" onClick={deleteClickHandle}>
             Удалить позицию
           </CellButton>
         </Div>
       }
 			<Separator wide={true}/>
-			<Div className={desktop && "footer-desktop"}>
-        {editMode && desktop &&
-          <Button size="s" mode="tertiary"
-            className="footer-desktop__delete"
-            before={<Icon24DeleteOutline/>} onClick={() => {
-            // deletePosition();
-            // router.popPage();
-            // setEditMode(false);
-          }}>
-            Удалить позицию
+			{desktop 
+        ? <Div className="footer-desktop">
+          {editMode &&
+            <Button className="footer-desktop__left-button footer-desktop__left-button_red" 
+              size="s" 
+              mode="tertiary"
+              before={<Icon24DeleteOutline/>} 
+              onClick={deleteClickHandle}
+            >
+              Удалить позицию
+            </Button>
+          }
+          <Button className="footer-desktop__button" 
+            size="s" 
+            mode="secondary"
+            onClick={abortHandle}
+          >
+            Отмена
           </Button>
-        }
-        {desktop &&
-          <Button className="footer-desktop__button footer-desktop__button_right" size="s" mode="secondary">Отмена</Button>
-        }
-				<Button size={desktop ? 's' : 'l'} type='submit' form='position'
-          stretched={desktop ? false : true}
-        >
-					{!editMode ? 'Добавить позицию' : 'Сохранить'}
-        </Button>
-			</Div>
-			{/* <FixedLayout vertical='bottom'>
-                
-            </FixedLayout> */}
+          <Button className="footer-desktop__button footer-desktop__button_right"
+            size='s'
+            type='submit' 
+            form='position'
+          >
+            {!editMode ? 'Добавить позицию' : 'Сохранить'}
+          </Button>
+        </Div>
+        : <Div>
+          <Button size='l'
+            type='submit' 
+            form='position'
+            stretched
+          >
+            {!editMode ? 'Добавить позицию' : 'Сохранить'}
+          </Button>
+        </Div>
+      }
 		</ModalPage>
 	);
 };

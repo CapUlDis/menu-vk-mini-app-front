@@ -174,6 +174,11 @@ const App = () => {
     }
   };
 
+  const abortHandle = () => {
+    router.popPage();
+    return setTimeout(() => setEditMode(false), 100);
+  }
+
   useEffect(() => {
     const launchParams = qs.parse(window.location.search.slice(1));
     console.log(launchParams);
@@ -207,10 +212,7 @@ const App = () => {
         popout={popout}
         activePanel={location.getViewActivePanel(VIEW_MAIN)}
         modal={
-          <ModalRoot activeModal={location.getModalId()} onClose={() => {
-            router.popPage();
-            setTimeout(() => setEditMode(false), 100);
-          }}>
+          <ModalRoot activeModal={location.getModalId()} onClose={abortHandle}>
             <AddEditPosition id={MODAL_PAGE_POSITION}
               desktop={desktop}
               group={group}
@@ -219,6 +221,7 @@ const App = () => {
               editMode={editMode}
               setEditMode={setEditMode}
               deletePosition={deletePosition}
+              abortHandle={abortHandle}
             />
             <AddEditCategory id={MODAL_CARD_CATEGORY}
               group={group}

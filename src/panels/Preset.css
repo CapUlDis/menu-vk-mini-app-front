@@ -17,11 +17,16 @@
   display: none;
 }
 
-.button-desktop {
-  display: block;
-  margin-left: auto;
-}
-
 .panel-header_desktop.vkuiPanelHeader--vkcom .vkuiPanelHeader__in {
   box-shadow: none; 
+}
+
+.footer-desktop {
+  height: 32px;
+  display: flex;
+}
+
+.footer-desktop__button {
+  margin-left: auto;
+  margin-right: 8px;
 }

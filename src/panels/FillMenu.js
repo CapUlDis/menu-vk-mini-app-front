@@ -1,7 +1,7 @@
 import React,  { useState }from 'react';
 import cloneDeep from 'lodash-es/cloneDeep';
 // import { BridgePlus } fro  m "@happysanta/bridge-plus";
-import { Panel, PanelHeader, PanelHeaderButton, FixedLayout, Div, Group, Header, Text, Link, Cell, List, CellButton, Avatar, Separator, usePlatform } from '@vkontakte/vkui';
+import { Panel, PanelHeader, PanelHeaderButton, FixedLayout, Div, Group, Header, Text, Link, Cell, List, CellButton, Avatar, Separator, usePlatform, Button } from '@vkontakte/vkui';
 import { Icon28EditOutline } from '@vkontakte/icons';
 import { Icon24PenOutline } from '@vkontakte/icons';
 import {   } from '@vkontakte/icons';
@@ -20,7 +20,7 @@ const FillMenu = ({ id, desktop, group, setGroup, setPosition, setCategories, se
   const router = useRouter();
   // const platform = BridgePlus.getStartParams().getPlatform();
 
-  const editCategoriesHadle = () => {
+  const editCategoriesHandle = () => {
     const cloneGroup = cloneDeep(group);
     setCategories(cloneGroup.Categories);
     setCatOrder(cloneGroup.catOrder);
@@ -33,7 +33,7 @@ const FillMenu = ({ id, desktop, group, setGroup, setPosition, setCategories, se
       <PanelHeader fixed={true}
         left={desktop
           ? undefined
-          : <PanelHeaderButton onClick={editCategoriesHadle}>
+          : <PanelHeaderButton onClick={editCategoriesHandle}>
             <Icon28EditOutline />
           </PanelHeaderButton>
         }
@@ -92,10 +92,34 @@ const FillMenu = ({ id, desktop, group, setGroup, setPosition, setCategories, se
       </Group>
       <FixedLayout vertical='bottom' filled>
         <Separator wide />
-        <Div className={desktop && 'footer-desktop'}>
-          {desktop && <CellButton className="footer-desktop__cell-button" before={<Icon24PenOutline />} onClick={editCategoriesHadle}>Изменить категории</CellButton>}
-          <CellButton className="footer-desktop__cell-button" before={<Icon24ViewOutline/>} onClick={() => router.pushPage(PAGE_MENU)}>Предпросмотр меню</CellButton>
-        </Div>
+        {desktop  
+          ? <Div className='footer-desktop'>
+            <Button className="footer-desktop__left-button"
+              size="s"
+              mode="tertiary"
+              before={<Icon24PenOutline />}
+              onClick={editCategoriesHandle}
+            >
+              Изменить категории
+            </Button> 
+            <Button className="footer-desktop__left-button"
+              size="s"
+              mode="tertiary"
+              before={<Icon24ViewOutline/>}
+              onClick={() => router.pushPage(PAGE_MENU)}
+            >
+              Предпросмотр меню
+            </Button>
+          </Div>
+          : <Div>
+            <CellButton
+              before={<Icon24ViewOutline/>}
+              onClick={() => router.pushPage(PAGE_MENU)}
+            >
+              Предпросмотр меню
+            </CellButton>
+          </Div>
+        }
       </FixedLayout>
     </Panel>
   );

@@ -9,20 +9,10 @@
   left: 32px;
 }
 
-.footer-desktop {
-  height: 32px;
-  padding: 16px;
-}
-
-.footer-desktop__button {
-  margin-right: 8px;
+.footer-desktop__left-button_red {
+  color: var(--button_secondary_destructive_foreground);
 }
 
 .footer-desktop__button_right {
-  margin-left: auto;
-}
-
-.footer-desktop__delete {
-  color: var(--button_secondary_destructive_foreground);
-  padding-left: 8px;
+  margin-left: 0;
 }
