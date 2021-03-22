@@ -66,7 +66,7 @@ const FillMenu = ({ id, desktop, group, setGroup, setPosition, setCategories, se
                     <Cell draggable
                       key={'pos' + position.id}
                       before={<Avatar mode='app' src={position.imageUrl} />}
-                      indicator={<Icon24MoreHorizontal className={platform === 'ios' && 'position__icon-more_ios'} onClick={() => {
+                      indicator={<Icon24MoreHorizontal className={platform === 'ios' && 'icon-right_ios'} onClick={() => {
                         setPosition(position);
                         return router.pushPopup(POPOUT_EDIT_DELETE_POSITION);
                       }}/>}

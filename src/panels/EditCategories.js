@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import cloneDeep from 'lodash-es/cloneDeep';
+import { BridgePlus } from "@happysanta/bridge-plus";
 import { Panel, PanelHeader, PanelHeaderButton, FixedLayout, Div, Group, Button, Separator, Cell, List, CellButton, Headline, Banner, usePlatform } from '@vkontakte/vkui';
 import { Icon20AddCircle } from '@vkontakte/icons';
 import { Icon28EditOutline } from '@vkontakte/icons';
@@ -7,6 +8,7 @@ import { Icon24AddOutline } from '@vkontakte/icons';
 
 import API from '../utils/API';
 import arrayEquals from '../utils/arrayEquals';
+import mapPlatform from '../utils/mapPlatform';
 import { useRouter } from '@happysanta/router';
 import { MODAL_CARD_CATEGORY, PAGE_FILL_MENU } from '../router';
 
@@ -30,6 +32,7 @@ const EditCategories = ({
 
 }) => {
   const router = useRouter();
+  const platform = mapPlatform(BridgePlus.getStartParams().getPlatform());
 
   const [deletedCats, setDeletedCats] = useState([]);
 
@@ -146,7 +149,7 @@ const EditCategories = ({
                 <Cell draggable removable
                   key={'cat' + catIndex}
                   indicator={
-                    <Icon28EditOutline fill='#3F8AE0' onClick={() => {
+                    <Icon28EditOutline className={platform === 'ios' && 'icon-right_ios'} fill='#3F8AE0' onClick={() => {
                       router.pushModal(MODAL_CARD_CATEGORY);
                       setEditMode({ catIndex, id: category.id, title: category.title });
                     }}/>
