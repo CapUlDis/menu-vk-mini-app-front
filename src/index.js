@@ -8,22 +8,10 @@ import { ConfigProvider, AdaptivityProvider, AppRoot, SplitLayout, SplitCol, Web
 import { RouterContext } from '@happysanta/router';
 import { router } from './router';
 import App from "./App";
+import mapPlatform from "./utils/mapPlatform";
 
 // Init VK  Mini App
 bridge.send("VKWebAppInit");
-
-const mapPlatform = (platform) => {
-  switch (platform) {
-    case 'desktop_web':
-      return 'vkcom';
-    case 'mobile_web':
-      return 'ios';
-    case 'mobile_android':
-      return 'android';
-    case 'mobiles_ios':
-      return 'ios'
-  }
-};
 
 const platform = BridgePlus.getStartParams().getPlatform();
 const uiPlatform = mapPlatform(platform);

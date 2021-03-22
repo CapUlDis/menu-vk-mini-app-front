@@ -1,10 +1,10 @@
 import React,  { useState }from 'react';
 import cloneDeep from 'lodash-es/cloneDeep';
+import { BridgePlus } from "@happysanta/bridge-plus";
 // import { BridgePlus } fro  m "@happysanta/bridge-plus";
 import { Panel, PanelHeader, PanelHeaderButton, FixedLayout, Div, Group, Header, Text, Link, Cell, List, CellButton, Avatar, Separator, usePlatform, Button } from '@vkontakte/vkui';
 import { Icon28EditOutline } from '@vkontakte/icons';
 import { Icon24PenOutline } from '@vkontakte/icons';
-import {   } from '@vkontakte/icons';
 import { Icon24ViewOutline } from '@vkontakte/icons';
 import { Icon24MoreHorizontal } from '@vkontakte/icons';
 import { Icon24AddOutline } from '@vkontakte/icons';
@@ -12,13 +12,14 @@ import { Icon24AddOutline } from '@vkontakte/icons';
 import API from '../utils/API';
 import './FillMenu.css';
 import orderArray from '../utils/orderArray';
+import mapPlatform from '../utils/mapPlatform';
 import { useRouter } from '@happysanta/router';
 import { MODAL_PAGE_POSITION, POPOUT_EDIT_DELETE_POSITION, PAGE_EDIT_CATEGORIES, PAGE_MENU } from '../router';
 
 
 const FillMenu = ({ id, desktop, group, setGroup, setPosition, setCategories, setCatOrder }) => {
   const router = useRouter();
-  // const platform = BridgePlus.getStartParams().getPlatform();
+  const platform = mapPlatform(BridgePlus.getStartParams().getPlatform());
 
   const editCategoriesHandle = () => {
     const cloneGroup = cloneDeep(group);
@@ -65,7 +66,7 @@ const FillMenu = ({ id, desktop, group, setGroup, setPosition, setCategories, se
                     <Cell draggable
                       key={'pos' + position.id}
                       before={<Avatar mode='app' src={position.imageUrl} />}
-                      indicator={<Icon24MoreHorizontal onClick={() => {
+                      indicator={<Icon24MoreHorizontal className={platform === 'ios' && 'position__icon-more_ios'} onClick={() => {
                         setPosition(position);
                         return router.pushPopup(POPOUT_EDIT_DELETE_POSITION);
                       }}/>}
