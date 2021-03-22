@@ -1,0 +1,16 @@
+.category-cell__button-block {
+  display: none;
+}
+
+.category-cell:hover .category-cell__button-block {
+  display: flex;
+}
+
+.category-cell__point {
+  color: var(--text_secondary);
+  margin: 0 4px;
+}
+
+.category-cell__button {
+  cursor: pointer;
+}

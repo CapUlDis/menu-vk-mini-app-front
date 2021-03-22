@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import cloneDeep from 'lodash-es/cloneDeep';
 import { BridgePlus } from "@happysanta/bridge-plus";
-import { Panel, PanelHeader, PanelHeaderButton, FixedLayout, Div, Group, Button, Separator, Cell, List, CellButton, Headline, Banner, usePlatform } from '@vkontakte/vkui';
+import { Panel, PanelHeader, PanelHeaderButton, FixedLayout, Div, Group, Button, Separator, Cell, List, CellButton, Text, Banner, usePlatform } from '@vkontakte/vkui';
 import { Icon20AddCircle } from '@vkontakte/icons';
 import { Icon28EditOutline } from '@vkontakte/icons';
 import { Icon24AddOutline } from '@vkontakte/icons';
 
+import './EditCategories.css';
 import API from '../utils/API';
 import arrayEquals from '../utils/arrayEquals';
 import mapPlatform from '../utils/mapPlatform';
@@ -83,6 +84,11 @@ const EditCategories = ({
     return setCatOrder([...catOrder.slice(0, catIndex), ...catOrder.slice(catIndex + 1)]);
   }
 
+  const editHandle = (catIndex, category) => {
+    setEditMode({ catIndex, id: category.id, title: category.title });
+    return router.pushModal(MODAL_CARD_CATEGORY);
+  }
+
   const dragFinishHandle = ({ from, to }) => {
     const cloneCatOrder = [...catOrder];
     cloneCatOrder.splice(from, 1);
@@ -145,21 +151,37 @@ const EditCategories = ({
         {categories &&
           <List>
             {categories.map((category, catIndex) => {
-              return (
-                <Cell draggable removable
-                  key={'cat' + catIndex}
-                  indicator={
-                    <Icon28EditOutline className={platform === 'ios' && 'icon-right_ios'} fill='#3F8AE0' onClick={() => {
-                      router.pushModal(MODAL_CARD_CATEGORY);
-                      setEditMode({ catIndex, id: category.id, title: category.title });
-                    }}/>
-                  }
-                  onRemove={() => removeHandle(category, catIndex)}
-                  onDragFinish={dragFinishHandle}
-                > 
-                  {category.title}
-                </Cell>
-              );
+              if (!desktop) {
+                return (
+                  <Cell draggable removable
+                    key={'cat' + catIndex}
+                    indicator={
+                      <Icon28EditOutline className={platform === 'ios' && 'icon-right_ios'} fill='#3F8AE0' onClick={() => editHandle(catIndex, category)}/>
+                    }
+                    onRemove={() => removeHandle(category, catIndex)}
+                    onDragFinish={dragFinishHandle}
+                  > 
+                    {category.title}
+                  </Cell>
+                );
+              } else {
+                return (
+                  <Cell draggable
+                    className='category-cell'
+                    key={'cat' + catIndex}
+                    onDragFinish={dragFinishHandle}
+                    after={
+                      <div className='category-cell__button-block'>
+                        <Text weight='regular' className="category-cell__button" onClick={() => editHandle(catIndex, category)}>Редактировать</Text>
+                        <Text weight='regular' className='category-cell__point'> · </Text>
+                        <Text weight='regular' className="category-cell__button" onClick={() => removeHandle(category, catIndex)}>Удалить</Text>
+                      </div>
+                    }
+                  >
+                    {category.title}
+                  </Cell>
+                );
+              }
             })}
           </List>
         }
