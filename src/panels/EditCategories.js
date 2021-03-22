@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import cloneDeep from 'lodash-es/cloneDeep';
 import { Panel, PanelHeader, PanelHeaderButton, FixedLayout, Div, Group, Button, Separator, Cell, List, CellButton, Headline, Banner, usePlatform } from '@vkontakte/vkui';
-import { Icon28AddCircleFillBlue } from '@vkontakte/icons';
+import { Icon20AddCircle } from '@vkontakte/icons';
 import { Icon28EditOutline } from '@vkontakte/icons';
+import { Icon24AddOutline } from '@vkontakte/icons';
 
 import API from '../utils/API';
 import arrayEquals from '../utils/arrayEquals';
@@ -126,17 +127,18 @@ const EditCategories = ({
       >
         Категории
       </PanelHeader>
-      <Group>
-        <CellButton before={<Icon28AddCircleFillBlue/>} onClick={() => router.pushModal(MODAL_CARD_CATEGORY)}>
-          Добавить категорию
-        </CellButton>
-        <CellButton onClick={() =>{
+      <Group style={{ paddingBottom: desktop ? '56px' : '72px' }}>
+        {!desktop && 
+          <CellButton before={<Icon20AddCircle height={22} width={22}/>} onClick={() => router.pushModal(MODAL_CARD_CATEGORY)}>
+            Добавить категорию
+          </CellButton>
+        }
+        {/* <CellButton onClick={() =>{
           console.log(categories, catOrder, deletedCats, newCats, changedCats, editMode);
           // console.log(group.Categories === categories);
         }}>
           Консоль стэйты
-        </CellButton>
-      </Group>
+        </CellButton> */}
         {categories &&
           <List>
             {categories.map((category, catIndex) => {
@@ -158,13 +160,34 @@ const EditCategories = ({
             })}
           </List>
         }
+      </Group>
       <FixedLayout vertical='bottom'>
         <Separator wide={true}/>
-        <Div>
-          <Button size='l' stretched onClick={submitHandle}>
-            Готово
-          </Button>
-        </Div>
+        {desktop
+          ? <Div className="footer-desktop">
+            <Button className="footer-desktop__left-button"
+              size="s"
+              mode="tertiary"
+              before={<Icon24AddOutline />}
+              onClick={() => router.pushModal(MODAL_CARD_CATEGORY)}
+            >
+              Добавить категорию
+            </Button> 
+            <Button className="footer-desktop__button"
+              size='s'
+              onClick={submitHandle}
+            >
+              Готово
+            </Button>
+          </Div>
+          : <Div>
+            <Button size='l' 
+              stretched 
+              onClick={submitHandle}>
+              Готово
+            </Button>
+          </Div>
+        }
       </FixedLayout>
     </Panel>
   )

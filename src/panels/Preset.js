@@ -75,7 +75,7 @@ const Preset = ({ id, group, setGroup, desktop }) => {
       </FixedLayout>
       <Group className="group-categories" style={{ 
         paddingTop: !desktop ? '54px' : '36px',
-        paddingBottom: !desktop ? '68px' : '61px'
+        paddingBottom: desktop ? '56px' : '72px'
       }}>
         {categories.map(({ id, title, src, isChecked }) => 
           <Cell selectable before={<Avatar src={src} shadow={false} mode='app' />}

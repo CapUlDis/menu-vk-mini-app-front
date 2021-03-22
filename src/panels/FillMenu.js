@@ -41,7 +41,7 @@ const FillMenu = ({ id, desktop, group, setGroup, setPosition, setCategories, se
         Ваше Меню
       </PanelHeader>
       {/* <CellButton onClick={() => console.log(platform)}>Консоль platform</CellButton> */}
-      <Group style={{ paddingBottom: '72px' }}>
+      <Group style={{ paddingBottom: desktop ? '56px' : '72px' }}>
         {group.Categories.map((category, catIndex) =>
             <Group key={'cat' + category.id}
               className="category-group"
