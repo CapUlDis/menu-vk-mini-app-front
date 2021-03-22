@@ -29,6 +29,8 @@ const AddEditCategory = ({
   newCats, setNewCats, 
 
   changedCats, setChangedCats, 
+
+  abortHandle
 }) => {
   const router = useRouter();
 
@@ -114,6 +116,7 @@ const AddEditCategory = ({
   if (desktop) {
     return (
       <ModalPage id={id}
+        onClose={abortHandle}
         header={
           <ModalPageHeader>
             {!editMode ? 'Новая категория' : 'Изменить категорию' }
@@ -148,10 +151,7 @@ const AddEditCategory = ({
     return (
       <ModalCard id={id}
         header={!editMode ? 'Новая категория' : 'Изменить категорию' }
-        onClose={() => {
-          router.popPage();
-          setTimeout(() => setEditMode(false), 100);
-        }}
+        onClose={abortHandle}
         actions={
           <Button size="l" mode="primary" onClick={submitHandle}>
             {!editMode ? 'Добавить' : 'Сохранить'}

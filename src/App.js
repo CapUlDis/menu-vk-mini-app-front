@@ -236,6 +236,7 @@ const App = () => {
               setNewCats={setNewCats}
               changedCats={changedCats}
               setChangedCats={setChangedCats}
+              abortHandle={abortHandle}
             />
           </ModalRoot>
         }
