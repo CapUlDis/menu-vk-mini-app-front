@@ -202,6 +202,7 @@ const AddEditPosition = ({ id, desktop, group, setGroup, position, editMode, set
 					status={inputStatus.description ? inputStatus.description : 'default'}
 				>
 					<Textarea name="description"
+            grow={true}
             style={{ height: '64px' }}
 						value={description}
 						maxLength="100"
@@ -276,14 +277,16 @@ const AddEditPosition = ({ id, desktop, group, setGroup, position, editMode, set
 							<Avatar size={100} mode='image' shadow={false} id='preview' src={image.src}>
 								{image.plug}
                 {image.src && <Icon24DismissOverlay className="image-input__close" onClick={() => {
-                  setImage({ plug: !editMode ? <Icon56GalleryOutline/> : null, src: !editMode ? '' : position.imageUrl, file: false });
+                  document.getElementById('fileInput').value = null;
+                  setImage({ plug: !editMode ? <Icon56GalleryOutline/> : null, src: '', file: false });
                 }} />}
 							</Avatar>
 						}
 						caption="Загрузите изображение блюда. Рекомендуемый размер 500×500px"
 						actions={
 							<React.Fragment>
-								<File mode="secondary"
+								<File id='fileInput'
+                  mode="secondary"
 									name='image'
 									accept=".png, .jpg, .jpeg"
 									onChange={e => {
