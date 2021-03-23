@@ -11,16 +11,18 @@ import './Menu.css';
 const Menu = ({ id, group, desktop, admin, groupInfo }) => {
   const router = useRouter();
 
-  const [activeTab, setActiveTab] = useState(group.Categories[0].id);
+  const [activeTab, setActiveTab] = useState(group.Categories.length === 0 ? null : group.Categories[0].id);
   const [contentPaddingBottom, setContentPaddingBottom] = useState('0px')
 
   useEffect(() => {
-    let paddingBottom = document.documentElement.clientHeight 
-          - document.getElementById(`group${group.Categories[group.Categories.length - 1].id}__main`).clientHeight
-          - (!groupInfo.avatar ? (!groupInfo.timetable ? 87 : 119) : (!groupInfo.timetable ? 299 : 331))
-          - 16;
-    
-    setContentPaddingBottom(paddingBottom + 'px');
+    if (group.Categories.length !== 0) {  
+      let paddingBottom = document.documentElement.clientHeight 
+        - document.getElementById(`group${group.Categories[group.Categories.length - 1].id}__main`).clientHeight
+        - (!groupInfo.avatar ? (!groupInfo.timetable ? 87 : 119) : (!groupInfo.timetable ? 299 : 331))
+        - 16;
+      
+      setContentPaddingBottom(paddingBottom + 'px');
+    }
   }, [])
 
   return (
@@ -121,7 +123,7 @@ const Menu = ({ id, group, desktop, admin, groupInfo }) => {
             );
           })}
         </Group>
-        : <Placeholder style={{
+        : <Placeholder stretched style={{
           paddingTop: !groupInfo.avatar ? (!groupInfo.timetable ? '97px' : '129px') : (!groupInfo.timetable ? '309px' : '341px'),
         }}>
           Меню еще не составлено
