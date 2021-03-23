@@ -57,6 +57,9 @@ html {
 
 .position-list_desktop {
   display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+  align-content: space-between;
   padding: 8px 24px;
 }
 
@@ -64,7 +67,6 @@ html {
   width: 190px;
   display: flex;
   flex-direction: column;
-  padding-right: 21px;
 }
 
 .position-desktop__description {
