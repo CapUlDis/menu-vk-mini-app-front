@@ -17,7 +17,7 @@ import { useRouter } from '@happysanta/router';
 import { MODAL_PAGE_POSITION, POPOUT_EDIT_DELETE_POSITION, PAGE_EDIT_CATEGORIES, PAGE_MENU } from '../router';
 
 
-const FillMenu = ({ id, desktop, group, setGroup, setPosition, setCategories, setCatOrder }) => {
+const FillMenu = ({ id, desktop, group, setGroup, setPosition, setCategories, setCatOrder, editPositionRef }) => {
   const router = useRouter();
   const platform = mapPlatform(BridgePlus.getStartParams().getPlatform());
 
@@ -64,9 +64,10 @@ const FillMenu = ({ id, desktop, group, setGroup, setPosition, setCategories, se
               <List>
                 {category.Positions && category.Positions.map(position =>
                     <Cell draggable
+                    
                       key={'pos' + position.id}
                       before={<Avatar mode='app' src={position.imageUrl} />}
-                      indicator={<Icon24MoreHorizontal className={platform === 'ios' && 'icon-right_ios'} onClick={() => {
+                      indicator={<Icon24MoreHorizontal  getRootRef={editPositionRef} className={platform === 'ios' && 'icon-right_ios'} onClick={() => {
                         setPosition(position);
                         return router.pushPopup(POPOUT_EDIT_DELETE_POSITION);
                       }}/>}

@@ -6,13 +6,14 @@ import { Icon28EditOutline, Icon28DeleteOutline } from '@vkontakte/icons';
 import { MODAL_PAGE_POSITION, PAGE_FILL_MENU } from '../router';
 
 
-const EditDeletePosition = ({ setEditMode, deletePosition }) => {
+const EditDeletePosition = ({ setEditMode, deletePosition, editPositionRef }) => {
   const router = useRouter();
 
   return (
     <ActionSheet
       onClose={() => router.popPage()}
       iosCloseItem={<ActionSheetItem autoclose mode="cancel">Отменить</ActionSheetItem>}
+      toggleRef={editPositionRef.current}
     >
       <ActionSheetItem before={<Icon28EditOutline/>} onClick={() => {
         setEditMode(true);

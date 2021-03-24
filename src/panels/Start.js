@@ -9,7 +9,7 @@ import menu from './components/img/menu.svg';
 import './Start.css';
 
 
-const Start = ({ id, setGroup, desktop }) => {
+const Start = ({ id, setGroup, desktop, fetchGroupInfo }) => {
   const router = useRouter();
 
   const addMenuToCommunity = async () => {
@@ -18,6 +18,7 @@ const Start = ({ id, setGroup, desktop }) => {
       const response = await API.post('/groups', { vkGroupId: responseVk.group_id });
 
       setGroup(response.data.group);
+      fetchGroupInfo(response.data.group);
 
       return router.pushPage(PAGE_PRESET);
     } catch (err) {

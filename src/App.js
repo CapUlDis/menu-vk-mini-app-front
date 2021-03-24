@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { BridgePlus } from "@happysanta/bridge-plus";
 import qs from 'querystring';
 import _ from 'lodash';
@@ -68,6 +68,8 @@ const App = () => {
     close: true,
   });
 
+  const editPositionRef = useRef(null);
+
   const deletePosition = async () => {
     try {
       await API.delete(`/positions/${position.id}`);
@@ -87,7 +89,13 @@ const App = () => {
 
   const popout = (() => {
     if (location.getPopupId() === POPOUT_EDIT_DELETE_POSITION) {
-      return <EditDeletePosition position={position} setEditMode={setEditMode} deletePosition={deletePosition}/>;
+      return (
+        <EditDeletePosition position={position} 
+          setEditMode={setEditMode} 
+          deletePosition={deletePosition}
+          editPositionRef={editPositionRef}
+        />
+      );
     }
   })();
 
@@ -190,9 +198,9 @@ const App = () => {
 
     } else {
       setStep(STEPS.MAIN);
-      // router.pushPage(PAGE_START);
+      router.pushPage(PAGE_START);
 
-      router.pushPage(PAGE_PRESET);
+      // router.pushPage(PAGE_PRESET);
     }
   }, [watchFlag])
 
@@ -244,6 +252,7 @@ const App = () => {
         <Start id={PANEL_START}
           setGroup={setGroup}
           desktop={desktop}
+          fetchGroupInfo={fetchGroupInfo}
         />
         <Preset id={PANEL_PRESET}
           group={group}
@@ -257,6 +266,7 @@ const App = () => {
           setPosition={setPosition}
           setCategories={setCategories}
           setCatOrder={setCatOrder}
+          editPositionRef={editPositionRef}
         />
         <EditCategories id={PANEL_EDIT_CATEGORIES} desktop={desktop}
           categories={categories}
