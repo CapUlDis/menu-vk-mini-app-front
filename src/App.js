@@ -251,6 +251,7 @@ const App = () => {
       >
         <Start id={PANEL_START}
           setGroup={setGroup}
+          setAdmin={setAdmin}
           desktop={desktop}
           fetchGroupInfo={fetchGroupInfo}
         />
