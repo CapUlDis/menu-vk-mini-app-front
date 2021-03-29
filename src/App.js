@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BridgePlus } from "@happysanta/bridge-plus";
 import qs from 'querystring';
 import _ from 'lodash';
@@ -35,6 +35,7 @@ import AddEditCategory from './modals/AddEditCategory';
 import EditDeletePosition from './popouts/EditDeletePosition';
 import API from './utils/API';
 import mapPlatform from './utils/mapPlatform';
+import getPositionSum from "./utils/getPositionSum";
 
 
 const STEPS = {
@@ -54,9 +55,9 @@ const App = () => {
   const [group, setGroup] = useState({});
   const [desktop, setDesktop] = useState(false);
   const [watchFlag, setWatchFlag] = useState(0);
-
   const [position, setPosition] = useState({});
   const [editMode, setEditMode] = useState(false);
+
   // EditCategories hooks:
   const [categories, setCategories] = useState({});
   const [catOrder, setCatOrder] = useState([]);
@@ -71,7 +72,7 @@ const App = () => {
     close: true,
   });
 
-  const editPositionRef = useRef();
+  const [editPosRefs, setEditPosRefs] = useState([]);
 
   const deletePosition = async () => {
     try {
@@ -89,18 +90,6 @@ const App = () => {
       console.log(err);
     }
   };
-
-  const popout = (() => {
-    if (location.getPopupId() === POPOUT_EDIT_DELETE_POSITION) {
-      return (
-        <EditDeletePosition position={position} 
-          setEditMode={setEditMode} 
-          deletePosition={deletePosition}
-          editPositionRef={editPositionRef}
-        />
-      );
-    }
-  })();
 
   const fetchGroupInfo = async (group) => {
     const response = await BridgePlus.api("groups.getById", { group_id: group.vkGroupId, fields: "addresses,cover,has_photo" })
@@ -205,7 +194,26 @@ const App = () => {
 
       router.pushPage(PAGE_PRESET);
     }
-  }, [watchFlag])
+  }, [watchFlag]);
+  
+
+  useEffect(() => {
+    if (editPosRefs.length !== getPositionSum(group)) {
+      setEditPosRefs(editPosRefs => Array(getPositionSum(group)).fill().map((_, i) => editPosRefs[i] || React.createRef()));
+    }
+  }, [group]);
+
+  const popout = (() => {
+    if (location.getPopupId() === POPOUT_EDIT_DELETE_POSITION) {
+      return (
+        <EditDeletePosition position={position} 
+          setEditMode={setEditMode} 
+          deletePosition={deletePosition}
+          editPosRefs={editPosRefs}
+        />
+      );
+    }
+  })();
 
   if (step === STEPS.LOADER) {
     return (
@@ -273,7 +281,7 @@ const App = () => {
                 setPosition={setPosition}
                 setCategories={setCategories}
                 setCatOrder={setCatOrder}
-                editPositionRef={editPositionRef}
+                editPosRefs={editPosRefs}
               />
               <EditCategories id={PANEL_EDIT_CATEGORIES} desktop={desktop}
                 categories={categories}

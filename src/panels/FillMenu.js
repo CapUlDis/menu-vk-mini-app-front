@@ -17,9 +17,19 @@ import { useRouter } from '@happysanta/router';
 import { MODAL_PAGE_POSITION, POPOUT_EDIT_DELETE_POSITION, PAGE_EDIT_CATEGORIES, PAGE_MENU } from '../router';
 
 
-const FillMenu = ({ id, desktop, group, setGroup, setPosition, setCategories, setCatOrder, editPositionRef }) => {
+const FillMenu = ({ id, desktop, group, setGroup, setPosition, setCategories, setCatOrder, editPosRefs }) => {
   const router = useRouter();
   const platform = mapPlatform(BridgePlus.getStartParams().getPlatform());
+
+  const getPosRefIndex = (catIndex, posIndex) => {
+    let index = posIndex;
+
+    for (let i = 0; i < catIndex; i ++) {
+      index += group.Categories[i].Positions.length;
+    }
+
+    return index;
+  }
 
   const editCategoriesHandle = () => {
     const cloneGroup = cloneDeep(group);
@@ -57,7 +67,7 @@ const FillMenu = ({ id, desktop, group, setGroup, setPosition, setCategories, se
                   setPosition({ categoryId: category.id });
                   return router.pushModal(MODAL_PAGE_POSITION);
                 }}>
-                  {desktop ? 'Добавить блюдо' : <Icon24AddOutline  />}
+                  {desktop ? 'Добавить блюдо' : <Icon24AddOutline/>}
                 </Link>
               }
             >
@@ -65,30 +75,33 @@ const FillMenu = ({ id, desktop, group, setGroup, setPosition, setCategories, se
             </Header>
           }>
             <List>
-              {category.Positions && category.Positions.map(position =>
-                  <Cell draggable
-                    key={'pos' + position.id}
-                    before={<Avatar mode='app' src={position.imageUrl} />}
-                    indicator={<Icon24MoreHorizontal  getRootRef={editPositionRef} className={platform === 'ios' && 'icon-right_ios'} onClick={() => {
+              {category.Positions && category.Positions.map((position, posIndex) =>
+                <Cell draggable
+                  key={'pos' + position.id}
+                  before={<Avatar mode='app' src={position.imageUrl} />}
+                  indicator={<Icon24MoreHorizontal className={platform === 'ios' && 'icon-right_ios'}
+                    getRootRef={editPosRefs[getPosRefIndex(catIndex, posIndex)]} 
+                    onClick={() => {
                       setPosition(position);
-                      return router.pushPopup(POPOUT_EDIT_DELETE_POSITION);
-                    }}/>}
-                    description={position.price + ' ₽'}
-                    onDragFinish={async ({ from, to }) => {
-                      try {
-                        const cloneGroup = cloneDeep(group);
-                        cloneGroup.Categories[catIndex].posOrder.splice(from, 1);
-                        cloneGroup.Categories[catIndex].posOrder.splice(to, 0, group.Categories[catIndex].posOrder[from]);
-                        cloneGroup.Categories[catIndex].Positions = orderArray(cloneGroup.Categories[catIndex].Positions, cloneGroup.Categories[catIndex].posOrder, 'id');
-                        await API.patch(`/categories/${category.id}`, { posOrder: cloneGroup.Categories[catIndex].posOrder })
-                        setGroup(cloneGroup);
-                      } catch (err) {
-                        console.log(err);
-                      }
+                      return router.pushPopup(POPOUT_EDIT_DELETE_POSITION, { index: getPosRefIndex(catIndex, posIndex) });
                     }}
-                  >
-                    {position.title}
-                  </Cell>
+                  />}
+                  description={position.price + ' ₽'}
+                  onDragFinish={async ({ from, to }) => {
+                    try {
+                      const cloneGroup = cloneDeep(group);
+                      cloneGroup.Categories[catIndex].posOrder.splice(from, 1);
+                      cloneGroup.Categories[catIndex].posOrder.splice(to, 0, group.Categories[catIndex].posOrder[from]);
+                      cloneGroup.Categories[catIndex].Positions = orderArray(cloneGroup.Categories[catIndex].Positions, cloneGroup.Categories[catIndex].posOrder, 'id');
+                      await API.patch(`/categories/${category.id}`, { posOrder: cloneGroup.Categories[catIndex].posOrder })
+                      setGroup(cloneGroup);
+                    } catch (err) {
+                      console.log(err);
+                    }
+                  }}
+                >
+                  {position.title}
+                </Cell>
               )}
             </List>
           </Group>
