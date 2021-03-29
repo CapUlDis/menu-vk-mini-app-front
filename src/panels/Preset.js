@@ -73,9 +73,11 @@ const Preset = ({ id, group, setGroup, desktop }) => {
           Выберите категории, которые представлены в вашем заведении. Позже вы сможете их изменить или создать новые.
         </Subhead>
       </FixedLayout>
-      <Group className="group-categories" style={{ 
-        paddingTop: !desktop ? '54px' : '36px',
-        paddingBottom: desktop ? '56px' : '72px'
+      <Group className="group-categories" 
+        mode="plain"
+        style={{ 
+          paddingTop: !desktop ? '54px' : '36px',
+          paddingBottom: desktop ? '56px' : '72px'
       }}>
         {categories.map(({ id, title, src, isChecked }) => 
           <Cell selectable before={<Avatar src={src} shadow={false} mode='app' />}

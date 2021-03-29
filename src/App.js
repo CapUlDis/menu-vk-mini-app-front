@@ -3,7 +3,7 @@ import { BridgePlus } from "@happysanta/bridge-plus";
 import qs from 'querystring';
 import _ from 'lodash';
 import cloneDeep from 'lodash-es/cloneDeep';
-import { SplitLayout, SplitCol, Root, View, Panel, Subhead, ScreenSpinner, ModalRoot } from '@vkontakte/vkui';
+import { AppRoot, SplitLayout, SplitCol, Root, View, Panel, Subhead, ScreenSpinner, ModalRoot, withAdaptivity, VKCOM } from '@vkontakte/vkui';
 import { PAGE_MAIN, useLocation, useRouter } from '@happysanta/router';
 import '@vkontakte/vkui/dist/vkui.css';
 
@@ -34,12 +34,15 @@ import AddEditPosition from './modals/AddEditPosition';
 import AddEditCategory from './modals/AddEditCategory';
 import EditDeletePosition from './popouts/EditDeletePosition';
 import API from './utils/API';
+import mapPlatform from './utils/mapPlatform';
 
 
 const STEPS = {
   LOADER: 'loader',
   MAIN: 'main'
 };
+
+const platform = mapPlatform(BridgePlus.getStartParams().getPlatform());
 
 const App = () => {
   const location = useLocation();
@@ -68,7 +71,7 @@ const App = () => {
     close: true,
   });
 
-  const editPositionRef = useRef(null);
+  const editPositionRef = useRef();
 
   const deletePosition = async () => {
     try {
@@ -198,9 +201,9 @@ const App = () => {
 
     } else {
       setStep(STEPS.MAIN);
-      router.pushPage(PAGE_START);
+      // router.pushPage(PAGE_START);
 
-      // router.pushPage(PAGE_PRESET);
+      router.pushPage(PAGE_PRESET);
     }
   }, [watchFlag])
 
@@ -215,86 +218,94 @@ const App = () => {
   }
 
   return (
-    <Root activeView={location.getViewId()}>
-      <View id={VIEW_MAIN}
-        popout={popout}
-        activePanel={location.getViewActivePanel(VIEW_MAIN)}
-        modal={
-          <ModalRoot activeModal={location.getModalId()} onClose={abortHandle}>
-            <AddEditPosition id={MODAL_PAGE_POSITION}
-              desktop={desktop}
-              group={group}
-              setGroup={setGroup}
-              position={position}
-              editMode={editMode}
-              setEditMode={setEditMode}
-              deletePosition={deletePosition}
-              abortHandle={abortHandle}
-            />
-            <AddEditCategory id={MODAL_CARD_CATEGORY}
-              desktop={desktop}
-              group={group}
-              editMode={editMode}
-              setEditMode={setEditMode}
-              categories={categories}
-              setCategories={setCategories}
-              catOrder={catOrder}
-              setCatOrder={setCatOrder}
-              newCats={newCats}
-              setNewCats={setNewCats}
-              changedCats={changedCats}
-              setChangedCats={setChangedCats}
-              abortHandle={abortHandle}
-            />
-          </ModalRoot>
-        }
-      >
-        <Start id={PANEL_START}
-          setGroup={setGroup}
-          setAdmin={setAdmin}
-          desktop={desktop}
-          fetchGroupInfo={fetchGroupInfo}
-        />
-        <Preset id={PANEL_PRESET}
-          group={group}
-          setGroup={setGroup}
-          desktop={desktop}
-        />
-        <FillMenu id={PANEL_FILL_MENU}
-          desktop={desktop}
-          group={group}
-          setGroup={setGroup}
-          setPosition={setPosition}
-          setCategories={setCategories}
-          setCatOrder={setCatOrder}
-          editPositionRef={editPositionRef}
-        />
-        <EditCategories id={PANEL_EDIT_CATEGORIES} desktop={desktop}
-          categories={categories}
-          setCategories={setCategories}
-          catOrder={catOrder}
-          setCatOrder={setCatOrder}
-          newCats={newCats}
-          setNewCats={setNewCats}
-          changedCats={changedCats}
-          setChangedCats={setChangedCats}
-          group={group}
-          setGroup={setGroup}
-          editMode={editMode}
-          setEditMode={setEditMode}
-        />
-      </View>
-      <View id={VIEW_MENU} activePanel={location.getViewActivePanel(VIEW_MENU)}>
-        <Menu id={PANEL_MENU}
-          group={group}
-          desktop={desktop}
-          admin={admin}
-          groupInfo={groupInfo}
-        />
-      </View>
-    </Root>
+    <AppRoot>
+      <SplitLayout>
+        <SplitCol>
+          <Root activeView={location.getViewId()}>
+            <View id={VIEW_MAIN}
+              popout={popout}
+              activePanel={location.getViewActivePanel(VIEW_MAIN)}
+              modal={
+                <ModalRoot activeModal={location.getModalId()} onClose={abortHandle}>
+                  <AddEditPosition id={MODAL_PAGE_POSITION}
+                    desktop={desktop}
+                    group={group}
+                    setGroup={setGroup}
+                    position={position}
+                    editMode={editMode}
+                    setEditMode={setEditMode}
+                    deletePosition={deletePosition}
+                    abortHandle={abortHandle}
+                  />
+                  <AddEditCategory id={MODAL_CARD_CATEGORY}
+                    desktop={desktop}
+                    group={group}
+                    editMode={editMode}
+                    setEditMode={setEditMode}
+                    categories={categories}
+                    setCategories={setCategories}
+                    catOrder={catOrder}
+                    setCatOrder={setCatOrder}
+                    newCats={newCats}
+                    setNewCats={setNewCats}
+                    changedCats={changedCats}
+                    setChangedCats={setChangedCats}
+                    abortHandle={abortHandle}
+                  />
+                </ModalRoot>
+              }
+            >
+              <Start id={PANEL_START}
+                setGroup={setGroup}
+                setAdmin={setAdmin}
+                desktop={desktop}
+                fetchGroupInfo={fetchGroupInfo}
+              />
+              <Preset id={PANEL_PRESET}
+                group={group}
+                setGroup={setGroup}
+                desktop={desktop}
+              />
+              <FillMenu id={PANEL_FILL_MENU}
+                desktop={desktop}
+                group={group}
+                setGroup={setGroup}
+                setPosition={setPosition}
+                setCategories={setCategories}
+                setCatOrder={setCatOrder}
+                editPositionRef={editPositionRef}
+              />
+              <EditCategories id={PANEL_EDIT_CATEGORIES} desktop={desktop}
+                categories={categories}
+                setCategories={setCategories}
+                catOrder={catOrder}
+                setCatOrder={setCatOrder}
+                newCats={newCats}
+                setNewCats={setNewCats}
+                changedCats={changedCats}
+                setChangedCats={setChangedCats}
+                group={group}
+                setGroup={setGroup}
+                editMode={editMode}
+                setEditMode={setEditMode}
+              />
+            </View>
+            <View id={VIEW_MENU} activePanel={location.getViewActivePanel(VIEW_MENU)}>
+              <Menu id={PANEL_MENU}
+                group={group}
+                desktop={desktop}
+                admin={admin}
+                groupInfo={groupInfo}
+              />
+            </View>
+          </Root>
+        </SplitCol>
+      </SplitLayout>
+    </AppRoot>
   );
-}
+};
+
+
 
 export default App;
 

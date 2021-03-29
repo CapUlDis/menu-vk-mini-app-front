@@ -4,7 +4,7 @@ import React from "react";
 import { BridgePlus } from "@happysanta/bridge-plus";
 import ReactDOM from "react-dom";
 import bridge from "@vkontakte/vk-bridge";
-import { ConfigProvider, AdaptivityProvider, AppRoot, SplitLayout, SplitCol, WebviewType } from '@vkontakte/vkui';
+import { ConfigProvider, AdaptivityProvider, WebviewType, SizeType, VKCOM, ViewWidth } from '@vkontakte/vkui';
 import { RouterContext } from '@happysanta/router';
 import { router } from './router';
 import App from "./App";
@@ -13,23 +13,21 @@ import mapPlatform from "./utils/mapPlatform";
 // Init VK  Mini App
 bridge.send("VKWebAppInit");
 
-const platform = BridgePlus.getStartParams().getPlatform();
-const uiPlatform = mapPlatform(platform);
+const uiPlatform = mapPlatform(BridgePlus.getStartParams().getPlatform());
+const isDesktop = BridgePlus.getStartParams().isDesktop();
 
 ReactDOM.render(
 	<RouterContext.Provider value={router}>
 		<ConfigProvider isWebView={true}
       platform={uiPlatform}
       webviewType={WebviewType.INTERNAL}
+      transitionMotionEnabled={!isDesktop}
     >
-			<AdaptivityProvider >
-				<AppRoot>
-					<SplitLayout>
-						<SplitCol>
-							<App />
-						</SplitCol>
-					</SplitLayout>
-				</AppRoot>
+			<AdaptivityProvider 
+        sizeX={uiPlatform === VKCOM ? SizeType.REGULAR : undefined}
+        viewWidth={uiPlatform === VKCOM ? ViewWidth.DESKTOP : undefined}
+      >
+        <App />
 			</AdaptivityProvider>
 		</ConfigProvider>
 	</RouterContext.Provider>, document.getElementById("root")

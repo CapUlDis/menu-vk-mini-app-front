@@ -106,7 +106,7 @@ const Menu = ({ id, group, desktop, admin, groupInfo }) => {
         <Spacing separator size={desktop? 1 : 8} className={desktop && 'header__separator_desktop'}/>
       </FixedLayout>
       {hasAtLeastOnePos()
-        ? <Group id='main' style={{ 
+        ? <Group id='main' mode='plain' style={{ 
           paddingTop: !groupInfo.avatar ? (!groupInfo.timetable ? '87px' : '119px') : (!groupInfo.timetable ? '299px' : '331px'),
           paddingBottom: contentPaddingBottom 
         }}>
@@ -115,6 +115,7 @@ const Menu = ({ id, group, desktop, admin, groupInfo }) => {
 
             result.push(
               <Group className="category-group"
+                mode="plain"
                 key={'group' + category.id} 
                 id={'group' + category.id}
                 header={

@@ -30,7 +30,7 @@ const FillMenu = ({ id, desktop, group, setGroup, setPosition, setCategories, se
   }
 
   return (
-    <Panel id={id}>
+    <Panel id={id} style={{ minHeight: '100vh' }}>
       <PanelHeader fixed={true}
         left={desktop
           ? undefined
@@ -42,54 +42,56 @@ const FillMenu = ({ id, desktop, group, setGroup, setPosition, setCategories, se
         Ваше Меню
       </PanelHeader>
       {/* <CellButton onClick={() => console.log(platform)}>Консоль platform</CellButton> */}
-      <Group style={{ paddingBottom: desktop ? '56px' : '72px' }}>
+      <Group style={{ paddingBottom: desktop ? '56px' : '72px' }}
+        mode="plain"
+      >
         {group.Categories.map((category, catIndex) =>
-            <Group key={'cat' + category.id}
-              className="category-group"
-              header={
-              <Header mode="primary"
-                indicator={category.Positions ? category.Positions.length : 0}
-                aside={
-                  <Link onClick={() => {
-                    setPosition({ categoryId: category.id });
-                    return router.pushModal(MODAL_PAGE_POSITION);
-                  }}>
-                    {desktop ? 'Добавить блюдо' : <Icon24AddOutline  />}
-                  </Link>
-                }
-              >
-                {category.title}
-              </Header>
-            }>
-              <List>
-                {category.Positions && category.Positions.map(position =>
-                    <Cell draggable
-                    
-                      key={'pos' + position.id}
-                      before={<Avatar mode='app' src={position.imageUrl} />}
-                      indicator={<Icon24MoreHorizontal  getRootRef={editPositionRef} className={platform === 'ios' && 'icon-right_ios'} onClick={() => {
-                        setPosition(position);
-                        return router.pushPopup(POPOUT_EDIT_DELETE_POSITION);
-                      }}/>}
-                      description={position.price + ' ₽'}
-                      onDragFinish={async ({ from, to }) => {
-                        try {
-                          const cloneGroup = cloneDeep(group);
-                          cloneGroup.Categories[catIndex].posOrder.splice(from, 1);
-                          cloneGroup.Categories[catIndex].posOrder.splice(to, 0, group.Categories[catIndex].posOrder[from]);
-                          cloneGroup.Categories[catIndex].Positions = orderArray(cloneGroup.Categories[catIndex].Positions, cloneGroup.Categories[catIndex].posOrder, 'id');
-                          await API.patch(`/categories/${category.id}`, { posOrder: cloneGroup.Categories[catIndex].posOrder })
-                          setGroup(cloneGroup);
-                        } catch (err) {
-                          console.log(err);
-                        }
-                      }}
-                    >
-                      {position.title}
-                    </Cell>
-                )}
-              </List>
-            </Group>
+          <Group key={'cat' + category.id}
+            mode="plain"
+            className="category-group"
+            header={
+            <Header mode="primary"
+              indicator={category.Positions ? category.Positions.length : 0}
+              aside={
+                <Link onClick={() => {
+                  setPosition({ categoryId: category.id });
+                  return router.pushModal(MODAL_PAGE_POSITION);
+                }}>
+                  {desktop ? 'Добавить блюдо' : <Icon24AddOutline  />}
+                </Link>
+              }
+            >
+              {category.title}
+            </Header>
+          }>
+            <List>
+              {category.Positions && category.Positions.map(position =>
+                  <Cell draggable
+                    key={'pos' + position.id}
+                    before={<Avatar mode='app' src={position.imageUrl} />}
+                    indicator={<Icon24MoreHorizontal  getRootRef={editPositionRef} className={platform === 'ios' && 'icon-right_ios'} onClick={() => {
+                      setPosition(position);
+                      return router.pushPopup(POPOUT_EDIT_DELETE_POSITION);
+                    }}/>}
+                    description={position.price + ' ₽'}
+                    onDragFinish={async ({ from, to }) => {
+                      try {
+                        const cloneGroup = cloneDeep(group);
+                        cloneGroup.Categories[catIndex].posOrder.splice(from, 1);
+                        cloneGroup.Categories[catIndex].posOrder.splice(to, 0, group.Categories[catIndex].posOrder[from]);
+                        cloneGroup.Categories[catIndex].Positions = orderArray(cloneGroup.Categories[catIndex].Positions, cloneGroup.Categories[catIndex].posOrder, 'id');
+                        await API.patch(`/categories/${category.id}`, { posOrder: cloneGroup.Categories[catIndex].posOrder })
+                        setGroup(cloneGroup);
+                      } catch (err) {
+                        console.log(err);
+                      }
+                    }}
+                  >
+                    {position.title}
+                  </Cell>
+              )}
+            </List>
+          </Group>
         )}
       </Group>
       <FixedLayout vertical='bottom' filled>
