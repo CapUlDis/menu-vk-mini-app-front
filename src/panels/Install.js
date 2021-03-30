@@ -1,28 +1,16 @@
 import React from 'react';
 import bridge from "@vkontakte/vk-bridge";
 import { Panel, Placeholder, FixedLayout, Div, Button } from '@vkontakte/vkui';
-import { useRouter } from '@happysanta/router';
 
-import API from '../utils/API';
-import { PAGE_PRESET } from '../router';
 import menu from './components/img/menu.svg';
-import './Start.css';
+import './Install.css';
 
 
-const Start = ({ id, setGroup, desktop, fetchGroupInfo, setAdmin }) => {
-  const router = useRouter();
+const Install = ({ id, desktop }) => {
 
   const addMenuToCommunity = async () => {
     try {
-      const responseVk = await bridge.send("VKWebAppAddToCommunity");
-      const response = await API.post('/groups', { vkGroupId: responseVk.group_id });
-
-      setGroup(response.data.group);
-      setAdmin(true);
-
-      fetchGroupInfo(response.data.group);
-
-      return router.pushPage(PAGE_PRESET);
+      await bridge.send("VKWebAppAddToCommunity");
     } catch (err) {
       console.log(err);
       return;
@@ -53,4 +41,4 @@ const Start = ({ id, setGroup, desktop, fetchGroupInfo, setAdmin }) => {
   )
 };
 
-export default Start;
+export default Install;

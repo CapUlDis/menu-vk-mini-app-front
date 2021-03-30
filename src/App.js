@@ -8,15 +8,15 @@ import { PAGE_MAIN, useLocation, useRouter } from '@happysanta/router';
 import '@vkontakte/vkui/dist/vkui.css';
 
 import {
+  VIEW_LENDING,
   VIEW_MAIN,
   VIEW_MENU,
-
-  PANEL_START,
+  PANEL_INSTALL,
   PANEL_PRESET,
   PANEL_FILL_MENU,
   PANEL_EDIT_CATEGORIES,
   PANEL_MENU,
-  PAGE_START,
+  PAGE_INSTALL,
   PAGE_PRESET,
   PAGE_FILL_MENU,
   PAGE_EDIT_CATEGORIES,
@@ -25,7 +25,7 @@ import {
   MODAL_CARD_CATEGORY,
   POPOUT_EDIT_DELETE_POSITION
 } from './router';
-import Start from './panels/Start';
+import Install from './panels/Install';
 import Preset from './panels/Preset';
 import FillMenu from './panels/FillMenu';
 import EditCategories from './panels/EditCategories';
@@ -190,9 +190,9 @@ const App = () => {
 
     } else {
       setStep(STEPS.MAIN);
-      // router.pushPage(PAGE_START);
+      router.pushPage(PAGE_INSTALL);
 
-      router.pushPage(PAGE_PRESET);
+      // router.pushPage(PAGE_PRESET);
     }
   }, [watchFlag]);
   
@@ -230,6 +230,13 @@ const App = () => {
       <SplitLayout>
         <SplitCol>
           <Root activeView={location.getViewId()}>
+            <View id={VIEW_LENDING}
+              activePanel={location.getViewActivePanel(VIEW_LENDING)}
+            >
+              <Install id={PANEL_INSTALL}
+                desktop={desktop}
+              />
+            </View>
             <View id={VIEW_MAIN}
               popout={popout}
               activePanel={location.getViewActivePanel(VIEW_MAIN)}
@@ -263,12 +270,6 @@ const App = () => {
                 </ModalRoot>
               }
             >
-              <Start id={PANEL_START}
-                setGroup={setGroup}
-                setAdmin={setAdmin}
-                desktop={desktop}
-                fetchGroupInfo={fetchGroupInfo}
-              />
               <Preset id={PANEL_PRESET}
                 group={group}
                 setGroup={setGroup}
