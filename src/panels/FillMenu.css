@@ -6,6 +6,6 @@
   margin-right: 16px;
 }
 
-/* .Panel__in {
-  background: white !important;
-} */
+.Panel__in {
+  background: var(--background_content) !important;
+}

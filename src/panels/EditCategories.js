@@ -136,7 +136,9 @@ const EditCategories = ({
       >
         Категории
       </PanelHeader>
-      <Group style={{ paddingBottom: desktop ? '56px' : '72px' }}>
+      <Group style={{ paddingBottom: desktop ? '56px' : '72px' }}
+        mode="plain"
+      >
         {!desktop && 
           <CellButton before={<Icon20AddCircle height={22} width={22}/>} onClick={() => router.pushModal(MODAL_CARD_CATEGORY)}>
             Добавить категорию
