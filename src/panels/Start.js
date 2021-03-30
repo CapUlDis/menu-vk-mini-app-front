@@ -5,7 +5,7 @@ import { Icon24DoneOutline } from '@vkontakte/icons';
 import { useRouter } from '@happysanta/router';
 
 import API from '../utils/API';
-import './Preset.css';
+import './Start.css';
 import { PAGE_FILL_MENU } from '../router';
 import breakfast from './components/img/Image.svg';
 import snacks from './components/img/Image-1.svg';
@@ -19,7 +19,7 @@ import burgers from './components/img/Image-8.svg';
 import bakery from './components/img/Image-9.svg';
 
 
-const Preset = ({ id, group, setGroup, desktop }) => {
+const Start = ({ id, group, setGroup, desktop }) => {
   const router = useRouter();
 
   const [categories, setCategories] = useState([
@@ -115,4 +115,4 @@ const Preset = ({ id, group, setGroup, desktop }) => {
   );
 };
 
-export default Preset;
+export default Start;

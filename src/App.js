@@ -12,12 +12,12 @@ import {
   VIEW_MAIN,
   VIEW_MENU,
   PANEL_INSTALL,
-  PANEL_PRESET,
+  PANEL_START,
   PANEL_FILL_MENU,
   PANEL_EDIT_CATEGORIES,
   PANEL_MENU,
   PAGE_INSTALL,
-  PAGE_PRESET,
+  PAGE_START,
   PAGE_FILL_MENU,
   PAGE_EDIT_CATEGORIES,
   PAGE_MENU,
@@ -26,7 +26,7 @@ import {
   POPOUT_EDIT_DELETE_POSITION
 } from './router';
 import Install from './panels/Install';
-import Preset from './panels/Preset';
+import Start from './panels/Start';
 import FillMenu from './panels/FillMenu';
 import EditCategories from './panels/EditCategories';
 import Menu from './panels/Menu';
@@ -191,8 +191,6 @@ const App = () => {
     } else {
       setStep(STEPS.MAIN);
       router.pushPage(PAGE_INSTALL);
-
-      // router.pushPage(PAGE_PRESET);
     }
   }, [watchFlag]);
   
@@ -230,12 +228,8 @@ const App = () => {
       <SplitLayout>
         <SplitCol>
           <Root activeView={location.getViewId()}>
-            <View id={VIEW_LENDING}
-              activePanel={location.getViewActivePanel(VIEW_LENDING)}
-            >
-              <Install id={PANEL_INSTALL}
-                desktop={desktop}
-              />
+            <View id={VIEW_LENDING} activePanel={location.getViewActivePanel(VIEW_LENDING)}>
+              <Install id={PANEL_INSTALL} desktop={desktop}/>
             </View>
             <View id={VIEW_MAIN}
               popout={popout}
@@ -270,7 +264,7 @@ const App = () => {
                 </ModalRoot>
               }
             >
-              <Preset id={PANEL_PRESET}
+              <Start id={PANEL_START}
                 group={group}
                 setGroup={setGroup}
                 desktop={desktop}
