@@ -23,6 +23,22 @@ const Menu = ({ id, group, desktop, admin, groupInfo }) => {
     });
   };
 
+  const twoCatHasPos = () => {
+    if (group.Categories.length === 0) return false;
+
+    let pos = 0;
+
+    for (let i = 0; i < group.Categories.length; i++) {
+      if (group.Categories[i].Positions && group.Categories[i].Positions.length > 0) {
+        pos++;
+      }
+
+      if (pos === 2) break;
+    }
+
+    return pos === 2;
+  }
+
   const firstActiveTabSetter = () => {
     const category = group.Categories.find(cat => {
       if (!cat.Positions) return false;
@@ -48,7 +64,16 @@ const Menu = ({ id, group, desktop, admin, groupInfo }) => {
     if (hasAtLeastOnePos()) {  
       let paddingBottom = document.documentElement.clientHeight 
         - document.getElementById(lastHasPos()).clientHeight
-        - (!groupInfo.avatar ? (!groupInfo.timetable ? 87 : 119) : (!groupInfo.timetable ? 299 : 331))
+        - (!groupInfo.avatar 
+            ? (!groupInfo.timetable 
+                ? (!twoCatHasPos() ? 67 : 87) 
+                : (!twoCatHasPos() ? 99 : 119)
+              ) 
+            : (!groupInfo.timetable 
+                ? (!twoCatHasPos() ? 279 : 299) 
+                : (!twoCatHasPos() ? 311 : 331)
+              )
+          )
         - 16;
       
       setContentPaddingBottom(paddingBottom + 'px');
@@ -75,7 +100,7 @@ const Menu = ({ id, group, desktop, admin, groupInfo }) => {
           <Tabs className={desktop && 'header__tabs_desktop'}
             style={{ minHeight: desktop ? '28px' : '22px' }}
           >
-            {hasAtLeastOnePos() &&
+            {twoCatHasPos() &&
               <HorizontalScroll showArrows={desktop ? true : false}
                 getScrollToRight={i => i + 120}
                 getScrollToLeft={i => i - 120}
@@ -107,7 +132,15 @@ const Menu = ({ id, group, desktop, admin, groupInfo }) => {
       </FixedLayout>
       {hasAtLeastOnePos()
         ? <Group id='main' mode='plain' style={{ 
-          paddingTop: !groupInfo.avatar ? (!groupInfo.timetable ? '87px' : '119px') : (!groupInfo.timetable ? '299px' : '331px'),
+          paddingTop: !groupInfo.avatar 
+            ? (!groupInfo.timetable 
+                ? (!twoCatHasPos() ? '67px' : '87px') 
+                : (!twoCatHasPos() ? '99px' : '119px')
+              ) 
+            : (!groupInfo.timetable 
+                ? (!twoCatHasPos() ? '279px' : '299px') 
+                : (!twoCatHasPos() ? '311px' : '331px')
+              ),
           paddingBottom: contentPaddingBottom 
         }}>
           {group.Categories.reduce((result, category) => {
