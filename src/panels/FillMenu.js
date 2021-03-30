@@ -1,8 +1,8 @@
-import React,  { useState }from 'react';
+import React,  { useState, useEffect } from 'react';
 import cloneDeep from 'lodash-es/cloneDeep';
 import { BridgePlus } from "@happysanta/bridge-plus";
-// import { BridgePlus } fro  m "@happysanta/bridge-plus";
-import { Panel, PanelHeader, PanelHeaderButton, FixedLayout, Div, Group, Header, Text, Link, Cell, List, CellButton, Avatar, Separator, usePlatform, Button } from '@vkontakte/vkui';
+import bridge from "@vkontakte/vk-bridge";
+import { Panel, PanelHeader, PanelHeaderButton, FixedLayout, Div, Group, Header, Tooltip, Link, Cell, List, CellButton, Avatar, Separator, usePlatform, Button } from '@vkontakte/vkui';
 import { Icon28EditOutline } from '@vkontakte/icons';
 import { Icon24PenOutline } from '@vkontakte/icons';
 import { Icon24ViewOutline } from '@vkontakte/icons';
@@ -17,9 +17,15 @@ import { useRouter } from '@happysanta/router';
 import { MODAL_PAGE_POSITION, POPOUT_EDIT_DELETE_POSITION, PAGE_EDIT_CATEGORIES, PAGE_MENU } from '../router';
 
 
+const STORAGE_KEYS = {
+  SEEN_TOOLTIP: 'menu_zav_seen_tooltip'
+}
+
 const FillMenu = ({ id, desktop, group, setGroup, setPosition, setCategories, setCatOrder, editPosRefs }) => {
   const router = useRouter();
   const platform = mapPlatform(BridgePlus.getStartParams().getPlatform());
+
+  const [tooltip, setTooltip] = useState(false);
 
   const getPosRefIndex = (catIndex, posIndex) => {
     let index = posIndex;
@@ -38,6 +44,23 @@ const FillMenu = ({ id, desktop, group, setGroup, setPosition, setCategories, se
     
     return router.pushPage(PAGE_EDIT_CATEGORIES);
   }
+
+  useEffect(() => {
+    (async () => {
+      const userHasSeenTooltip = await bridge.send("VKWebAppStorageGet", {"keys": [STORAGE_KEYS.SEEN_TOOLTIP]})
+        .then(response => { return response.keys[0].value });
+
+      if (!userHasSeenTooltip) {
+        await bridge.send('VKWebAppStorageSet', {
+          key: STORAGE_KEYS.SEEN_TOOLTIP,
+          value: "true"
+        });
+        return setTooltip(true);
+      }
+
+      return setTooltip(false);
+    })();
+  }, []);
 
   return (
     <Panel id={id} style={{ minHeight: '100vh' }}>
@@ -62,8 +85,23 @@ const FillMenu = ({ id, desktop, group, setGroup, setPosition, setCategories, se
             header={
             <Header mode="primary"
               indicator={category.Positions ? category.Positions.length : 0}
-              aside={
-                <Link onClick={() => {
+              aside={catIndex === 0
+                ? <Tooltip className="category-group__tooltip"
+                  text="Теперь добавьте блюда в каждую категорию"
+                  isShown={tooltip}
+                  onClose={() => setTooltip(false)}
+                  alignX="right"
+                  offsetX={9}
+                  cornerOffset={-9}
+                >
+                  <Link onClick={() => {
+                    setPosition({ categoryId: category.id });
+                    return router.pushModal(MODAL_PAGE_POSITION);
+                  }}>
+                    {desktop ? 'Добавить блюдо' : <Icon24AddOutline/>}
+                  </Link>
+                </Tooltip>
+                : <Link onClick={() => {
                   setPosition({ categoryId: category.id });
                   return router.pushModal(MODAL_PAGE_POSITION);
                 }}>
