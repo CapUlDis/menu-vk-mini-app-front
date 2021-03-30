@@ -114,12 +114,11 @@ const Menu = ({ id, group, desktop, admin, groupInfo }) => {
             if (!category.Positions || category.Positions.length === 0) return result;
 
             result.push(
-              <Group className="category-group"
-                mode="plain"
+              <Group mode="plain"
                 key={'group' + category.id} 
                 id={'group' + category.id}
                 header={
-                  <Header className={desktop ? "category-group__header category-group__header_desktop" : "category-group__header"} mode='primary'>
+                  <Header mode='primary'>
                     {category.title}
                   </Header>
               }>
@@ -135,7 +134,7 @@ const Menu = ({ id, group, desktop, admin, groupInfo }) => {
                           <Caption className="position-desktop__description" level='1' weight='regular'>{position.description}</Caption>
                           <div className="position__bottom position__bottom_desktop">
                             <Text>{position.price + ' ₽'}</Text>
-                            <Caption className="position__value" level='1' weight='regular'>{'· ' + position.value + units[position.unitId].nick}</Caption>
+                            <Caption className="position__value" level='1' weight='regular'>{'· ' + position.value + ' ' + units[position.unitId].nick}</Caption>
                           </div>
                         </div>
                       )
@@ -150,7 +149,7 @@ const Menu = ({ id, group, desktop, admin, groupInfo }) => {
                           bottom={
                             <div className="position__bottom">
                               <Text>{position.price + ' ₽'}</Text>
-                              <Caption className="position__value" level='1' weight='regular'>{'· ' + position.value + units[position.unitId].nick}</Caption>
+                              <Caption className="position__value" level='1' weight='regular'>{'· ' + position.value + ' ' + units[position.unitId].nick}</Caption>
                             </div>
                           }
                         >
