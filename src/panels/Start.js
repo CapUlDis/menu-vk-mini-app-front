@@ -36,29 +36,24 @@ const Start = ({ id, group, setGroup, desktop }) => {
   ]);
 
   const handleContinueClick = async () => {
-    let cloneGroup = cloneDeep(group);
-    cloneGroup.Categories = [];
+    let cats = [];
     categories.forEach(category => {
       if (category.isChecked) {
-        cloneGroup.Categories.push({
+        cats.push({
           title: category.title,
-          groupId: cloneGroup.id
         });
       }
       return;
     });
 
     try {
-      const response = await API.post('/categories', cloneGroup);
-      cloneGroup.Categories = response.data.Categories;
-      cloneGroup.catOrder = response.data.catOrder;
-      setGroup(cloneGroup);
-
-      console.log(cloneGroup);
+      const response = await API.post('/groups', cats);
+      
+      setGroup(response.data.group);
 
       return router.pushPage(PAGE_FILL_MENU);
     } catch (err) {
-      console.log(err);
+      console.log(err.response);
     }
 
   }

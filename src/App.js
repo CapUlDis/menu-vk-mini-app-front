@@ -152,26 +152,55 @@ const App = () => {
 
   const fetchMenu = async (launchParams) => {
     try {
-      const response = await API.get(`/groups/${launchParams.vk_group_id}`)
-        .then((response) => {
-          return response.data.group;
-        });
-      console.log(response);
+      const response = await API.get(`/groups`);
+      
       setGroup(response);
+      if (launchParams.vk_viewer_group_role === 'admin') setAdmin(true);
 
-      if (launchParams.vk_viewer_group_role === 'admin') {
-        setAdmin(true);
+
+    } catch (error) {
+      if (error.response.status === 404 
+        && error.response.data.message === 'Group with specified Id not found') {
+          setStep(STEPS.MAIN);
+          return router.pushPage(PAGE_START);
       }
 
-      await fetchGroupInfo(response);
+      if (error.response.status === 500 && error.response.data.message === 'Server error') {
+        return console.error(error.response); 
+      }
 
-      setStep(STEPS.MAIN);
-      return router.pushPage(PAGE_MENU);
-
-    } catch (err) {
-      console.log(err);
-      return setWatchFlag(watchFlag + 1);
+      if (error.response.status === 500 && error.response.data === 'Invalid sign') {
+        return console.error(error.response);
+      }
     }
+    
+    
+
+
+    // try {
+    //   const response = await API.get(`/groups/${launchParams.vk_group_id}`)
+    //     .then((response) => {
+    //       return response.data.group;
+    //     });
+    //     .catch((error) => {
+
+    //     })
+    //   console.log(response);
+    //   setGroup(response);
+
+    //   if (launchParams.vk_viewer_group_role === 'admin') {
+    //     setAdmin(true);
+    //   }
+
+    //   await fetchGroupInfo(response);
+
+    //   setStep(STEPS.MAIN);
+    //   return router.pushPage(PAGE_MENU);
+
+    // } catch (err) {
+    //   console.log(err);
+    //   return setWatchFlag(watchFlag + 1);
+    // }
   };
 
   const abortHandle = () => {
@@ -181,7 +210,7 @@ const App = () => {
 
   useEffect(() => {
     const launchParams = qs.parse(window.location.search.slice(1));
-    console.log(launchParams);
+    console.log(window.location.search.slice(1));
 
     if (launchParams.vk_platform === 'desktop_web') setDesktop(true);
 
