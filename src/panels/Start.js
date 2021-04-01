@@ -19,7 +19,7 @@ import burgers from './components/img/Image-8.svg';
 import bakery from './components/img/Image-9.svg';
 
 
-const Start = ({ id, group, setGroup, desktop }) => {
+const Start = ({ id, setGroup, desktop }) => {
   const router = useRouter();
 
   const [categories, setCategories] = useState([
@@ -47,9 +47,12 @@ const Start = ({ id, group, setGroup, desktop }) => {
     });
 
     try {
-      const response = await API.post('/groups', cats);
+      const response = await API.post('/groups', cats)
+        .then(response => { 
+          return response.data.group;
+        })
       
-      setGroup(response.data.group);
+      setGroup(response);
 
       return router.pushPage(PAGE_FILL_MENU);
     } catch (err) {

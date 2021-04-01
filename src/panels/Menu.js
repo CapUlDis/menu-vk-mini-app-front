@@ -12,9 +12,7 @@ const Menu = ({ id, group, desktop, admin, groupInfo }) => {
   const router = useRouter();
 
   const hasAtLeastOnePos = () => {
-    if (group.Categories.length === 0) {
-      return false;
-    }
+    if (!group.Categories || group.Categories.length === 0) return false;
 
     return group.Categories.some(cat => {
       if (!cat.Positions) return false;
@@ -24,7 +22,7 @@ const Menu = ({ id, group, desktop, admin, groupInfo }) => {
   };
 
   const twoCatHasPos = () => {
-    if (group.Categories.length === 0) return false;
+    if (!group.Categories || group.Categories.length === 0) return false;
 
     let pos = 0;
 
@@ -40,6 +38,8 @@ const Menu = ({ id, group, desktop, admin, groupInfo }) => {
   }
 
   const firstActiveTabSetter = () => {
+    if (!group.Categories) return null;
+
     const category = group.Categories.find(cat => {
       if (!cat.Positions) return false;
       

@@ -91,8 +91,8 @@ const App = () => {
     }
   };
 
-  const fetchGroupInfo = async (group) => {
-    const response = await BridgePlus.api("groups.getById", { group_id: group.vkGroupId, fields: "addresses,cover,has_photo" })
+  const fetchGroupInfo = async ({ vkGroupId }) => {
+    const response = await BridgePlus.api("groups.getById", { group_id: vkGroupId, fields: "addresses,cover,has_photo" })
       .then(({ response: [groupInfo] }) => { return groupInfo });
     
     let cloneGroupInfo = {...groupInfo};
@@ -106,7 +106,7 @@ const App = () => {
     }
 
     if (response.addresses.is_enabled) {
-      const mainAdress = await BridgePlus.api("groups.getAddresses", { group_id: group.vkGroupId, address_ids: response.addresses.main_address_id, fields: "timetable" })
+      const mainAdress = await BridgePlus.api("groups.getAddresses", { group_id: vkGroupId, address_ids: response.addresses.main_address_id, fields: "timetable" })
         .then(({ response }) => { return response.items[0] });
 
       const daysOfWeek = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
@@ -152,17 +152,33 @@ const App = () => {
 
   const fetchMenu = async (launchParams) => {
     try {
-      const response = await API.get(`/groups`);
-      
+      const response = await API.get(`/groups`)
+        .then(response => {
+          return response.data.group
+        });
+
+      await fetchGroupInfo({ vkGroupId: response.vkGroupId });
+
       setGroup(response);
       if (launchParams.vk_viewer_group_role === 'admin') setAdmin(true);
+      setStep(STEPS.MAIN);
 
+      return router.pushPage(PAGE_MENU);
 
     } catch (error) {
       if (error.response.status === 404 
-        && error.response.data.message === 'Group with specified Id not found') {
+        && error.response.data.message === 'Group with specified Id not found') { 
+          await fetchGroupInfo({ vkGroupId: launchParams.vk_group_id });
           setStep(STEPS.MAIN);
-          return router.pushPage(PAGE_START);
+          
+          if (launchParams.vk_viewer_group_role === 'admin') {
+            setAdmin(true);
+
+            return router.pushPage(PAGE_START);
+          } else {
+
+            return router.pushPage(PAGE_MENU);
+          }
       }
 
       if (error.response.status === 500 && error.response.data.message === 'Server error') {
@@ -173,34 +189,6 @@ const App = () => {
         return console.error(error.response);
       }
     }
-    
-    
-
-
-    // try {
-    //   const response = await API.get(`/groups/${launchParams.vk_group_id}`)
-    //     .then((response) => {
-    //       return response.data.group;
-    //     });
-    //     .catch((error) => {
-
-    //     })
-    //   console.log(response);
-    //   setGroup(response);
-
-    //   if (launchParams.vk_viewer_group_role === 'admin') {
-    //     setAdmin(true);
-    //   }
-
-    //   await fetchGroupInfo(response);
-
-    //   setStep(STEPS.MAIN);
-    //   return router.pushPage(PAGE_MENU);
-
-    // } catch (err) {
-    //   console.log(err);
-    //   return setWatchFlag(watchFlag + 1);
-    // }
   };
 
   const abortHandle = () => {
@@ -210,7 +198,7 @@ const App = () => {
 
   useEffect(() => {
     const launchParams = qs.parse(window.location.search.slice(1));
-    console.log(window.location.search.slice(1));
+    // console.log(window.location.search.slice(1));
 
     if (launchParams.vk_platform === 'desktop_web') setDesktop(true);
 
@@ -294,7 +282,6 @@ const App = () => {
               }
             >
               <Start id={PANEL_START}
-                group={group}
                 setGroup={setGroup}
                 desktop={desktop}
               />
