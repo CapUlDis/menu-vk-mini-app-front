@@ -103,26 +103,28 @@ const EditCategories = ({
   }
 
   const submitHandle = async () => {
-    if (!arrayEquals(catOrder, group.catOrder) || changedCats.length !== 0) {
-      console.log('changed');
-      const response = await API.put('/categories', { 
-        catOrder:  !arrayEquals(catOrder, group.catOrder) ? catOrder : false,
-        newCats, 
-        deletedCats, 
-        changedCats,
-        groupId: group.id,
-      });
-      const cloneGroup = cloneDeep(response.data.group);
+    try {
+      if (!arrayEquals(catOrder, group.catOrder) || changedCats.length !== 0) {
+        const response = await API.put('/categories', { 
+          catOrder:  !arrayEquals(catOrder, group.catOrder) ? catOrder : false,
+          newCats, 
+          deletedCats, 
+          changedCats,
+        }).then(response => response.data.group);
+        const cloneGroup = cloneDeep(response);
 
-      setGroup(response.data.group);
-      setCategories(cloneGroup.Categories);
-      setCatOrder(cloneGroup.catOrder);
-      setDeletedCats([]);
-      setChangedCats([]);
-      setNewCats([]);
+        setGroup(response);
+        setCategories(cloneGroup.Categories);
+        setCatOrder(cloneGroup.catOrder);
+        setDeletedCats([]);
+        setChangedCats([]);
+        setNewCats([]);
+      }
+
+      return router.pushPage(PAGE_FILL_MENU);
+    } catch (err) {
+      console.error(err);
     }
-
-    return router.pushPage(PAGE_FILL_MENU);
   }
 
   return (
@@ -210,7 +212,8 @@ const EditCategories = ({
           : <Div>
             <Button size='l' 
               stretched 
-              onClick={submitHandle}>
+              onClick={submitHandle}
+            >
               Готово
             </Button>
           </Div>
