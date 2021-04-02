@@ -6,7 +6,6 @@ import {
 	ModalPageHeader,
 	PanelHeaderClose,
 	Input,
-	FixedLayout,
 	Div,
 	Button,
 	Separator,
@@ -19,7 +18,6 @@ import {
 	File,
 	Avatar,
   CellButton,
-  SizeType
 } from '@vkontakte/vkui';
 import { useRouter } from '@happysanta/router';
 import { Icon56GalleryOutline, Icon28DeleteOutline, Icon24DeleteOutline, Icon24DismissOverlay } from '@vkontakte/icons';

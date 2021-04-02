@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import cloneDeep from 'lodash-es/cloneDeep';
-import { Panel, PanelHeader, Text, FixedLayout, Div, Button, Separator, Subhead, Group, Cell, Avatar } from '@vkontakte/vkui';
+import { Panel, PanelHeader, FixedLayout, Div, Button, Separator, Subhead, Group, Cell, Avatar } from '@vkontakte/vkui';
 import { Icon24DoneOutline } from '@vkontakte/icons';
 import { useRouter } from '@happysanta/router';
 

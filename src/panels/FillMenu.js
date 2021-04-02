@@ -2,7 +2,7 @@ import React,  { useState, useEffect } from 'react';
 import cloneDeep from 'lodash-es/cloneDeep';
 import { BridgePlus } from "@happysanta/bridge-plus";
 import bridge from "@vkontakte/vk-bridge";
-import { Panel, PanelHeader, PanelHeaderButton, FixedLayout, Div, Group, Header, Tooltip, Link, Cell, List, CellButton, Avatar, Separator, usePlatform, Button } from '@vkontakte/vkui';
+import { Panel, PanelHeader, PanelHeaderButton, FixedLayout, Div, Group, Header, Tooltip, Link, Cell, List, CellButton, Avatar, Separator, Button } from '@vkontakte/vkui';
 import { Icon28EditOutline } from '@vkontakte/icons';
 import { Icon24PenOutline } from '@vkontakte/icons';
 import { Icon24ViewOutline } from '@vkontakte/icons';

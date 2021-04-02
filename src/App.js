@@ -3,8 +3,8 @@ import { BridgePlus } from "@happysanta/bridge-plus";
 import qs from 'querystring';
 import _ from 'lodash';
 import cloneDeep from 'lodash-es/cloneDeep';
-import { AppRoot, SplitLayout, SplitCol, Root, View, Panel, Subhead, ScreenSpinner, ModalRoot, withAdaptivity, VKCOM } from '@vkontakte/vkui';
-import { PAGE_MAIN, useLocation, useRouter } from '@happysanta/router';
+import { AppRoot, SplitLayout, SplitCol, Root, View, Panel, Subhead, ScreenSpinner, ModalRoot } from '@vkontakte/vkui';
+import { useLocation, useRouter } from '@happysanta/router';
 import '@vkontakte/vkui/dist/vkui.css';
 
 import {
@@ -18,8 +18,6 @@ import {
   PANEL_MENU,
   PAGE_INSTALL,
   PAGE_START,
-  PAGE_FILL_MENU,
-  PAGE_EDIT_CATEGORIES,
   PAGE_MENU,
   MODAL_PAGE_POSITION,
   MODAL_CARD_CATEGORY,

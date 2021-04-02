@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import cloneDeep from 'lodash-es/cloneDeep';
 import { BridgePlus } from "@happysanta/bridge-plus";
-import { Panel, PanelHeader, PanelHeaderButton, FixedLayout, Div, Group, Button, Separator, Cell, List, CellButton, Text, Banner, usePlatform } from '@vkontakte/vkui';
+import { Panel, PanelHeader, PanelHeaderButton, FixedLayout, Div, Group, Button, Separator, Cell, List, CellButton, Text } from '@vkontakte/vkui';
 import { Icon20AddCircle } from '@vkontakte/icons';
 import { Icon28EditOutline } from '@vkontakte/icons';
 import { Icon24AddOutline } from '@vkontakte/icons';
@@ -17,11 +17,9 @@ import { MODAL_CARD_CATEGORY, PAGE_FILL_MENU } from '../router';
 const EditCategories = ({
   id, 
 
-  desktop, 
-
-  group, setGroup, 
-
-  editMode, setEditMode, 
+  group, setGroup,
+  
+  desktop, setEditMode,
 
   categories, setCategories,
 
