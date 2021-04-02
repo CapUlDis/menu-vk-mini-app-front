@@ -123,7 +123,7 @@ const AddEditCategory = ({
           </ModalPageHeader>
         }
       >
-        <div class="modal-page__group">
+        <div className="modal-page__group">
           <FormItem status={formStatus}
             top="Название"
           >
