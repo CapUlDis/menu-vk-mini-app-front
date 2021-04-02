@@ -53,7 +53,7 @@ const AddEditCategory = ({
       num += 1;
 
       cloneCategories.push({ id: newId, title });
-      cloneNewCats.push({ id: newId, title, groupId: group.id });
+      cloneNewCats.push({ id: newId, title });
 
       setNewCats(cloneNewCats);
       setCategories(cloneCategories);
