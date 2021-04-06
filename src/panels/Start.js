@@ -6,6 +6,7 @@ import { useRouter } from '@happysanta/router';
 
 import API from '../utils/API';
 import './Start.css';
+import SnackbarError from '../popouts/SnackbarError';
 import { PAGE_FILL_MENU } from '../router';
 import breakfast from './components/img/Image.svg';
 import snacks from './components/img/Image-1.svg';
@@ -22,6 +23,7 @@ import bakery from './components/img/Image-9.svg';
 const Start = ({ id, setGroup, desktop }) => {
   const router = useRouter();
 
+  const [snackbarError, setSnackbarError] = useState(null);
   const [categories, setCategories] = useState([
     { id: 0, title: 'Завтрак', src: breakfast, isChecked: false },
     { id: 1, title: 'Закуски', src: snacks, isChecked: false },
@@ -43,20 +45,23 @@ const Start = ({ id, setGroup, desktop }) => {
           title: category.title,
         });
       }
+      
       return;
     });
 
     try {
-      const response = await API.post('/groups', cats)
-        .then(response => { 
-          return response.data.group;
-        })
+      const response = await API.post('/groups', cats).then(response => response.data.group);
       
       setGroup(response);
 
       return router.pushPage(PAGE_FILL_MENU);
     } catch (err) {
-      console.log(err.response);
+      
+      return setSnackbarError(
+        <SnackbarError setSnackbarError={setSnackbarError}>
+          Проблемы с получением данных от сервера. Проверьте интернет-соединение.
+        </SnackbarError>
+      );
     }
 
   }
@@ -109,6 +114,7 @@ const Start = ({ id, setGroup, desktop }) => {
           </Button>
         </Div>
       </FixedLayout>
+      {snackbarError}
     </Panel>
   );
 };
