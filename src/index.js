@@ -13,6 +13,14 @@ import mapPlatform from "./utils/mapPlatform";
 // Init VK  Mini App
 bridge.send("VKWebAppInit");
 
+bridge.subscribe(({ detail: { type, data }}) => {
+  if (type === 'VKWebAppUpdateConfig') {
+    const schemeAttribute = document.createAttribute('scheme');
+    schemeAttribute.value = data.scheme ? data.scheme : 'client_light';
+    document.body.attributes.setNamedItem(schemeAttribute);
+  }
+});
+
 const uiPlatform = mapPlatform(BridgePlus.getStartParams().getPlatform());
 const isDesktop = BridgePlus.getStartParams().isDesktop();
 
