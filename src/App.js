@@ -95,8 +95,6 @@ const App = () => {
       .then(({ response: [groupInfo] }) => { return groupInfo });
     
     let cloneGroupInfo = {...groupInfo};
-    console.log(response);
-
     cloneGroupInfo.name = response.name;
 
     if (response.has_photo + response.cover.enabled === 2) {
@@ -151,9 +149,9 @@ const App = () => {
 
   const fetchMenu = async (launchParams) => {
     try {
-      const response = await API.get(`/groups`).then(response => response.data.group);
+      await fetchGroupInfo({ vkGroupId: launchParams.vk_group_id });
 
-      await fetchGroupInfo({ vkGroupId: response.vkGroupId });
+      const response = await API.get(`/groups`).then(response => response.data.group);
 
       setGroup(response);
       if (launchParams.vk_viewer_group_role === 'admin') setAdmin(true);
@@ -163,7 +161,6 @@ const App = () => {
 
     } catch (error) {
       if (error.response && error.response.status === 404) { 
-          await fetchGroupInfo({ vkGroupId: launchParams.vk_group_id });
           setStep(STEPS.MAIN);
           
           if (launchParams.vk_viewer_group_role === 'admin') {
@@ -176,15 +173,12 @@ const App = () => {
           }
       } else {
         setSnackbarError(
-          <SnackbarError setSnackbarError={setSnackbarError} 
-            fetchMenu={fetchMenu}
-            launchParams={launchParams}
-          >
+          <SnackbarError setSnackbarError={setSnackbarError}>
             Проблемы с получением данных от сервера
           </SnackbarError>
         );
 
-        return setTimeout(() => setWatchFlag(watchFlag + 1), 11000);
+        return setTimeout(() => setWatchFlag(watchFlag + 1), 5000);
       }
     }
   };
@@ -196,7 +190,6 @@ const App = () => {
 
   useEffect(() => {
     const launchParams = qs.parse(window.location.search.slice(1));
-    console.log(window.location.search.slice(1));
 
     if (launchParams.vk_platform === 'desktop_web') setDesktop(true);
 
