@@ -83,7 +83,7 @@ const Menu = ({ id, group, desktop, admin, groupInfo }) => {
   return (
     <Panel id={id}>
       <FixedLayout id="header" vertical='top' filled>
-        {admin && <Icon28SettingsOutline className="header__settings" fill={groupInfo.avatar ? '#FFFFFF' : '#000000'} onClick={() =>{
+        {admin && <Icon28SettingsOutline className={desktop ? "header__settings" : "header__settings header__settings_mobile"} fill={groupInfo.avatar ? '#FFFFFF' : '#000000'} onClick={() =>{
           router.pushPage(PAGE_FILL_MENU);
         }}/>}
         {groupInfo.avatar &&

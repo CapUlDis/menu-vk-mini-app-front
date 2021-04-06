@@ -23,6 +23,7 @@ import { useRouter } from '@happysanta/router';
 import { Icon56GalleryOutline, Icon28DeleteOutline, Icon24DeleteOutline, Icon24DismissOverlay } from '@vkontakte/icons';
 
 import API from '../utils/API';
+import SnackbarError from '../popouts/SnackbarError';
 import units from '../utils/units';
 import './AddEditPosition.css';
 
@@ -40,6 +41,8 @@ const AddEditPosition = ({ id, desktop, group, setGroup, position, editMode, set
 
 	const [inputMes, setInputMes] = useState({});
 	const [inputStatus, setInputStatus] = useState({});
+  const [snackbarError, setSnackbarError] = useState(null);
+
 
 	const imageSelectHandle = (event) => {
 		event.nativeEvent.preventDefault();
@@ -168,7 +171,12 @@ const AddEditPosition = ({ id, desktop, group, setGroup, position, editMode, set
 			return router.popPage();
 
 		} catch (err) {
-			console.log(err);
+
+      return setSnackbarError(
+        <SnackbarError setSnackbarError={setSnackbarError}>
+          Проблемы с получением данных от сервера. Проверьте интернет-соединение.
+        </SnackbarError>
+      );
 		}
 	}
 
@@ -347,6 +355,7 @@ const AddEditPosition = ({ id, desktop, group, setGroup, position, editMode, set
           </Button>
         </Div>
       }
+      {snackbarError}
 		</ModalPage>
 	);
 };

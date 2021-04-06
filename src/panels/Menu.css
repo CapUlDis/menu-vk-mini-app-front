@@ -26,6 +26,10 @@ html {
   top: 14px;
 }
 
+.header__settings_mobile {
+  left: calc(100% - 125px);
+}
+
 .header__text {
   width: 100%;
   display: flex;
