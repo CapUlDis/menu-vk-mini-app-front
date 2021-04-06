@@ -9,3 +9,11 @@
 .Panel__in {
   background: var(--background_content) !important;
 }
+
+.panel_desktop .vkuiTooltip {
+  left: -16px;
+}
+
+.panel_mobile .vkuiTooltip {
+  left: -8px;
+}

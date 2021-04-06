@@ -25,7 +25,7 @@ const FillMenu = ({ id, desktop, group, setGroup, setPosition, setCategories, se
   const router = useRouter();
   const platform = mapPlatform(BridgePlus.getStartParams().getPlatform());
 
-  const [tooltip, setTooltip] = useState(false);
+  const [tooltip, setTooltip] = useState(true);
 
   const getPosRefIndex = (catIndex, posIndex) => {
     let index = posIndex;
@@ -48,25 +48,27 @@ const FillMenu = ({ id, desktop, group, setGroup, setPosition, setCategories, se
     return router.pushPage(PAGE_EDIT_CATEGORIES);
   }
 
-  useEffect(() => {
-    (async () => {
-      const userHasSeenTooltip = await bridge.send("VKWebAppStorageGet", {"keys": [STORAGE_KEYS.SEEN_TOOLTIP]})
-        .then(response => { return response.keys[0].value });
+  // useEffect(() => {
+  //   (async () => {
+  //     const userHasSeenTooltip = await bridge.send("VKWebAppStorageGet", {"keys": [STORAGE_KEYS.SEEN_TOOLTIP]})
+  //       .then(response => { return response.keys[0].value });
 
-      if (!userHasSeenTooltip) {
-        await bridge.send('VKWebAppStorageSet', {
-          key: STORAGE_KEYS.SEEN_TOOLTIP,
-          value: "true"
-        });
-        return setTooltip(true);
-      }
+  //     if (!userHasSeenTooltip) {
+  //       await bridge.send('VKWebAppStorageSet', {
+  //         key: STORAGE_KEYS.SEEN_TOOLTIP,
+  //         value: "true"
+  //       });
+  //       return setTooltip(true);
+  //     }
 
-      return setTooltip(false);
-    })();
-  }, []);
+  //     return setTooltip(false);
+  //   })();
+  // }, []);
 
   return (
-    <Panel id={id} style={{ minHeight: '100vh' }}>
+    <Panel id={id} style={{ minHeight: '100vh' }}
+      className={desktop ? "panel_desktop" : "panel_mobile"}
+    >
       <PanelHeader fixed={true}
         left={desktop
           ? undefined
@@ -89,13 +91,13 @@ const FillMenu = ({ id, desktop, group, setGroup, setPosition, setCategories, se
             <Header mode="primary"
               indicator={category.Positions ? category.Positions.length : 0}
               aside={catIndex === 0
-                ? <Tooltip className="category-group__tooltip"
+                ? <Tooltip
                   text="Теперь добавьте блюда в каждую категорию"
                   isShown={tooltip}
                   onClose={() => setTooltip(false)}
                   alignX="right"
-                  offsetX={9}
-                  cornerOffset={-9}
+                  offsetX={desktop ? 80 : 70}
+                  cornerOffset={desktop ? -4 : -11}
                 >
                   <Link onClick={() => {
                     setPosition({ categoryId: category.id });
