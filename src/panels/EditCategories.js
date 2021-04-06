@@ -7,6 +7,7 @@ import { Icon28EditOutline } from '@vkontakte/icons';
 import { Icon24AddOutline } from '@vkontakte/icons';
 
 import './EditCategories.css';
+import SnackbarError from '../popouts/SnackbarError';
 import API from '../utils/API';
 import arrayEquals from '../utils/arrayEquals';
 import mapPlatform from '../utils/mapPlatform';
@@ -33,6 +34,7 @@ const EditCategories = ({
   const router = useRouter();
   const platform = mapPlatform(BridgePlus.getStartParams().getPlatform());
 
+  const [snackbarError, setSnackbarError] = useState(null);
   const [deletedCats, setDeletedCats] = useState([]);
 
   const abortHandle = () => {
@@ -121,7 +123,12 @@ const EditCategories = ({
 
       return router.pushPage(PAGE_FILL_MENU);
     } catch (err) {
-      console.error(err);
+      
+      return setSnackbarError(
+        <SnackbarError setSnackbarError={setSnackbarError}>
+          Проблемы с получением данных от сервера. Проверьте интернет-соединение.
+        </SnackbarError>
+      );
     }
   }
 
@@ -144,12 +151,6 @@ const EditCategories = ({
             Добавить категорию
           </CellButton>
         }
-        {/* <CellButton onClick={() =>{
-          console.log(group, categories, catOrder, deletedCats, newCats, changedCats);
-          // console.log(group.Categories === categories);
-        }}>
-          Консоль стэйты
-        </CellButton> */}
         {categories &&
           <List>
             {categories.map((category, catIndex) => {
@@ -217,6 +218,7 @@ const EditCategories = ({
           </Div>
         }
       </FixedLayout>
+      {snackbarError}
     </Panel>
   )
 };
