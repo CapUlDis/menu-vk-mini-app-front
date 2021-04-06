@@ -174,7 +174,7 @@ const App = () => {
       } else {
         setSnackbarError(
           <SnackbarError setSnackbarError={setSnackbarError}>
-            Проблемы с получением данных от сервера
+            Проблемы с получением данных от сервера. Проверьте интернет-соединение.
           </SnackbarError>
         );
 
