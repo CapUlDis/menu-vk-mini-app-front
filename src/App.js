@@ -31,6 +31,7 @@ import Menu from './panels/Menu';
 import AddEditPosition from './modals/AddEditPosition';
 import AddEditCategory from './modals/AddEditCategory';
 import EditDeletePosition from './popouts/EditDeletePosition';
+import SnackbarError from './popouts/SnackbarError';
 import API from './utils/API';
 import mapPlatform from './utils/mapPlatform';
 import getPositionSum from "./utils/getPositionSum";
@@ -150,10 +151,7 @@ const App = () => {
 
   const fetchMenu = async (launchParams) => {
     try {
-      const response = await API.get(`/groups`)
-        .then(response => {
-          return response.data.group
-        });
+      const response = await API.get(`/groups`).then(response => response.data.group);
 
       await fetchGroupInfo({ vkGroupId: response.vkGroupId });
 
@@ -164,8 +162,7 @@ const App = () => {
       return router.pushPage(PAGE_MENU);
 
     } catch (error) {
-      if (error.response.status === 404 
-        && error.response.data.message === 'Group with specified Id not found') { 
+      if (error.response && error.response.status === 404) { 
           await fetchGroupInfo({ vkGroupId: launchParams.vk_group_id });
           setStep(STEPS.MAIN);
           
@@ -177,14 +174,17 @@ const App = () => {
 
             return router.pushPage(PAGE_MENU);
           }
-      }
+      } else {
+        setSnackbarError(
+          <SnackbarError setSnackbarError={setSnackbarError} 
+            fetchMenu={fetchMenu}
+            launchParams={launchParams}
+          >
+            Проблемы с получением данных от сервера
+          </SnackbarError>
+        );
 
-      if (error.response.status === 500 && error.response.data.message === 'Server error') {
-        return console.error(error.response); 
-      }
-
-      if (error.response.status === 500 && error.response.data === 'Invalid sign') {
-        return console.error(error.response);
+        return setTimeout(() => setWatchFlag(watchFlag + 1), 11000);
       }
     }
   };
@@ -196,7 +196,7 @@ const App = () => {
 
   useEffect(() => {
     const launchParams = qs.parse(window.location.search.slice(1));
-    // console.log(window.location.search.slice(1));
+    console.log(window.location.search.slice(1));
 
     if (launchParams.vk_platform === 'desktop_web') setDesktop(true);
 

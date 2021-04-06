@@ -145,7 +145,7 @@ const EditCategories = ({
           </CellButton>
         }
         {/* <CellButton onClick={() =>{
-          console.log(categories, catOrder, deletedCats, newCats, changedCats, editMode);
+          console.log(group, categories, catOrder, deletedCats, newCats, changedCats);
           // console.log(group.Categories === categories);
         }}>
           Консоль стэйты

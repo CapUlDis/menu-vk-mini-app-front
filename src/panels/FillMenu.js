@@ -31,13 +31,16 @@ const FillMenu = ({ id, desktop, group, setGroup, setPosition, setCategories, se
     let index = posIndex;
 
     for (let i = 0; i < catIndex; i ++) {
-      index += group.Categories[i].Positions.length;
+      if (group.Categories[i].Positions) {
+        index += group.Categories[i].Positions.length;
+      }
     }
 
     return index;
   }
 
   const editCategoriesHandle = () => {
+    console.log(0);
     const cloneGroup = cloneDeep(group);
     setCategories(cloneGroup.Categories);
     setCatOrder(cloneGroup.catOrder);
