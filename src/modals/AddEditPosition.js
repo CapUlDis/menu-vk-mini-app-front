@@ -184,10 +184,12 @@ const AddEditPosition = ({ id, desktop, group, setGroup, position, editMode, set
 		<ModalPage id={id}
 			settlingHeight={100}
 			onClose={abortHandle}
+      header={
+        <ModalPageHeader left={!desktop && <PanelHeaderClose onClick={abortHandle} />}>
+          {!editMode ? 'Добавление' : 'Редактирование'}
+        </ModalPageHeader>
+      }
 		>
-			<ModalPageHeader left={!desktop && <PanelHeaderClose onClick={abortHandle} />}>
-				{!editMode ? 'Добавление' : 'Редактирование'}
-			</ModalPageHeader>
 			<FormLayout id='position' onSubmit={submitHandle}>
 				<FormItem top="Название"
 					status={inputStatus.title ? inputStatus.title : 'default'}
