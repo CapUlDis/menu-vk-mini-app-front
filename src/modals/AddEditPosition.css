@@ -16,3 +16,11 @@
 .footer-desktop__button_right {
   margin-left: 0;
 }
+
+.textarea_desktop .vkuiTextarea__el {
+  min-height: 56px;
+}
+
+.textarea_mobile .vkuiTextarea__el {
+  min-height: 64px;
+}

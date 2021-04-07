@@ -209,9 +209,9 @@ const AddEditPosition = ({ id, desktop, group, setGroup, position, editMode, set
 				<FormItem top="Описание"
 					status={inputStatus.description ? inputStatus.description : 'default'}
 				>
-					<Textarea name="description"
+					<Textarea className={desktop ? "textarea_desktop" : "textarea_mobile"}
+            name="description"
             grow={true}
-            style={{ height: '64px' }}
 						value={description}
 						maxLength="100"
 						placeholder="Введите описание"
