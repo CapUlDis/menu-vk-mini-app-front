@@ -33,7 +33,6 @@ import AddEditCategory from './modals/AddEditCategory';
 import EditDeletePosition from './popouts/EditDeletePosition';
 import SnackbarError from './popouts/SnackbarError';
 import API from './utils/API';
-import mapPlatform from './utils/mapPlatform';
 import getPositionSum from "./utils/getPositionSum";
 
 
@@ -41,8 +40,6 @@ const STEPS = {
   LOADER: 'loader',
   MAIN: 'main'
 };
-
-const platform = mapPlatform(BridgePlus.getStartParams().getPlatform());
 
 const App = () => {
   const location = useLocation();
@@ -86,7 +83,12 @@ const App = () => {
       cloneGroup.Categories[catIndex].posOrder.splice(posIndex, 1);
       setGroup(cloneGroup);
     } catch (err) {
-      console.log(err);
+
+      return setSnackbarError(
+        <SnackbarError setSnackbarError={setSnackbarError}>
+          Проблемы с получением данных от сервера. Проверьте интернет-соединение.
+        </SnackbarError>
+      );
     }
   };
 
