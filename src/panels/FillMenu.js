@@ -25,7 +25,7 @@ const FillMenu = ({ id, desktop, group, setGroup, setPosition, setCategories, se
   const router = useRouter();
   const platform = mapPlatform(BridgePlus.getStartParams().getPlatform());
 
-  const [tooltip, setTooltip] = useState(true);
+  const [tooltip, setTooltip] = useState(false);
 
   const getPosRefIndex = (catIndex, posIndex) => {
     let index = posIndex;
@@ -48,22 +48,22 @@ const FillMenu = ({ id, desktop, group, setGroup, setPosition, setCategories, se
     return router.pushPage(PAGE_EDIT_CATEGORIES);
   }
 
-  // useEffect(() => {
-  //   (async () => {
-  //     const userHasSeenTooltip = await bridge.send("VKWebAppStorageGet", {"keys": [STORAGE_KEYS.SEEN_TOOLTIP]})
-  //       .then(response => { return response.keys[0].value });
+  useEffect(() => {
+    (async () => {
+      const userHasSeenTooltip = await bridge.send("VKWebAppStorageGet", {"keys": [STORAGE_KEYS.SEEN_TOOLTIP]})
+        .then(response => { return response.keys[0].value });
 
-  //     if (!userHasSeenTooltip) {
-  //       await bridge.send('VKWebAppStorageSet', {
-  //         key: STORAGE_KEYS.SEEN_TOOLTIP,
-  //         value: "true"
-  //       });
-  //       return setTooltip(true);
-  //     }
+      if (!userHasSeenTooltip) {
+        await bridge.send('VKWebAppStorageSet', {
+          key: STORAGE_KEYS.SEEN_TOOLTIP,
+          value: "true"
+        });
+        return setTooltip(true);
+      }
 
-  //     return setTooltip(false);
-  //   })();
-  // }, []);
+      return setTooltip(false);
+    })();
+  }, []);
 
   return (
     <Panel id={id} style={{ minHeight: '100vh' }}
