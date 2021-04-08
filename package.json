@@ -32,7 +32,6 @@
     "eruda": "^2.4.1",
     "eruda-code": "^2.0.0",
     "eruda-dom": "^2.0.0",
-    "lodash": "^4.17.20",
     "lodash-es": "^4.17.21",
     "prop-types": "^15.7.2",
     "querystring": "^0.2.0",

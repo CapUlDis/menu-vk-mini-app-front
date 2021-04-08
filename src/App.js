@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { BridgePlus } from "@happysanta/bridge-plus";
 import qs from 'querystring';
-import _ from 'lodash';
 import cloneDeep from 'lodash-es/cloneDeep';
 import { AppRoot, SplitLayout, SplitCol, Root, View, Panel, Subhead, ScreenSpinner, ModalRoot } from '@vkontakte/vkui';
 import { useLocation, useRouter } from '@happysanta/router';
