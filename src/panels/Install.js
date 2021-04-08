@@ -16,7 +16,7 @@ const Install = ({ id, desktop }) => {
     try {
       const response = await bridge.send("VKWebAppAddToCommunity");
 
-      return setLink(`https://vk.com/app7733175_-${response.group_id}`);
+      return setLink(`https://vk.com/app7815236_-${response.group_id}`);
     } catch (err) {
       if (err.error_data && err.error_data.error_code === 1) {
         setSnackbarError(
@@ -39,7 +39,7 @@ const Install = ({ id, desktop }) => {
           header='Меню заведения'
           action={desktop && <Button size="l" onClick={addMenuToCommunity}>Установить в сообщество</Button>}
         >
-          <p className="placeholder__text">Описание приложения. <br />Выберите категории, которые представлены в вашем заведении. Позже вы сможете их изменить или создать новые.</p>
+          <p className="placeholder__text">Создайте меню в вашем сообществе,<br/> чтобы пользователи могли ознакомиться с ассортиментом блюд и напитков в вашем заведении.</p>
         </Placeholder>
         {link &&
           <Div className="link">
