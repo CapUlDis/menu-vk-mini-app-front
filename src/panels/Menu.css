@@ -2,6 +2,10 @@ html {
   scroll-behavior: smooth;
 }
 
+.header {
+  top: var(--safe-area-inset-top);
+}
+
 .header__images {
   height: 212px
 }

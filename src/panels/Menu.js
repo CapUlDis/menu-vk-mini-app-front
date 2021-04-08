@@ -82,7 +82,7 @@ const Menu = ({ id, group, desktop, admin, groupInfo }) => {
 
   return (
     <Panel id={id}>
-      <FixedLayout id="header" vertical='top' filled>
+      <FixedLayout className="header" id="header" vertical='top' filled>
         {admin && 
           <div className="header__settings">
             <Icon28SettingsOutline width={24} height={24} fill="FFFFFF"
