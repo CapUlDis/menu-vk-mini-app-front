@@ -22,12 +22,8 @@ html {
 
 .header__settings {
   position: fixed;
-  left: calc(100% - 44px);
+  right: calc(100% - 44px);
   top: 14px;
-}
-
-.header__settings_mobile {
-  left: calc(100% - 125px);
 }
 
 .header__text {
