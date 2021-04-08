@@ -226,13 +226,19 @@ const AddEditPosition = ({ id, desktop, group, setGroup, position, editMode, set
 						status={inputStatus.value ? inputStatus.value : 'default'}
 					>
 						<Input name="value"
+              maxLength='5'
 							type="number"
 							step='0.5'
 							value={value}
 							placeholder="Введите размер"
 							onChange={e => {
 								setInputStatus({});
-								setValue(e.target.value);
+
+                if (e.target.value.length > e.target.maxLength) {
+                  return setValue(e.target.value.slice(0, e.target.maxLength));
+                }
+
+								return setValue(e.target.value);
 							}}
 						/>
 					</FormItem>
@@ -253,12 +259,18 @@ const AddEditPosition = ({ id, desktop, group, setGroup, position, editMode, set
 					status={inputStatus.price ? inputStatus.price : 'default'}
 				>
 					<Input type="number"
+            maxLength='7'
 						step="0.5"
 						name="price"
 						value={price}
 						placeholder="Введите цену"
 						onChange={e => {
 							setInputStatus({});
+
+              if (e.target.value.length > e.target.maxLength) {
+                return setPrice(e.target.value.slice(0, e.target.maxLength));
+              }
+
 							setPrice(e.target.value);
 						}}
 
