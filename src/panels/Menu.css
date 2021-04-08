@@ -22,8 +22,15 @@ html {
 
 .header__settings {
   position: fixed;
-  right: calc(100% - 44px);
-  top: 14px;
+  border-radius: 56px;
+  width: 36px;
+  height: 36px;
+  background: rgba(0, 0, 0, 0.5);
+  right: calc(100% - 48px);
+  top: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .header__text {

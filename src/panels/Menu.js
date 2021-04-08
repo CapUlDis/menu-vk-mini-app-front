@@ -84,10 +84,11 @@ const Menu = ({ id, group, desktop, admin, groupInfo }) => {
     <Panel id={id}>
       <FixedLayout id="header" vertical='top' filled>
         {admin && 
-          <Icon28SettingsOutline className="header__settings"
-            fill="var(--text_primary)" 
-            onClick={() => router.pushPage(PAGE_FILL_MENU)}
-          />
+          <div className="header__settings">
+            <Icon28SettingsOutline width={24} height={24} fill="FFFFFF"
+              onClick={() => router.pushPage(PAGE_FILL_MENU)}
+            />
+          </div>
         }
         {groupInfo.avatar &&
           <div className="header__images">
