@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { BridgePlus } from "@happysanta/bridge-plus";
 import qs from 'querystring';
 import cloneDeep from 'lodash-es/cloneDeep';
 import { AppRoot, SplitLayout, SplitCol, Root, View, Panel, Subhead, ScreenSpinner, ModalRoot } from '@vkontakte/vkui';
@@ -91,9 +90,8 @@ const App = () => {
     }
   };
 
-  const fetchGroupInfo = async ({ vkGroupId }) => {
-    const response = await BridgePlus.api("groups.getById", { group_id: vkGroupId, fields: "addresses,cover,has_photo" })
-      .then(({ response: [groupInfo] }) => { return groupInfo });
+  const fetchGroupInfo = async () => {
+    const response = await API.get(`/group_info`).then(res => res.data.groupInfo);
     
     let cloneGroupInfo = {...groupInfo};
     cloneGroupInfo.name = response.name;
@@ -103,10 +101,8 @@ const App = () => {
       cloneGroupInfo.cover = response.cover.images[4].url;
     }
 
-    if (response.addresses.is_enabled) {
-      const mainAdress = await BridgePlus.api("groups.getAddresses", { group_id: vkGroupId, address_ids: response.addresses.main_address_id, fields: "timetable" })
-        .then(({ response }) => { return response.items[0] });
-
+    if (response.main_address) {
+      const mainAdress = response.main_address;
       const daysOfWeek = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
       const today = new Date();
       const currentMinutes = 60 * today.getHours() + today.getMinutes();
@@ -150,7 +146,7 @@ const App = () => {
 
   const fetchMenu = async (launchParams) => {
     try {
-      await fetchGroupInfo({ vkGroupId: launchParams.vk_group_id });
+      await fetchGroupInfo();
 
       const response = await API.get(`/groups`).then(response => response.data.group);
 
