@@ -18,9 +18,8 @@ html {
   position: relative;
   left: calc(50% - 40px);
   top: -40px;
-}
-
-.header__avatar .Avatar__img {
+  width: 84px;
+  border-radius: 42px;
   border: 2px solid var(--background_content);
 }
 
