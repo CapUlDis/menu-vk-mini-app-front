@@ -67,7 +67,7 @@ const Menu = ({ id, group, desktop, admin, groupInfo }) => {
       const paddingBottom = document.documentElement.clientHeight 
         - document.getElementById(lastHasPos()).clientHeight
         - paddingTop 
-        - 16;
+        - 24;
       
       setContentPaddingTop(paddingTop + 'px');
       setContentPaddingBottom(paddingBottom + 'px');
