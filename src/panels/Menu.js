@@ -58,24 +58,18 @@ const Menu = ({ id, group, desktop, admin, groupInfo }) => {
   };
 
   const [activeTab, setActiveTab] = useState(firstActiveTabSetter());
+  const [contentPaddingTop, setContentPaddingTop] = useState('0px');
   const [contentPaddingBottom, setContentPaddingBottom] = useState('0px');
 
   useEffect(() => {
     if (hasAtLeastOnePos()) {  
-      let paddingBottom = document.documentElement.clientHeight 
+      const paddingTop = document.getElementById("header").clientHeight - 8;
+      const paddingBottom = document.documentElement.clientHeight 
         - document.getElementById(lastHasPos()).clientHeight
-        - (!groupInfo.avatar 
-            ? (!groupInfo.timetable 
-                ? (!twoCatHasPos() ? 67 : 87) 
-                : (!twoCatHasPos() ? 99 : 119)
-              ) 
-            : (!groupInfo.timetable 
-                ? (!twoCatHasPos() ? 279 : 299) 
-                : (!twoCatHasPos() ? 311 : 331)
-              )
-          )
+        - paddingTop 
         - 16;
       
+      setContentPaddingTop(paddingTop + 'px');
       setContentPaddingBottom(paddingBottom + 'px');
     }
   }, [])
@@ -96,7 +90,7 @@ const Menu = ({ id, group, desktop, admin, groupInfo }) => {
             <Avatar size={80} src={groupInfo.avatar} className="header__avatar"/>
           </div>
         }
-        <div className="header__text">
+        <div className="header__text" id="header__text">
           <Title level='1' weight='heavy' className="header__title">{groupInfo.name}</Title>
           {groupInfo.timetable}
         </div>
@@ -117,7 +111,8 @@ const Menu = ({ id, group, desktop, admin, groupInfo }) => {
                       onClick={() => {
                         setActiveTab(category.id);
                         const verPos = document.getElementById('group' + category.id + '__main').offsetTop
-                          - document.getElementById('header').offsetHeight;
+                          - document.getElementById('header').offsetHeight 
+                          - 8;
                         window.scrollTo(0, verPos);
                       }}
                       selected={activeTab === category.id}
@@ -136,15 +131,7 @@ const Menu = ({ id, group, desktop, admin, groupInfo }) => {
       </FixedLayout>
       {hasAtLeastOnePos()
         ? <Group id='main' mode='plain' style={{ 
-          paddingTop: !groupInfo.avatar 
-            ? (!groupInfo.timetable 
-                ? (!twoCatHasPos() ? '67px' : '87px') 
-                : (!twoCatHasPos() ? '99px' : '119px')
-              ) 
-            : (!groupInfo.timetable 
-                ? (!twoCatHasPos() ? '279px' : '299px') 
-                : (!twoCatHasPos() ? '311px' : '331px')
-              ),
+          paddingTop: contentPaddingTop,
           paddingBottom: contentPaddingBottom 
         }}>
           {group.Categories.reduce((result, category) => {

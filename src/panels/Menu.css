@@ -44,7 +44,8 @@ html {
 }
 
 .header__title {
-  margin-top: 14px;
+  margin: 14px 16px 0;
+  text-align: center;
 }
 
 .header__open {
@@ -68,8 +69,8 @@ html {
 .position-list_desktop {
   display: flex;
   flex-flow: row wrap;
-  padding: 8px 16px;
-  gap: 21px;
+  padding: 0 16px 24px;
+  gap: 20px;
 }
 
 .position-desktop {
