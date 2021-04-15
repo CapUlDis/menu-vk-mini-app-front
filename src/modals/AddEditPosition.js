@@ -37,7 +37,19 @@ const AddEditPosition = ({ id, desktop, group, setGroup, position, editMode, set
 	const [unitId, setUnit] = useState(!editMode ? units[0].id : position.unitId);
 	const [price, setPrice] = useState(!editMode ? '' : position.price);
 	const [categoryId, setCategory] = useState(position.categoryId);
-	const [image, setImage] = useState({ plug: !editMode ? <Icon56GalleryOutline/> : null, src: !editMode ? '' : position.imageUrl, file: false });
+	const [image, setImage] = useState({ 
+    plug: !editMode 
+      ? <Icon56GalleryOutline/> 
+      : position.imageUrl
+        ? null
+        : <Icon56GalleryOutline/>, 
+    src: !editMode 
+      ? '' 
+      : position.imageUrl 
+        ? position.imageUrl
+        : '', 
+    file: false 
+  });
 
 	const [inputMes, setInputMes] = useState({});
 	const [inputStatus, setInputStatus] = useState({});
@@ -104,7 +116,7 @@ const AddEditPosition = ({ id, desktop, group, setGroup, position, editMode, set
 
 	const submitHandle = async (event) => {
 		event.preventDefault();
-		console.log('submit');
+
 		switch (true) {
 			case !title.trim():
 				setInputStatus({ title: 'error' });
@@ -115,10 +127,10 @@ const AddEditPosition = ({ id, desktop, group, setGroup, position, editMode, set
 				return setInputStatus({ value: 'error' });
 			case !price:
 				return setInputStatus({ price: 'error' });
-			case !image.src:
-				setInputMes({ image: 'Загрузите изображение добавляемого блюда.' });
-				setInputStatus({ image: 'error' });
-				return document.getElementsByClassName('ModalPage__content').scrollTop = Infinity;
+			// case !image.src:
+			// 	setInputMes({ image: 'Загрузите изображение добавляемого блюда.' });
+			// 	setInputStatus({ image: 'error' });
+			// 	return document.getElementsByClassName('ModalPage__content').scrollTop = Infinity;
 		}
 
 		const formData = new FormData(document.getElementById('position'));
@@ -131,6 +143,11 @@ const AddEditPosition = ({ id, desktop, group, setGroup, position, editMode, set
       let cloneGroup = cloneDeep(group);
 
       if (editMode) {
+
+        if (!image.src) {
+          formData.set('imageId', null);
+        }
+
         const response = await API.patch(`/positions/${position.id}`, formData, { headers: { 'Content-Type': 'multipart/form-data' }});
         let cloneGroup = cloneDeep(group);
         
@@ -298,7 +315,7 @@ const AddEditPosition = ({ id, desktop, group, setGroup, position, editMode, set
 								{image.plug}
                 {image.src && <Icon24DismissOverlay className="image-input__close" onClick={() => {
                   document.getElementById('fileInput').value = null;
-                  setImage({ plug: !editMode ? <Icon56GalleryOutline/> : null, src: '', file: false });
+                  setImage({ plug: <Icon56GalleryOutline/>, src: '', file: false });
                 }} />}
 							</Avatar>
 						}

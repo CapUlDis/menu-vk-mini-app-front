@@ -10,6 +10,7 @@ import { Icon24MoreHorizontal } from '@vkontakte/icons';
 import { Icon24AddOutline } from '@vkontakte/icons';
 
 import API from '../utils/API';
+import posNoImage from './components/img/pos_no_image.png';
 import './FillMenu.css';
 import orderArray from '../utils/orderArray';
 import mapPlatform from '../utils/mapPlatform';
@@ -121,7 +122,7 @@ const FillMenu = ({ id, desktop, group, setGroup, setPosition, setCategories, se
               {category.Positions && category.Positions.map((position, posIndex) =>
                 <Cell draggable
                   key={'pos' + position.id}
-                  before={<Avatar mode='app' src={position.imageUrl} />}
+                  before={<Avatar mode='app' src={position.imageUrl ? position.imageUrl : posNoImage} />}
                   indicator={<Icon24MoreHorizontal className={platform === 'ios' && 'icon-right_ios'}
                     getRootRef={editPosRefs[getPosRefIndex(catIndex, posIndex)]} 
                     onClick={() => {

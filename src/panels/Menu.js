@@ -4,6 +4,7 @@ import { Icon28SettingsOutline } from '@vkontakte/icons';
 import { useRouter } from '@happysanta/router';
 
 import { PAGE_FILL_MENU } from '../router';
+import posNoImage from './components/img/pos_no_image.png';
 import units from '../utils/units';
 import './Menu.css';
 
@@ -153,7 +154,7 @@ const Menu = ({ id, group, desktop, admin, groupInfo }) => {
                     if (desktop) {
                       return (
                         <div className="position-desktop" key={'position-desktop' + position.id}>
-                          <Avatar size={190} mode='image' src={position.imageUrl}/>
+                          <Avatar size={190} mode='image' src={position.imageUrl ? position.imageUrl : posNoImage}/>
                           <Text className="position-desktop__title">{position.title}</Text>
                           <Caption className="position-desktop__description" level='1' weight='regular'>{position.description}</Caption>
                           <div className="position__bottom position__bottom_desktop">
@@ -168,7 +169,7 @@ const Menu = ({ id, group, desktop, admin, groupInfo }) => {
                           key={'richCell' + position.id}
                           disabled
                           multiline
-                          before={<Avatar size={72} mode='app' src={position.imageUrl}/>}
+                          before={<Avatar size={72} mode='app' src={position.imageUrl ? position.imageUrl : posNoImage}/>}
                           text={position.description}
                           bottom={
                             <div className="position__bottom">
