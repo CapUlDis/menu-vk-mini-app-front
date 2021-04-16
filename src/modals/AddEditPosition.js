@@ -127,10 +127,6 @@ const AddEditPosition = ({ id, desktop, group, setGroup, position, editMode, set
 				return setInputStatus({ value: 'error' });
 			case !price:
 				return setInputStatus({ price: 'error' });
-			// case !image.src:
-			// 	setInputMes({ image: 'Загрузите изображение добавляемого блюда.' });
-			// 	setInputStatus({ image: 'error' });
-			// 	return document.getElementsByClassName('ModalPage__content').scrollTop = Infinity;
 		}
 
 		const formData = new FormData(document.getElementById('position'));
