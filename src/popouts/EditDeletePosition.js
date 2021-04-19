@@ -25,7 +25,7 @@ const EditDeletePosition = ({ setEditMode, editPosRefs }) => {
       </ActionSheetItem>
       <ActionSheetItem autoclose before={<Icon28DeleteOutline/>} mode="destructive" onClick={async () => {
         await router.afterUpdate();
-        router.pushPopup(POPOUT_ALERT_DELETE_POSITION);
+        return router.pushPopup(POPOUT_ALERT_DELETE_POSITION);
       }}>
         Удалить позицию
       </ActionSheetItem>
