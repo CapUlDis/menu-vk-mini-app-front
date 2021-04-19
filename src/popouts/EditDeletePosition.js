@@ -3,10 +3,10 @@ import { ActionSheet, ActionSheetItem } from '@vkontakte/vkui';
 import { useRouter, useParams } from '@happysanta/router';
 import { Icon28EditOutline, Icon28DeleteOutline } from '@vkontakte/icons';
 
-import { MODAL_PAGE_POSITION, PAGE_FILL_MENU } from '../router';
+import { MODAL_PAGE_POSITION, PAGE_FILL_MENU, POPOUT_ALERT_DELETE_POSITION } from '../router';
 
 
-const EditDeletePosition = ({ setEditMode, deletePosition, editPosRefs }) => {
+const EditDeletePosition = ({ setEditMode, editPosRefs }) => {
   const router = useRouter();
   const { index } = useParams();
 
@@ -23,7 +23,10 @@ const EditDeletePosition = ({ setEditMode, deletePosition, editPosRefs }) => {
       }}>
         Редактировать
       </ActionSheetItem>
-      <ActionSheetItem autoclose before={<Icon28DeleteOutline/>} mode="destructive" onClick={deletePosition}>
+      <ActionSheetItem autoclose before={<Icon28DeleteOutline/>} mode="destructive" onClick={async () => {
+        await router.afterUpdate();
+        router.pushPopup(POPOUT_ALERT_DELETE_POSITION);
+      }}>
         Удалить позицию
       </ActionSheetItem>
     </ActionSheet>

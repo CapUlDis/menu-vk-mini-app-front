@@ -23,6 +23,7 @@ export const MODAL_PAGE_POSITION = 'modal_page_position';
 export const MODAL_CARD_CATEGORY = 'modal_card_category';
 
 export const POPOUT_EDIT_DELETE_POSITION = 'popout_edit_delete_position';
+export const POPOUT_ALERT_DELETE_POSITION = 'popout_alert_delete_position';
 
 const routes = {
 	[PAGE_INSTALL]: new Page(PANEL_INSTALL, VIEW_LENDING),

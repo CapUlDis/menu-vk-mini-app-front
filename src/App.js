@@ -19,7 +19,8 @@ import {
   PAGE_MENU,
   MODAL_PAGE_POSITION,
   MODAL_CARD_CATEGORY,
-  POPOUT_EDIT_DELETE_POSITION
+  POPOUT_EDIT_DELETE_POSITION,
+  POPOUT_ALERT_DELETE_POSITION
 } from './router';
 import Install from './panels/Install';
 import Start from './panels/Start';
@@ -30,6 +31,7 @@ import AddEditPosition from './modals/AddEditPosition';
 import AddEditCategory from './modals/AddEditCategory';
 import EditDeletePosition from './popouts/EditDeletePosition';
 import SnackbarError from './popouts/SnackbarError';
+import AlertDeletePosition from './popouts/AlertDeletePosition';
 import API from './utils/API';
 import getPositionSum from "./utils/getPositionSum";
 
@@ -211,10 +213,13 @@ const App = () => {
       return (
         <EditDeletePosition position={position} 
           setEditMode={setEditMode} 
-          deletePosition={deletePosition}
           editPosRefs={editPosRefs}
         />
       );
+    }
+
+    if (location.getPopupId() === POPOUT_ALERT_DELETE_POSITION) {
+      return <AlertDeletePosition deletePosition={deletePosition}/>;
     }
   })();
 

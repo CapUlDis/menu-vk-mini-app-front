@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "@happysanta/bridge-plus": "^0.0.10-beta.3",
-    "@happysanta/router": "^0.1.9",
+    "@happysanta/router": "^0.1.16",
     "@vkontakte/icons": "^1.83.0",
     "@vkontakte/vk-bridge": "^2.4.0",
     "@vkontakte/vk-miniapps-deploy": "0.0.17",
