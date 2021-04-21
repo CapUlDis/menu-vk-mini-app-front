@@ -37,8 +37,6 @@ const AddEditCategory = ({
   const [formStatus, setFormStatus] = useState('default');
 
   const submitHandle = () => {
-    console.log('submit');
-
     if (!title.trim()) {
       return setFormStatus('error');
     }

@@ -10,6 +10,7 @@ import { Icon24MoreHorizontal } from '@vkontakte/icons';
 import { Icon24AddOutline } from '@vkontakte/icons';
 
 import API from '../utils/API';
+import SnackbarError from '../popouts/SnackbarError';
 import posNoImage from './components/img/pos_no_image.png';
 import './FillMenu.css';
 import orderArray from '../utils/orderArray';
@@ -27,6 +28,7 @@ const FillMenu = ({ id, desktop, group, setGroup, setPosition, setCategories, se
   const platform = mapPlatform(BridgePlus.getStartParams().getPlatform());
 
   const [tooltip, setTooltip] = useState(false);
+  const [snackbarError, setSnackbarError] = useState(null);
 
   const getPosRefIndex = (catIndex, posIndex) => {
     let index = posIndex;
@@ -41,7 +43,6 @@ const FillMenu = ({ id, desktop, group, setGroup, setPosition, setCategories, se
   }
 
   const editCategoriesHandle = () => {
-    console.log(0);
     const cloneGroup = cloneDeep(group);
     setCategories(cloneGroup.Categories);
     setCatOrder(cloneGroup.catOrder);
@@ -140,7 +141,11 @@ const FillMenu = ({ id, desktop, group, setGroup, setPosition, setCategories, se
                       await API.patch(`/categories/${category.id}`, { posOrder: cloneGroup.Categories[catIndex].posOrder })
                       setGroup(cloneGroup);
                     } catch (err) {
-                      console.log(err);
+                      setSnackbarError(
+                        <SnackbarError setSnackbarError={setSnackbarError}>
+                          Проблемы с получением данных от сервера. Проверьте интернет-соединение.
+                        </SnackbarError>
+                      );
                     }
                   }}
                 >
@@ -182,6 +187,7 @@ const FillMenu = ({ id, desktop, group, setGroup, setPosition, setCategories, se
           </Div>
         }
       </FixedLayout>
+      {snackbarError}
     </Panel>
   );
 };
