@@ -14,3 +14,7 @@
 .category-cell__button {
   cursor: pointer;
 }
+
+.category-cell_mobile .vkuiSimpleCell__children {
+  width: calc(100vw - 140px);
+}

@@ -157,6 +157,7 @@ const EditCategories = ({
               if (!desktop) {
                 return (
                   <Cell draggable removable
+                    className='category-cell_mobile'
                     key={'cat' + catIndex}
                     indicator={
                       <Icon28EditOutline className={platform === 'ios' && 'icon-right_ios'} fill='#3F8AE0' onClick={() => editHandle(catIndex, category)}/>
