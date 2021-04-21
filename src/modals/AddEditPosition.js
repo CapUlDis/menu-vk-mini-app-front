@@ -240,6 +240,7 @@ const AddEditPosition = ({ id, desktop, group, setGroup, position, editMode, set
 					>
 						<Input name="value"
               maxLength='5'
+              min="0"
 							type="number"
 							step='0.5'
 							value={value}
@@ -274,6 +275,7 @@ const AddEditPosition = ({ id, desktop, group, setGroup, position, editMode, set
 					<Input type="number"
             maxLength='7'
 						step="0.5"
+            min="0"
 						name="price"
 						value={price}
 						placeholder="Введите цену"
