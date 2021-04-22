@@ -82,6 +82,8 @@ const App = () => {
       cloneGroup.Categories[catIndex].Positions.splice(posIndex, 1);
       cloneGroup.Categories[catIndex].posOrder.splice(posIndex, 1);
       setGroup(cloneGroup);
+
+      router.popPageIfModal();
     } catch (err) {
 
       return setSnackbarError(
@@ -253,7 +255,6 @@ const App = () => {
                     position={position}
                     editMode={editMode}
                     setEditMode={setEditMode}
-                    deletePosition={deletePosition}
                     abortHandle={abortHandle}
                   />
                   <AddEditCategory id={MODAL_CARD_CATEGORY}

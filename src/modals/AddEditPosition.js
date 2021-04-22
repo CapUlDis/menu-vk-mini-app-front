@@ -26,9 +26,10 @@ import API from '../utils/API';
 import SnackbarError from '../popouts/SnackbarError';
 import units from '../utils/units';
 import './AddEditPosition.css';
+import { POPOUT_ALERT_DELETE_POSITION } from '../router';
 
 
-const AddEditPosition = ({ id, desktop, group, setGroup, position, editMode, setEditMode, deletePosition, abortHandle }) => {
+const AddEditPosition = ({ id, desktop, group, setGroup, position, editMode, setEditMode, abortHandle }) => {
 	const router = useRouter();
 
 	const [title, setTitle] = useState(!editMode ? '' : position.title);
@@ -107,12 +108,6 @@ const AddEditPosition = ({ id, desktop, group, setGroup, position, editMode, set
 		img.src = URL.createObjectURL(file);
 
 	}
-
-  const deleteClickHandle = () => {
-    deletePosition();
-    router.popPage();
-    return setTimeout(() => setEditMode(false), 100);
-  }
 
 	const submitHandle = async (event) => {
 		event.preventDefault();
@@ -341,7 +336,7 @@ const AddEditPosition = ({ id, desktop, group, setGroup, position, editMode, set
       {editMode && !desktop &&
         <Div>
           <Separator wide={true}/>
-          <CellButton before={<Icon28DeleteOutline/>} mode="danger" onClick={deleteClickHandle}>
+          <CellButton before={<Icon28DeleteOutline/>} mode="danger" onClick={() => router.pushPopup(POPOUT_ALERT_DELETE_POSITION)}>
             Удалить позицию
           </CellButton>
         </Div>
@@ -354,7 +349,7 @@ const AddEditPosition = ({ id, desktop, group, setGroup, position, editMode, set
               size="s" 
               mode="tertiary"
               before={<Icon24DeleteOutline/>} 
-              onClick={deleteClickHandle}
+              onClick={() => router.pushPopup(POPOUT_ALERT_DELETE_POSITION)}
             >
               Удалить позицию
             </Button>
