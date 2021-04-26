@@ -164,7 +164,6 @@ const AddEditPosition = ({ id, desktop, group, setGroup, position, editMode, set
           cloneGroup.Categories[catIndex].Positions[posIndex] = response.data.position;
         }
 
-        setEditMode(false);
         setGroup(cloneGroup);
         return router.popPage();
       }
