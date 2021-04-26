@@ -38,6 +38,7 @@ const AddEditPosition = ({ id, desktop, group, setGroup, position, editMode, set
 	const [unitId, setUnit] = useState(!editMode ? units[0].id : position.unitId);
 	const [price, setPrice] = useState(!editMode ? '' : position.price);
 	const [categoryId, setCategory] = useState(position.categoryId);
+  const [submitDisable, setSubmitDisable] = useState(false);
 	const [image, setImage] = useState({ 
     plug: !editMode 
       ? <Icon56GalleryOutline/> 
@@ -111,6 +112,8 @@ const AddEditPosition = ({ id, desktop, group, setGroup, position, editMode, set
 
 	const submitHandle = async (event) => {
 		event.preventDefault();
+    setSubmitDisable(true);
+    setTimeout(() => setSubmitDisable(false), 500);
 
 		switch (true) {
 			case !title.trim():
@@ -365,6 +368,7 @@ const AddEditPosition = ({ id, desktop, group, setGroup, position, editMode, set
             size='s'
             type='submit' 
             form='position'
+            disabled={submitDisable}
           >
             {!editMode ? 'Добавить позицию' : 'Сохранить'}
           </Button>
@@ -373,6 +377,7 @@ const AddEditPosition = ({ id, desktop, group, setGroup, position, editMode, set
           <Button size='l'
             type='submit' 
             form='position'
+            disabled={submitDisable}
             stretched
           >
             {!editMode ? 'Добавить позицию' : 'Сохранить'}
