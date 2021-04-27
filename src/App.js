@@ -187,7 +187,7 @@ const App = () => {
 
   const abortHandle = () => {
     router.popPage();
-    return setTimeout(() => setEditMode(false), 100);
+    return setTimeout(() => setEditMode(false), 1000);
   }
 
   useEffect(() => {

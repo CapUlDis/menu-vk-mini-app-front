@@ -164,9 +164,9 @@ const AddEditPosition = ({ id, desktop, group, setGroup, position, editMode, set
           cloneGroup.Categories[catIndex].Positions[posIndex] = response.data.position;
         }
 
-        setEditMode(false);
         setGroup(cloneGroup);
-        return router.popPage();
+        router.popPage();
+        return setTimeout(() => setEditMode(false), 1000);
       }
 			
       const response = await API.post('/positions', formData, { headers: { 'Content-Type': 'multipart/form-data' }});

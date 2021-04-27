@@ -11,7 +11,6 @@ import {
   Button,
 } from '@vkontakte/vkui';
 
-import { PAGE_EDIT_CATEGORIES } from '../router';
 import './AddEditCategory.css';
 
 let num = 1;
@@ -106,8 +105,8 @@ const AddEditCategory = ({
       }
     }
 
-    router.pushPage(PAGE_EDIT_CATEGORIES);
-    return setTimeout(() => setEditMode(false), 100);
+    router.popPage();
+    return setTimeout(() => setEditMode(false), 1000);
   }
 
   if (desktop) {
