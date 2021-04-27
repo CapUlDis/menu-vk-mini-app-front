@@ -82,7 +82,7 @@ const App = () => {
       cloneGroup.Categories[catIndex].Positions.splice(posIndex, 1);
       cloneGroup.Categories[catIndex].posOrder.splice(posIndex, 1);
       setGroup(cloneGroup);
-      setEditMode(false);
+      setTimeout(() => setEditMode(false), 1000);
 
       router.popPageIfModal();
     } catch (err) {
