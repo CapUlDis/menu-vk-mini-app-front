@@ -32,18 +32,20 @@ const Install = ({ id, desktop }) => {
 
   return (
     <Panel id={id}>
-      <Placeholder className="placeholder"
-        icon={<img src={menu} />}
-        header='Меню заведения'
-        action={desktop && <Button size="l" onClick={addMenuToCommunity}>Установить в сообщество</Button>}
-      >
-        <p className="placeholder__text">Описание приложения. <br />Выберите категории, которые представлены в вашем заведении. Позже вы сможете их изменить или создать новые.</p>
-      </Placeholder>
-      {link &&
-        <Div className="link">
-          <Link href={link} target="_blank">Перейти в сообщество для запуска приложения</Link>
-        </Div>
-      }
+      <div className="placeholder">
+        <Placeholder 
+          icon={<img src={menu} />}
+          header='Меню заведения'
+          action={desktop && <Button size="l" onClick={addMenuToCommunity}>Установить в сообщество</Button>}
+        >
+          <p className="placeholder__text">Описание приложения. <br />Выберите категории, которые представлены в вашем заведении. Позже вы сможете их изменить или создать новые.</p>
+        </Placeholder>
+        {link &&
+          <Div className="link">
+            <Link href={link} target="_blank">Перейти в сообщество для запуска приложения</Link>
+          </Div>
+        }
+      </div>
       {!desktop &&
         <FixedLayout vertical='bottom'>
           <Div>
