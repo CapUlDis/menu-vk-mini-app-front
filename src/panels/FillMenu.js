@@ -124,7 +124,7 @@ const FillMenu = ({ id, desktop, group, setGroup, setPosition, setCategories, se
                 <Cell draggable
                   key={'pos' + position.id}
                   before={<Avatar mode='app' src={position.imageUrl ? position.imageUrl : posNoImage} />}
-                  indicator={<Icon24MoreHorizontal className={platform === 'ios' && 'icon-right_ios'}
+                  indicator={<Icon24MoreHorizontal className={platform === 'ios' ? 'icon-right_ios clickable' : 'clickable'}
                     getRootRef={editPosRefs[getPosRefIndex(catIndex, posIndex)]} 
                     onClick={() => {
                       setPosition(position);

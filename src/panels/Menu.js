@@ -79,7 +79,7 @@ const Menu = ({ id, group, desktop, admin, groupInfo }) => {
     <Panel id={id}>
       <FixedLayout className="header" id="header" vertical='top' filled>
         {admin && 
-          <div className="header__settings">
+          <div className="header__settings clickable">
             <Icon28SettingsOutline width={24} height={24} fill="FFFFFF"
               onClick={() => router.pushPage(PAGE_FILL_MENU)}
             />

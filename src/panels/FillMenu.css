@@ -17,3 +17,11 @@
 .panel_mobile .vkuiTooltip {
   left: -8px;
 }
+
+.clickable {
+  cursor: pointer;
+}
+
+.vkuiCell__dragger {
+  cursor: pointer;
+}
