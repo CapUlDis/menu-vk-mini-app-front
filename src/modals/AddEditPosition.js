@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import cloneDeep from 'lodash-es/cloneDeep';
 import Resizer from 'react-image-file-resizer';
 import {
@@ -31,6 +31,7 @@ import { POPOUT_ALERT_DELETE_POSITION } from '../router';
 
 const AddEditPosition = ({ id, desktop, group, setGroup, position, editMode, setEditMode, abortHandle }) => {
 	const router = useRouter();
+  const modalContent = React.createRef();
 
 	const [title, setTitle] = useState(!editMode ? '' : position.title);
 	const [description, setDescription] = useState(!editMode ? '' : position.description);
@@ -81,8 +82,7 @@ const AddEditPosition = ({ id, desktop, group, setGroup, position, editMode, set
       cloneInputStatus.image = 'error';
 
 			setImgStatusMes('Допустимый размер изображения не больше 5МБ.');
-			setInputStatus(cloneInputStatus);
-			return document.getElementsByClassName('ModalPage__content').scrollTop = Infinity;
+			return setInputStatus(cloneInputStatus);
 		}
 
 		let w, h, ratio;
@@ -97,8 +97,7 @@ const AddEditPosition = ({ id, desktop, group, setGroup, position, editMode, set
         cloneInputStatus.image = 'error';
 
 				setImgStatusMes('Соотношение сторон загружаемого изображения не равно 1:1.');
-				setInputStatus(cloneInputStatus);
-				return document.getElementsByClassName('ModalPage__content').scrollTop = Infinity;
+				return setInputStatus(cloneInputStatus);
 			}
 
 			if (w > 700) {
@@ -114,6 +113,7 @@ const AddEditPosition = ({ id, desktop, group, setGroup, position, editMode, set
 		}
 		img.src = URL.createObjectURL(file);
 
+    return modalContent.current.scrollTop = 300;
 	}
 
 	const submitHandle = async (event) => {
@@ -145,6 +145,7 @@ const AddEditPosition = ({ id, desktop, group, setGroup, position, editMode, set
     }
 
     if (inputError) {
+      modalContent.current.scrollTop = 0;
       return setInputStatus(cloneInputStatus);
     }
 
@@ -218,6 +219,7 @@ const AddEditPosition = ({ id, desktop, group, setGroup, position, editMode, set
 		<ModalPage id={id}
 			settlingHeight={100}
 			onClose={abortHandle}
+      getModalContentRef={modalContent}
       header={
         <ModalPageHeader left={!desktop && <PanelHeaderClose onClick={abortHandle} />}>
           {!editMode ? 'Добавление' : 'Редактирование'}
