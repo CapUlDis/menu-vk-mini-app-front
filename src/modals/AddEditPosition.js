@@ -128,10 +128,13 @@ const AddEditPosition = ({ id, desktop, group, setGroup, position, editMode, set
 		}
 
 		const formData = new FormData(document.getElementById('position'));
+    console.log(image, formData.get('image'));
 
 		if (image.file) {
 			formData.set('image', image.file, image.file.name);
-		}
+		} else {
+      formData.delete('image');
+    }
 
 		try {
       let cloneGroup = cloneDeep(group);
