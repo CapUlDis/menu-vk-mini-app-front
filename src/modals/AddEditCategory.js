@@ -130,6 +130,7 @@ const AddEditCategory = ({
                 maxLength="30"
                 placeholder="Введите название категории"
                 onChange={e => {
+                  setFormStatus('default');
                   setTitle(e.target.value);
                 }}
               />
@@ -162,6 +163,7 @@ const AddEditCategory = ({
             maxLength="30"
             placeholder="Введите название категории"
             onChange={e => {
+              setFormStatus('default');
               setTitle(e.target.value);
             }}
           />
