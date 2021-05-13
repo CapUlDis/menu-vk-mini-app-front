@@ -53,7 +53,7 @@ const AddEditPosition = ({ id, desktop, group, setGroup, position, editMode, set
     file: false 
   });
 
-	const [inputMes, setInputMes] = useState({});
+	const [imgStatusMes, setImgStatusMes] = useState('');
 	const [inputStatus, setInputStatus] = useState({ title: 'default', description: 'default', value: 'default', price: 'default', image: 'default' });
   const [snackbarError, setSnackbarError] = useState(null);
 
@@ -77,8 +77,11 @@ const AddEditPosition = ({ id, desktop, group, setGroup, position, editMode, set
 		const file = event.target.files[0];
 
 		if (file.size > 5242880) {
-			setInputMes({ image: 'Допустимый размер изображения не больше 5МБ.' });
-			setInputStatus({ image: 'error' });
+      let cloneInputStatus = {...inputStatus};
+      cloneInputStatus.image = 'error';
+
+			setImgStatusMes('Допустимый размер изображения не больше 5МБ.');
+			setInputStatus(cloneInputStatus);
 			return document.getElementsByClassName('ModalPage__content').scrollTop = Infinity;
 		}
 
@@ -90,8 +93,11 @@ const AddEditPosition = ({ id, desktop, group, setGroup, position, editMode, set
 			ratio = w / h;
 
 			if (ratio < 0.99 || ratio > 1.01) {
-				setInputMes({ image: 'Соотношение сторон загружаемого изображения не равно 1:1.' });
-				setInputStatus({ image: 'error' });
+        let cloneInputStatus = {...inputStatus};
+        cloneInputStatus.image = 'error';
+
+				setImgStatusMes('Соотношение сторон загружаемого изображения не равно 1:1.');
+				setInputStatus(cloneInputStatus);
 				return document.getElementsByClassName('ModalPage__content').scrollTop = Infinity;
 			}
 
@@ -322,7 +328,7 @@ const AddEditPosition = ({ id, desktop, group, setGroup, position, editMode, set
 				</FormItem>
 				<FormItem top="Изображение"
 					status={inputStatus.image}
-					bottom={inputMes.image ? inputMes.image : null}
+					bottom={imgStatusMes}
 				>
 					<RichCell
 						disabled
@@ -344,9 +350,12 @@ const AddEditPosition = ({ id, desktop, group, setGroup, position, editMode, set
 									name='image'
 									accept=".png, .jpg, .jpeg"
 									onChange={e => {
+                    let cloneInputStatus = {...inputStatus};
+                    cloneInputStatus.image = 'default';
+
 										setImage({ plug: <Icon56GalleryOutline />, src: '', file: false });
-										setInputStatus({});
-										setInputMes({});
+										setInputStatus(cloneInputStatus);
+										setImgStatusMes('');
 										imageSelectHandle(e);
 									}}
 								>
