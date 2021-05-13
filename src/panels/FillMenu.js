@@ -122,7 +122,7 @@ const FillMenu = ({ id, desktop, group, setGroup, setPosition, setCategories, se
             <List>
               {category.Positions && category.Positions.map((position, posIndex) =>
                 <Cell draggable
-                  className={!desktop && 'category-cell_mobile'}
+                  className='category-cell_mobile'
                   key={'pos' + position.id}
                   before={<Avatar mode='app' src={position.imageUrl ? position.imageUrl : posNoImage} />}
                   indicator={<Icon24MoreHorizontal className={platform === 'ios' ? 'icon-right_ios clickable' : 'clickable'}
