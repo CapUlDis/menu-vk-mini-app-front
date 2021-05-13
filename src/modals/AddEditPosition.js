@@ -54,7 +54,7 @@ const AddEditPosition = ({ id, desktop, group, setGroup, position, editMode, set
   });
 
 	const [inputMes, setInputMes] = useState({});
-	const [inputStatus, setInputStatus] = useState({});
+	const [inputStatus, setInputStatus] = useState({ title: 'default', description: 'default', value: 'default', price: 'default', image: 'default' });
   const [snackbarError, setSnackbarError] = useState(null);
 
 
@@ -115,20 +115,34 @@ const AddEditPosition = ({ id, desktop, group, setGroup, position, editMode, set
     setSubmitDisable(true);
     setTimeout(() => setSubmitDisable(false), 500);
 
-		switch (true) {
-			case !title.trim():
-				setInputStatus({ title: 'error' });
-				return document.getElementsByClassName('ModalPage__content').scrollTop = 0;
-			case !description.trim():
-				return setInputStatus({ description: 'error' });
-			case !value:
-				return setInputStatus({ value: 'error' });
-			case !price:
-				return setInputStatus({ price: 'error' });
-		}
+    let inputError = false;
+    let cloneInputStatus = {...inputStatus};
+
+    if (!title.trim()) {
+      cloneInputStatus.title = 'error';
+      inputError = true;
+    }
+
+    if (!description.trim()) {
+      cloneInputStatus.description = 'error';
+      inputError = true;
+    }
+
+    if (!value) {
+      cloneInputStatus.value = 'error';
+      inputError = true;
+    }
+
+    if (!price) {
+      cloneInputStatus.price = 'error';
+      inputError = true;
+    }
+
+    if (inputError) {
+      return setInputStatus(cloneInputStatus);
+    }
 
 		const formData = new FormData(document.getElementById('position'));
-    console.log(image, formData.get('image'));
 
 		if (image.file) {
 			formData.set('image', image.file, image.file.name);
@@ -205,9 +219,7 @@ const AddEditPosition = ({ id, desktop, group, setGroup, position, editMode, set
       }
 		>
 			<FormLayout id='position' onSubmit={submitHandle}>
-				<FormItem top="Название"
-					status={inputStatus.title ? inputStatus.title : 'default'}
-				>
+				<FormItem top="Название" status={inputStatus.title}>
 					<Input name="title"
 						form="position"
 						type="text"
@@ -215,14 +227,15 @@ const AddEditPosition = ({ id, desktop, group, setGroup, position, editMode, set
 						maxLength="50"
 						placeholder="Введите название"
 						onChange={e => {
-							setInputStatus({});
+              let cloneInputStatus = {...inputStatus};
+              cloneInputStatus.title = 'default';
+
+							setInputStatus(cloneInputStatus);
 							setTitle(e.target.value);
 						}}
 					/>
 				</FormItem>
-				<FormItem top="Описание"
-					status={inputStatus.description ? inputStatus.description : 'default'}
-				>
+				<FormItem top="Описание" status={inputStatus.description}>
 					<Textarea className={desktop ? "textarea_desktop" : "textarea_mobile"}
             name="description"
             grow={true}
@@ -230,15 +243,16 @@ const AddEditPosition = ({ id, desktop, group, setGroup, position, editMode, set
 						maxLength="100"
 						placeholder="Введите описание"
 						onChange={e => {
-							setInputStatus({});
+							let cloneInputStatus = {...inputStatus};
+              cloneInputStatus.description = 'default';
+              
+							setInputStatus(cloneInputStatus);
 							setDescription(e.target.value);
 						}}
 					/>
 				</FormItem>
 				<FormLayoutGroup mode="horizontal">
-					<FormItem top="Размер порции"
-						status={inputStatus.value ? inputStatus.value : 'default'}
-					>
+					<FormItem top="Размер порции" status={inputStatus.value}>
 						<Input name="value"
               maxLength='5'
               min="0"
@@ -247,7 +261,10 @@ const AddEditPosition = ({ id, desktop, group, setGroup, position, editMode, set
 							value={value}
 							placeholder="Введите размер"
 							onChange={e => {
-								setInputStatus({});
+								let cloneInputStatus = {...inputStatus};
+                cloneInputStatus.value = 'default';
+                
+                setInputStatus(cloneInputStatus);
 
                 if (e.target.value.length > e.target.maxLength) {
                   return setValue(e.target.value.slice(0, e.target.maxLength));
@@ -270,9 +287,7 @@ const AddEditPosition = ({ id, desktop, group, setGroup, position, editMode, set
 						</NativeSelect>
 					</FormItem>
 				</FormLayoutGroup>
-				<FormItem top="Цена, ₽"
-					status={inputStatus.price ? inputStatus.price : 'default'}
-				>
+				<FormItem top="Цена, ₽" status={inputStatus.price}>
 					<Input type="number"
             maxLength='7'
 						step="0.5"
@@ -281,7 +296,10 @@ const AddEditPosition = ({ id, desktop, group, setGroup, position, editMode, set
 						value={price}
 						placeholder="Введите цену"
 						onChange={e => {
-							setInputStatus({});
+							let cloneInputStatus = {...inputStatus};
+              cloneInputStatus.price = 'default';
+              
+              setInputStatus(cloneInputStatus);
 
               if (e.target.value.length > e.target.maxLength) {
                 return setPrice(e.target.value.slice(0, e.target.maxLength));
@@ -303,7 +321,7 @@ const AddEditPosition = ({ id, desktop, group, setGroup, position, editMode, set
 					</NativeSelect>
 				</FormItem>
 				<FormItem top="Изображение"
-					status={inputStatus.image ? inputStatus.image : 'default'}
+					status={inputStatus.image}
 					bottom={inputMes.image ? inputMes.image : null}
 				>
 					<RichCell
