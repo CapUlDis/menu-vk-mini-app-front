@@ -101,6 +101,10 @@ const App = () => {
     let cloneGroupInfo = {...groupInfo};
     cloneGroupInfo.name = response.name;
 
+    if (response.is_closed === 2) {
+      return setGroupInfo(cloneGroupInfo);
+    }
+
     if (response.has_photo + response.cover.enabled === 2) {
       cloneGroupInfo.avatar = response.photo_200;
       cloneGroupInfo.cover = response.cover.images[4].url;
