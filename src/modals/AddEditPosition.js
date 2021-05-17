@@ -268,6 +268,7 @@ const AddEditPosition = ({ id, desktop, group, setGroup, position, editMode, set
 							step='0.5'
 							value={value}
 							placeholder="Введите размер"
+              onKeyDown={e => (e.key === 'e' || e.key === '+' || e.key === '-') && e.preventDefault()} 
 							onChange={e => {
 								let cloneInputStatus = {...inputStatus};
                 cloneInputStatus.value = 'default';
@@ -303,6 +304,7 @@ const AddEditPosition = ({ id, desktop, group, setGroup, position, editMode, set
 						name="price"
 						value={price}
 						placeholder="Введите цену"
+            onKeyDown={e => (e.key === 'e' || e.key === '+' || e.key === '-') && e.preventDefault()} 
 						onChange={e => {
 							let cloneInputStatus = {...inputStatus};
               cloneInputStatus.price = 'default';
