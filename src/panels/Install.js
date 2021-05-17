@@ -3,7 +3,8 @@ import bridge from "@vkontakte/vk-bridge";
 import { Panel, Placeholder, FixedLayout, Div, Button, Link } from '@vkontakte/vkui';
 
 import SnackbarError from '../popouts/SnackbarError';
-import menu from './components/img/menu.svg';
+import menuMob from './components/img/menu_mob.png';
+import menuDes from './components/img/menu_des.png';
 import './Install.css';
 
 
@@ -34,7 +35,7 @@ const Install = ({ id, desktop }) => {
     <Panel id={id}>
       <div className="placeholder">
         <Placeholder 
-          icon={<img src={menu} />}
+          icon={<img src={desktop ? menuDes : menuMob} width={desktop ? 64 : 88} height={desktop ? 64 : 88}/>}
           header='Меню заведения'
           action={desktop && <Button size="l" onClick={addMenuToCommunity}>Установить в сообщество</Button>}
         >
