@@ -54,7 +54,7 @@ const Start = ({ id, setGroup, desktop }) => {
       
       setGroup(response);
 
-      return router.pushPage(PAGE_FILL_MENU);
+      return router.replacePage(PAGE_FILL_MENU);
     } catch (err) {
       
       return setSnackbarError(
