@@ -242,14 +242,13 @@ const App = () => {
 
   return (
     <AppRoot>
-      <SplitLayout>
+      <SplitLayout popout={popout}>
         <SplitCol>
           <Root activeView={location.getViewId()}>
             <View id={VIEW_LENDING} activePanel={location.getViewActivePanel(VIEW_LENDING)}>
               <Install id={PANEL_INSTALL} desktop={desktop}/>
             </View>
             <View id={VIEW_MAIN}
-              popout={popout}
               activePanel={location.getViewActivePanel(VIEW_MAIN)}
               modal={
                 <ModalRoot activeModal={location.getModalId()} onClose={abortHandle}>
