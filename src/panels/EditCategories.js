@@ -190,7 +190,7 @@ const EditCategories = ({
           </List>
         }
       </Group>
-      <FixedLayout vertical='bottom'>
+      <FixedLayout vertical='bottom' filled>
         <Separator wide={true}/>
         {desktop
           ? <Div className="footer-desktop">
