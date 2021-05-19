@@ -4,7 +4,7 @@ import React from "react";
 import { BridgePlus } from "@happysanta/bridge-plus";
 import ReactDOM from "react-dom";
 import bridge from "@vkontakte/vk-bridge";
-import { ConfigProvider, AdaptivityProvider, WebviewType, SizeType, VKCOM, ViewWidth } from '@vkontakte/vkui';
+import { ConfigProvider, AdaptivityProvider, WebviewType, SizeType, VKCOM, ViewWidth, Scheme } from '@vkontakte/vkui';
 import { RouterContext } from '@happysanta/router';
 import { router } from './router';
 import App from "./App";
@@ -13,16 +13,18 @@ import mapPlatform from "./utils/mapPlatform";
 // Init VK  Mini App
 bridge.send("VKWebAppInit");
 
+const uiPlatform = mapPlatform(BridgePlus.getStartParams().getPlatform());
+const isDesktop = BridgePlus.getStartParams().isDesktop();
+
 bridge.subscribe(({ detail: { type, data }}) => {
-  if (type === 'VKWebAppUpdateConfig') {
+  if (type === 'VKWebAppUpdateConfig' && !isDesktop) {
     const schemeAttribute = document.createAttribute('scheme');
     schemeAttribute.value = data.scheme ? data.scheme : 'client_light';
     document.body.attributes.setNamedItem(schemeAttribute);
   }
 });
 
-const uiPlatform = mapPlatform(BridgePlus.getStartParams().getPlatform());
-const isDesktop = BridgePlus.getStartParams().isDesktop();
+
 
 ReactDOM.render(
 	<RouterContext.Provider value={router}>
