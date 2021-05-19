@@ -134,6 +134,10 @@ const FillMenu = ({ id, desktop, group, setGroup, setPosition, setCategories, se
                   />}
                   description={position.price + ' ₽'}
                   onDragFinish={async ({ from, to }) => {
+                    if (from === to || to === undefined) {
+                      return;
+                    }
+
                     try {
                       const cloneGroup = cloneDeep(group);
                       cloneGroup.Categories[catIndex].posOrder.splice(from, 1);
