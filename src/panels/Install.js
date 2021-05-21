@@ -16,7 +16,7 @@ const Install = ({ id, desktop }) => {
     try {
       const response = await bridge.send("VKWebAppAddToCommunity");
 
-      return setLink(`https://vk.com/public${response.group_id}`);
+      return setLink(`https://vk.com/app7733175_-${response.group_id}`);
     } catch (err) {
       if (err.error_data && err.error_data.error_code === 1) {
         setSnackbarError(
