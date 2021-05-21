@@ -36,6 +36,7 @@ const EditCategories = ({
 
   const [snackbarError, setSnackbarError] = useState(null);
   const [deletedCats, setDeletedCats] = useState([]);
+  const [submitDisable, setSubmitDisable] = useState(false);
 
   const abortHandle = () => {
     const cloneGroup = cloneDeep(group);
@@ -103,6 +104,8 @@ const EditCategories = ({
   }
 
   const submitHandle = async () => {
+    setSubmitDisable(true);
+
     try {
       if (!arrayEquals(catOrder, group.catOrder) || changedCats.length !== 0) {
         const response = await API.put('/categories', { 
@@ -121,9 +124,11 @@ const EditCategories = ({
         setNewCats([]);
       }
 
-      return router.pushPage(PAGE_FILL_MENU);
+      router.pushPage(PAGE_FILL_MENU);
+      return setSubmitDisable(false);
     } catch (err) {
       
+      setSubmitDisable(false);
       return setSnackbarError(
         <SnackbarError setSnackbarError={setSnackbarError}>
           Проблемы с получением данных от сервера. Проверьте интернет-соединение.
@@ -204,6 +209,7 @@ const EditCategories = ({
             </Button> 
             <Button className="footer-desktop__button"
               size='s'
+              disabled={submitDisable}
               onClick={submitHandle}
             >
               Готово
@@ -212,6 +218,7 @@ const EditCategories = ({
           : <Div>
             <Button size='l' 
               stretched 
+              disabled={submitDisable}
               onClick={submitHandle}
             >
               Готово
