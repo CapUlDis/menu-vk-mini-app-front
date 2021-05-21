@@ -26,10 +26,10 @@ import API from '../utils/API';
 import SnackbarError from '../popouts/SnackbarError';
 import units from '../utils/units';
 import './AddEditPosition.css';
-import { POPOUT_ALERT_DELETE_POSITION } from '../router';
+import { POPOUT_ALERT_DELETE_POSITION, PAGE_FILL_MENU } from '../router';
 
 
-const AddEditPosition = ({ id, desktop, group, setGroup, position, editMode, setEditMode, abortHandle }) => {
+const AddEditPosition = ({ id, desktop, group, setGroup, position, editMode, setEditMode }) => {
 	const router = useRouter();
   const modalContent = React.createRef();
 
@@ -58,6 +58,10 @@ const AddEditPosition = ({ id, desktop, group, setGroup, position, editMode, set
 	const [inputStatus, setInputStatus] = useState({ title: 'default', description: 'default', value: 'default', price: 'default', image: 'default' });
   const [snackbarError, setSnackbarError] = useState(null);
 
+  const abortHandle = () => {
+    router.replacePage(PAGE_FILL_MENU);
+    return setTimeout(() => setEditMode(false), 1000);
+  }
 
 	const imageSelectHandle = (event) => {
 		event.nativeEvent.preventDefault();
