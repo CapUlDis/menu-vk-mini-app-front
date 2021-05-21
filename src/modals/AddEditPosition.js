@@ -134,12 +134,12 @@ const AddEditPosition = ({ id, desktop, group, setGroup, position, editMode, set
       inputError = true;
     }
 
-    if (!value) {
+    if (!String(value)) {
       cloneInputStatus.value = 'error';
       inputError = true;
     }
 
-    if (!price) {
+    if (!String(price)) {
       cloneInputStatus.price = 'error';
       inputError = true;
     }
