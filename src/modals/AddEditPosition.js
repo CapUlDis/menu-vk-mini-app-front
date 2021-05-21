@@ -113,7 +113,7 @@ const AddEditPosition = ({ id, desktop, group, setGroup, position, editMode, set
 				}
 			}
 
-			return setImage({ src: this.src, plug: null, file: false });
+			return setImage({ src: this.src, plug: null, file });
 		}
 		img.src = URL.createObjectURL(file);
 
