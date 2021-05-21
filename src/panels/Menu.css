@@ -30,7 +30,7 @@ html {
   height: 36px;
   background: rgba(0, 0, 0, 0.5);
   right: calc(100% - 48px);
-  top: 12px;
+  top: calc(var(--safe-area-inset-top) + 12px);
   display: flex;
   justify-content: center;
   align-items: center;
