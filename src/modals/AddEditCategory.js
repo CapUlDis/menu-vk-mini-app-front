@@ -33,9 +33,13 @@ const AddEditCategory = ({
   const router = useRouter();
 
   const [title, setTitle] = useState(!editMode ? '' : editMode.title);
+  const [submitDisable, setSubmitDisable] = useState(false);
   const [formStatus, setFormStatus] = useState('default');
 
   const submitHandle = () => {
+    setSubmitDisable(true);
+    setTimeout(() => setSubmitDisable(false), 500);
+    
     if (!title.trim()) {
       return setFormStatus('error');
     }
@@ -136,7 +140,12 @@ const AddEditCategory = ({
               />
           </FormItem>
           <Div className="footer-desktop">
-            <Button className="modal-page__button" size="s" mode="primary" onClick={submitHandle}>
+            <Button className="modal-page__button" 
+              size="s" 
+              mode="primary" 
+              onClick={submitHandle}
+              disabled={submitDisable}
+            >
               {!editMode ? 'Добавить категорию' : 'Сохранить категорию'}
             </Button>
           </Div>
@@ -150,7 +159,7 @@ const AddEditCategory = ({
         header={!editMode ? 'Новая категория' : 'Изменить категорию' }
         onClose={abortHandle}
         actions={
-          <Button size="l" mode="primary" onClick={submitHandle}>
+          <Button size="l" mode="primary" onClick={submitHandle} disabled={submitDisable}>
             {!editMode ? 'Добавить' : 'Сохранить'}
           </Button>
         }
