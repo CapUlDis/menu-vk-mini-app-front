@@ -40,7 +40,6 @@ const AddEditCategory = ({
 
   const submitHandle = () => {
     setSubmitDisable(true);
-    setTimeout(() => setSubmitDisable(false), 500);
     
     if (!title.trim()) {
       return setFormStatus('error');
