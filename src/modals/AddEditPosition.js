@@ -82,7 +82,7 @@ const AddEditPosition = ({ id, desktop, group, setGroup, position, editMode, set
 		if (!event.target.files[0]) return;
     
 		const file = event.target.files[0];
-    console.log('TUT', file);
+    
 		if (file.size > 5242880) {
       let cloneInputStatus = {...inputStatus};
       cloneInputStatus.image = 'error';
