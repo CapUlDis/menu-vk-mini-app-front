@@ -22,6 +22,7 @@ import {
   POPOUT_EDIT_DELETE_POSITION,
   POPOUT_ALERT_DELETE_POSITION
 } from './router';
+import { enableScroll } from './utils/bodyScroll';
 import Install from './panels/Install';
 import Start from './panels/Start';
 import FillMenu from './panels/FillMenu';
@@ -190,6 +191,14 @@ const App = () => {
   };
 
   const abortHandle = () => {
+    if (location.getViewActivePanel(VIEW_MAIN) === PANEL_FILL_MENU) {
+      enableScroll(PANEL_FILL_MENU);
+    }
+
+    if (location.getViewActivePanel(VIEW_MAIN) === PANEL_EDIT_CATEGORIES) {
+      enableScroll(PANEL_EDIT_CATEGORIES);
+    }
+
     router.popPage();
     return setTimeout(() => setEditMode(false), 1000);
   }

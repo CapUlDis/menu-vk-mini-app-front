@@ -3,7 +3,8 @@ import { ActionSheet, ActionSheetItem } from '@vkontakte/vkui';
 import { useRouter, useParams } from '@happysanta/router';
 import { Icon28EditOutline, Icon28DeleteOutline } from '@vkontakte/icons';
 
-import { MODAL_PAGE_POSITION, PAGE_FILL_MENU, POPOUT_ALERT_DELETE_POSITION } from '../router';
+import { MODAL_PAGE_POSITION, PAGE_FILL_MENU, PANEL_FILL_MENU, POPOUT_ALERT_DELETE_POSITION } from '../router';
+import { disableScroll } from '../utils/bodyScroll';
 
 
 const EditDeletePosition = ({ setEditMode, editPosRefs }) => {
@@ -17,6 +18,7 @@ const EditDeletePosition = ({ setEditMode, editPosRefs }) => {
       toggleRef={editPosRefs[index].current}
     >
       <ActionSheetItem before={<Icon28EditOutline/>} onClick={() => {
+        disableScroll(PANEL_FILL_MENU);
         setEditMode(true);
         router.pushPage(PAGE_FILL_MENU);
         return router.pushModal(MODAL_PAGE_POSITION);

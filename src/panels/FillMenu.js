@@ -16,6 +16,7 @@ import './FillMenu.css';
 import orderArray from '../utils/orderArray';
 import mapPlatform from '../utils/mapPlatform';
 import { useRouter } from '@happysanta/router';
+import { disableScroll } from '../utils/bodyScroll';
 import { MODAL_PAGE_POSITION, POPOUT_EDIT_DELETE_POSITION, PAGE_EDIT_CATEGORIES, PAGE_MENU } from '../router';
 
 
@@ -102,6 +103,7 @@ const FillMenu = ({ id, desktop, group, setGroup, setPosition, setCategories, se
                   cornerOffset={desktop ? -4 : -11}
                 >
                   <Link onClick={() => {
+                    disableScroll(id);
                     setPosition({ categoryId: category.id });
                     return router.pushModal(MODAL_PAGE_POSITION);
                   }}>
@@ -109,6 +111,7 @@ const FillMenu = ({ id, desktop, group, setGroup, setPosition, setCategories, se
                   </Link>
                 </Tooltip>
                 : <Link onClick={() => {
+                  disableScroll(id);
                   setPosition({ categoryId: category.id });
                   return router.pushModal(MODAL_PAGE_POSITION);
                 }}>

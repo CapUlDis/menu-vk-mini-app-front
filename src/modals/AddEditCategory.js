@@ -11,6 +11,8 @@ import {
   Button,
 } from '@vkontakte/vkui';
 
+import { enableScroll } from '../utils/bodyScroll';
+import { PANEL_EDIT_CATEGORIES } from '../router';
 import './AddEditCategory.css';
 
 let num = 1;
@@ -109,6 +111,7 @@ const AddEditCategory = ({
       }
     }
 
+    enableScroll(PANEL_EDIT_CATEGORIES);
     router.popPage();
     return setTimeout(() => setEditMode(false), 1000);
   }

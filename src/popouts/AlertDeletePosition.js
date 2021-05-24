@@ -2,6 +2,8 @@ import React from 'react';
 import { Alert } from '@vkontakte/vkui';
 import { useRouter } from '@happysanta/router';
 
+import { enableScroll } from '../utils/bodyScroll';
+import { PANEL_FILL_MENU } from '../router';
 
 const AlertDeletePosition = ({ deletePosition }) => {
   const router = useRouter();
@@ -19,7 +21,10 @@ const AlertDeletePosition = ({ deletePosition }) => {
         action: deletePosition,
       }]}
       actionsLayout="horizontal"
-      onClose={() => router.popPage()}
+      onClose={() => {
+        enableScroll(PANEL_FILL_MENU);
+        router.popPage();
+      }}
       header="Удаление позиции"
       text="Вы уверены, что хотите удалить эту позицию?"
     />

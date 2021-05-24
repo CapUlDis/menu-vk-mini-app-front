@@ -12,6 +12,7 @@ import API from '../utils/API';
 import arrayEquals from '../utils/arrayEquals';
 import mapPlatform from '../utils/mapPlatform';
 import { useRouter } from '@happysanta/router';
+import { disableScroll } from '../utils/bodyScroll';
 import { MODAL_CARD_CATEGORY, PAGE_FILL_MENU } from '../router';
 
 
@@ -86,6 +87,7 @@ const EditCategories = ({
   }
 
   const editHandle = (catIndex, category) => {
+    disableScroll(id);
     setEditMode({ catIndex, id: category.id, title: category.title });
     return router.pushModal(MODAL_CARD_CATEGORY);
   }
@@ -151,7 +153,10 @@ const EditCategories = ({
         mode="plain"
       >
         {!desktop && 
-          <CellButton before={<Icon20AddCircle height={22} width={22}/>} onClick={() => router.pushModal(MODAL_CARD_CATEGORY)}>
+          <CellButton before={<Icon20AddCircle height={22} width={22}/>} onClick={() => {
+            disableScroll(id);
+            router.pushModal(MODAL_CARD_CATEGORY)
+          }}>
             Добавить категорию
           </CellButton>
         }
@@ -202,7 +207,10 @@ const EditCategories = ({
               size="s"
               mode="tertiary"
               before={<Icon24AddOutline />}
-              onClick={() => router.pushModal(MODAL_CARD_CATEGORY)}
+              onClick={() => {
+                disableScroll(id);
+                router.pushModal(MODAL_CARD_CATEGORY)
+              }}
             >
               Добавить категорию
             </Button> 

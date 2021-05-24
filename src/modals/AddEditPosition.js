@@ -26,7 +26,8 @@ import API from '../utils/API';
 import SnackbarError from '../popouts/SnackbarError';
 import units from '../utils/units';
 import './AddEditPosition.css';
-import { POPOUT_ALERT_DELETE_POSITION, PAGE_FILL_MENU } from '../router';
+import { enableScroll } from '../utils/bodyScroll';
+import { POPOUT_ALERT_DELETE_POSITION, PAGE_FILL_MENU, PANEL_FILL_MENU } from '../router';
 
 
 const AddEditPosition = ({ id, desktop, group, setGroup, position, editMode, setEditMode }) => {
@@ -59,6 +60,7 @@ const AddEditPosition = ({ id, desktop, group, setGroup, position, editMode, set
   const [snackbarError, setSnackbarError] = useState(null);
 
   const abortHandle = () => {
+    enableScroll(PANEL_FILL_MENU);
     router.replacePage(PAGE_FILL_MENU);
     return setTimeout(() => setEditMode(false), 1000);
   }
@@ -193,6 +195,7 @@ const AddEditPosition = ({ id, desktop, group, setGroup, position, editMode, set
         }
 
         setGroup(cloneGroup);
+        enableScroll(PANEL_FILL_MENU);
         router.popPage();
         return setTimeout(() => setEditMode(false), 1000);
       }
