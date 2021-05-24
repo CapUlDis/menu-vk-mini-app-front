@@ -42,6 +42,7 @@ const AddEditCategory = ({
     setSubmitDisable(true);
     
     if (!title.trim()) {
+      setSubmitDisable(false);
       return setFormStatus('error');
     }
 

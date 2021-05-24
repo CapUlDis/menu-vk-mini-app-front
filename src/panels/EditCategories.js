@@ -107,7 +107,6 @@ const EditCategories = ({
 
   const submitHandle = async () => {
     setSubmitDisable(true);
-    setTimeout(() => setSubmitDisable(false), 500);
 
     try {
       if (!arrayEquals(catOrder, group.catOrder) || changedCats.length !== 0) {
@@ -130,6 +129,7 @@ const EditCategories = ({
       return router.pushPage(PAGE_FILL_MENU);
     } catch (err) {
       
+      setSubmitDisable(false);
       return setSnackbarError(
         <SnackbarError setSnackbarError={setSnackbarError}>
           Проблемы с получением данных от сервера. Проверьте интернет-соединение.

@@ -125,7 +125,6 @@ const AddEditPosition = ({ id, desktop, group, setGroup, position, editMode, set
 	const submitHandle = async (event) => {
 		event.preventDefault();
     setSubmitDisable(true);
-    setTimeout(() => setSubmitDisable(false), 500);
 
     let inputError = false;
     let cloneInputStatus = {...inputStatus};
@@ -152,6 +151,7 @@ const AddEditPosition = ({ id, desktop, group, setGroup, position, editMode, set
 
     if (inputError) {
       modalContent.current.scrollTop = 0;
+      setSubmitDisable(false);
       return setInputStatus(cloneInputStatus);
     }
 
@@ -214,6 +214,7 @@ const AddEditPosition = ({ id, desktop, group, setGroup, position, editMode, set
 
 		} catch (err) {
 
+      setSubmitDisable(false);
       return setSnackbarError(
         <SnackbarError setSnackbarError={setSnackbarError}>
           Проблемы с получением данных от сервера. Проверьте интернет-соединение.
