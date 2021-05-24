@@ -78,9 +78,9 @@ const AddEditPosition = ({ id, desktop, group, setGroup, position, editMode, set
 		});
 
 		if (!event.target.files[0]) return;
-
+    
 		const file = event.target.files[0];
-
+    console.log('TUT', file);
 		if (file.size > 5242880) {
       let cloneInputStatus = {...inputStatus};
       cloneInputStatus.image = 'error';
@@ -113,7 +113,7 @@ const AddEditPosition = ({ id, desktop, group, setGroup, position, editMode, set
 				}
 			}
 
-			return setImage({ src: this.src, plug: null, file });
+			return setImage({ src: this.src, plug: null, file: file });
 		}
 		img.src = URL.createObjectURL(file);
 
