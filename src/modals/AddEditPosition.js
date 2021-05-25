@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import cloneDeep from 'lodash-es/cloneDeep';
 import Resizer from 'react-image-file-resizer';
 import {
@@ -9,7 +9,6 @@ import {
 	Div,
 	Button,
 	Separator,
-	NativeSelect,
 	FormLayout,
 	FormItem,
 	FormLayoutGroup,
@@ -18,6 +17,8 @@ import {
 	File,
 	Avatar,
   CellButton,
+  Select,
+  CustomSelectOption
 } from '@vkontakte/vkui';
 import { useRouter } from '@happysanta/router';
 import { Icon56GalleryOutline, Icon28DeleteOutline, Icon24DeleteOutline, Icon24DismissOverlay } from '@vkontakte/icons';
@@ -162,7 +163,7 @@ const AddEditPosition = ({ id, desktop, group, setGroup, position, editMode, set
 		} else {
       formData.delete('image');
     }
-
+    
 		try {
       let cloneGroup = cloneDeep(group);
 
@@ -209,6 +210,8 @@ const AddEditPosition = ({ id, desktop, group, setGroup, position, editMode, set
 				cloneGroup.Categories[catIndex].Positions.push(response.data.position);
 			}
 			cloneGroup.Categories[catIndex].posOrder.push(response.data.position.id);
+
+      enableScroll(PANEL_FILL_MENU);
 			setGroup(cloneGroup);
 			return router.popPage();
 
@@ -294,14 +297,11 @@ const AddEditPosition = ({ id, desktop, group, setGroup, position, editMode, set
 					<FormItem className="select-units"
             style={{ maxWidth: desktop ? '104px' : '120px' }}
           >
-						<NativeSelect name="unitId"
-							value={unitId}
+            <Select name="unitId"
+              value={unitId}
 							onChange={e => setUnit(e.currentTarget.value)}
-						>
-							{units.map(unit => {
-								return <option key={unit.id} value={unit.id}>{unit.title}</option>
-							})}
-						</NativeSelect>
+              options={units.map(unit => ({ label: unit.title, value: unit.id }))}
+            />
 					</FormItem>
 				</FormLayoutGroup>
 				<FormItem top="Цена, ₽" status={inputStatus.price}>
@@ -329,14 +329,14 @@ const AddEditPosition = ({ id, desktop, group, setGroup, position, editMode, set
 					/>
 				</FormItem>
 				<FormItem top="Категория">
-					<NativeSelect name="categoryId"
-						value={categoryId}
-						onChange={e => setCategory(parseInt(e.currentTarget.value))}
-					>
-						{group.Categories && group.Categories.map(category => {
-							return <option key={category.id} value={category.id}>{category.title}</option>
-						})}
-					</NativeSelect>
+          <Select name="categoryId"
+            value={categoryId}
+            onChange={e => setCategory(parseInt(e.currentTarget.value))}
+            options={group.Categories && group.Categories.map(category => ({ label: category.title, value: category.id }))}
+            renderOption={({ option, ...restProps }) => (
+              <CustomSelectOption {...restProps} />
+            )}
+          />
 				</FormItem>
 				<FormItem top="Изображение"
 					status={inputStatus.image}
