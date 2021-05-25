@@ -58,6 +58,10 @@ html {
   align-items: baseline;
 }
 
+.position__value {
+  margin-left: 4px;
+}
+
 .position__value, .position-desktop__description {
   color: var(--text_secondary);
 }
