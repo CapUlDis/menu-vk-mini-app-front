@@ -69,7 +69,7 @@ const Start = ({ id, setGroup, desktop }) => {
   return (
     <Panel id={id}>
       <PanelHeader className={desktop && "panel-header_desktop"} separator={false}>
-        Выберите категории
+        Категории
       </PanelHeader>
       <FixedLayout vertical='top' filled>
         <Subhead weight='regular' align='center' className="header__subhead">

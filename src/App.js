@@ -241,11 +241,17 @@ const App = () => {
 
   if (step === STEPS.LOADER) {
     return (
-      <View activePanel={STEPS.LOADER} popout={<ScreenSpinner size='large' />}>
-        <Panel id={STEPS.LOADER}>
-          {snackbarError}
-        </Panel>
-      </View>
+      <AppRoot>
+        <SplitLayout popout={<ScreenSpinner size='large' />}>
+          <SplitCol>
+            <View activePanel={STEPS.LOADER}>
+              <Panel id={STEPS.LOADER}>
+                {snackbarError}
+              </Panel>
+            </View>
+          </SplitCol>
+        </SplitLayout>
+      </AppRoot>
     );
   }
 
