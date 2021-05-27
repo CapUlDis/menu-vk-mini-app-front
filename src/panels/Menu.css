@@ -44,8 +44,9 @@ html {
 }
 
 .header__title {
-  margin: 14px 16px 0;
+  margin-top: 14px;
   text-align: center;
+  width: calc(100vw - 200px);
 }
 
 .header__open {
