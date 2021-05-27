@@ -46,6 +46,9 @@ html {
 .header__title {
   margin-top: 14px;
   text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
   width: calc(100vw - 200px);
 }
 
