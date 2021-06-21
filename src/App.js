@@ -111,7 +111,7 @@ const App = () => {
       cloneGroupInfo.cover = response.cover.images[4].url;
     }
 
-    if (response.main_address) {
+    if (response.main_address && response.main_address.timetable) {
       const mainAdress = response.main_address;
       const daysOfWeek = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
       const today = new Date();
