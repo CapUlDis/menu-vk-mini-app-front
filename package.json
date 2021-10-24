@@ -18,18 +18,18 @@
     "react-scripts": "^4.0.1"
   },
   "dependencies": {
-    "@happysanta/bridge-plus": "^0.0.10-beta.3",
-    "@happysanta/router": "^0.1.16",
-    "@vkontakte/icons": "^1.83.0",
-    "@vkontakte/vk-bridge": "^2.4.1",
+    "@happysanta/bridge-plus": "0.0.10",
+    "@happysanta/router": "^0.1.21",
+    "@vkontakte/icons": "^1.131.0",
+    "@vkontakte/vk-bridge": "^2.4.8",
     "@vkontakte/vk-miniapps-deploy": "0.0.17",
     "@vkontakte/vkjs": "^0.20.0",
-    "@vkontakte/vkui": "^4.6.0",
-    "axios": "^0.21.1",
+    "@vkontakte/vkui": "~4.6.0",
+    "axios": "^0.21.4",
     "babel-eslint": "^10.1.0",
     "body-scroll-lock": "^3.1.5",
     "chalk": "^2.4.2",
-    "core-js": "^3.8.3",
+    "core-js": "^3.18.3",
     "eruda": "^2.4.1",
     "eruda-code": "^2.0.0",
     "eruda-dom": "^2.0.0",
@@ -38,7 +38,7 @@
     "querystring": "^0.2.0",
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
-    "react-image-file-resizer": "^0.4.2"
+    "react-image-file-resizer": "^0.4.7"
   },
   "browserslist": {
     "production": [
